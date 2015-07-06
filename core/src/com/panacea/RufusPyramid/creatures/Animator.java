@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid;
+package com.panacea.RufusPyramid.creatures;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -51,7 +51,7 @@ public class Animator implements ApplicationListener {
 
     @Override
     public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);  /*pulisci lo schermo*/
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);  /*pulisci lo schermo*/
         stateTime += Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
         spriteBatch.begin();

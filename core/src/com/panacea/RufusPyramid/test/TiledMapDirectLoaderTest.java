@@ -10,7 +10,7 @@ package com.panacea.RufusPyramid.test;
         import com.badlogic.gdx.maps.tiled.TmxMapLoader;
         import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
         import com.panacea.RufusPyramid.test.GdxTest;
-        import com.panacea.RufusPyramid.test.OrthoCamController;
+        import com.panacea.RufusPyramid.map.OrthoCamController;
 
 public class TiledMapDirectLoaderTest extends GdxTest {
 

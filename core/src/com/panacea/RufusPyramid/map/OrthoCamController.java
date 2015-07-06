@@ -1,8 +1,8 @@
-package com.panacea.RufusPyramid.test;
+package com.panacea.RufusPyramid.map;
 
-        import com.badlogic.gdx.InputAdapter;
-        import com.badlogic.gdx.graphics.OrthographicCamera;
-        import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 
 public class OrthoCamController extends InputAdapter {
     final OrthographicCamera camera;
@@ -10,7 +10,7 @@ public class OrthoCamController extends InputAdapter {
     final Vector3 last = new Vector3(-1, -1, -1);
     final Vector3 delta = new Vector3();
 
-    public OrthoCamController (OrthographicCamera camera) {
+    public OrthoCamController(OrthographicCamera camera) {
         this.camera = camera;
     }
 
