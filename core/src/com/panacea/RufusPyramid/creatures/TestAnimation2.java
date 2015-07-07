@@ -7,9 +7,6 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.InputManager;
 import com.panacea.RufusPyramid.common.ViewObject;
 
-/**
- * Created by gioele.masini on 06/07/2015.
- */
 public class TestAnimation extends ViewObject {
 
     com.panacea.RufusPyramid.creatures.Animator animator;
