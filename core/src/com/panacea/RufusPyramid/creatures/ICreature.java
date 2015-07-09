@@ -24,18 +24,17 @@ public interface ICreature {
     public String getDescription();
     public void setDescription(String description);
 
-    public int getAttackValue();
-    public void setAttackValue(int attackValue);
+    public double getAttackValue();
+    public void setAttackValue(double attackValue);
 
-    public int getDefenceValue();
-    public void setDefenceValue(int defenceValue);
+    public double getDefenceValue();
+    public void setDefenceValue(double defenceValue);
+
+    public double getSpeed();
+    public void setSpeed(double currentSpeed);
 
     public GridPoint2 getPosition();
     public void setPosition(GridPoint2 currentPosition);
 
-    public List<IItem> getEquipment();
-    public void setEquipment(List<IItem> currentEquipment);
-
-    public int getSpeed();
-    public void setSpeed(int currentSpeed);
+    public Backpack getEquipment();
 }
