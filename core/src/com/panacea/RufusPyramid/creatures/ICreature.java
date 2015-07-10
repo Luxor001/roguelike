@@ -1,0 +1,40 @@
+package com.panacea.RufusPyramid.creatures;
+
+import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.items.IItem;
+
+import java.util.List;
+
+/**
+ * General creature interface.
+ */
+public interface ICreature {
+
+    public int getID();
+
+    public int getHPCurrent();
+    public void setHPCurrent(int currentHP);
+
+    public int getHPMaximum();
+    public void setHPMaximum(int maxHP);
+
+    public String getName();
+    public void setName(String name);
+
+    public String getDescription();
+    public void setDescription(String description);
+
+    public double getAttackValue();
+    public void setAttackValue(double attackValue);
+
+    public double getDefenceValue();
+    public void setDefenceValue(double defenceValue);
+
+    public double getSpeed();
+    public void setSpeed(double currentSpeed);
+
+    public GridPoint2 getPosition();
+    public void setPosition(GridPoint2 currentPosition);
+
+    public Backpack getEquipment();
+}
