@@ -8,13 +8,12 @@ import com.badlogic.gdx.math.GridPoint2;
  */
 public class Tile {
     GridPoint2 position;
-    Texture texture;
     //Items items;
     TileType type;
 
-    public Tile(GridPoint2 position, Texture texture, TileType type){ //manca items!
+
+    public Tile(GridPoint2 position, TileType type){ //manca items!
         this.position=position;
-        this.texture=texture;
         this.type=type;
     }
 
@@ -29,7 +28,7 @@ public class Tile {
         int hp;
 
         public DestructibleTile(GridPoint2 position, Texture texture, TileType type, int hp){
-            super(position, texture, type);
+            super(position, type);
             this.hp=hp;
         }
     }
@@ -38,7 +37,7 @@ public class Tile {
         Texture altImg;
 
         public HiddenTile(GridPoint2 position, Texture texture, TileType type, Texture altImg){
-            super(position, texture, type);
+            super(position, type);
             this.altImg=altImg;
         }
     }

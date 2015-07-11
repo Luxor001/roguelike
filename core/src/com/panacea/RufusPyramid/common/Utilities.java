@@ -12,4 +12,11 @@ public class Utilities {
         int randomNum = rand.nextInt((max - min) + 1) + min;
         return randomNum;
     }
+
+    public enum Directions{
+        NORTH,
+        EAST,
+        SOUTH,
+        WEST
+    }
 }
