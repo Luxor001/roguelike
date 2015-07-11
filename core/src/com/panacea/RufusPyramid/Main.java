@@ -10,7 +10,7 @@ public class Main extends Game {
 	@Override
 	public void create () {
         Gdx.input.setInputProcessor(InputManager.getInstance());
-        this.setScreen(new GameScreen());
+        this.setScreen(new com.panacea.RufusPyramid.view.screens.GameScreen());
 	}
 
 
