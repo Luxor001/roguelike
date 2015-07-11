@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.map;
+package com.panacea.RufusPyramid.view;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
