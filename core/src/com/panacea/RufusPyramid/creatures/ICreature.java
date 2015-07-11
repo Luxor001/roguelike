@@ -1,9 +1,6 @@
 package com.panacea.RufusPyramid.creatures;
 
-import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.items.IItem;
-
-import java.util.List;
+import com.panacea.RufusPyramid.map.Tile;
 
 /**
  * General creature interface.
@@ -33,8 +30,8 @@ public interface ICreature {
     public double getSpeed();
     public void setSpeed(double currentSpeed);
 
-    public GridPoint2 getPosition();
-    public void setPosition(GridPoint2 currentPosition);
+    public Tile getPosition();
+    public void setPosition(Tile currentPosition);
 
     public Backpack getEquipment();
 }

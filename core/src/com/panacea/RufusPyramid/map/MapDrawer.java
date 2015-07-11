@@ -1,18 +1,13 @@
 package com.panacea.RufusPyramid.map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.panacea.RufusPyramid.common.InputManager;
-import com.panacea.RufusPyramid.common.ViewObject;
-import com.panacea.RufusPyramid.test.GdxTest;
-import com.panacea.RufusPyramid.map.OrthoCamController;
+import com.panacea.RufusPyramid.view.ViewObject;
 
 public class MapDrawer extends ViewObject {
 
@@ -24,12 +19,7 @@ public class MapDrawer extends ViewObject {
 //    private SpriteBatch batch;
 
     public void create() {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * 10, 10);
-        camera.update();
+        camera = createCamera();
 
         cameraController = new OrthoCamController(camera);
         InputManager.getInstance().addProcessor(cameraController);
@@ -39,6 +29,17 @@ public class MapDrawer extends ViewObject {
 
         map = new TmxMapLoader().load("data/level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1f / 32f);
+    }
+
+    public OrthographicCamera createCamera() {
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false, (w / h) * 10, 10);
+        camera.update();
+
+        return camera;
     }
 
     public void render() {

@@ -1,9 +1,6 @@
 package com.panacea.RufusPyramid.creatures;
 
-import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.items.IItem;
-
-import java.util.List;
+import com.panacea.RufusPyramid.map.Tile;
 
 /**
  * Deve davvero essere una classe astratta? O basta chiamarla "GenericCreature" ?
@@ -16,7 +13,7 @@ public abstract class AbstractCreature implements ICreature {
     private String name, description;
     private int maximumHP, currentHP;
     private double attack, defence, speed;
-    private GridPoint2 position;
+    private Tile position;
     private Backpack backpack;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
@@ -106,12 +103,12 @@ public abstract class AbstractCreature implements ICreature {
      * @return la posizione della creatura nella mappa, null se non è presente in mappa.
      */
     @Override
-    public GridPoint2 getPosition() {
+    public Tile getPosition() {
         return this.position;
     }
 
     @Override
-    public void setPosition(GridPoint2 currentPosition) {
+    public void setPosition(Tile currentPosition) {
         this.position = currentPosition;
     }
 

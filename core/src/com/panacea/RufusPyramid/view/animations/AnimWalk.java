@@ -1,16 +1,19 @@
-package com.panacea.RufusPyramid.creatures;
+package com.panacea.RufusPyramid.view.animations;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.view.ViewObject;
 
-/*Snippet preso da https://github.com/libgdx/libgdx/wiki/2D-Animation*/
-public class Animator implements ApplicationListener {
+/**
+ * Classe che permette di effettuare l'animazione di una camminata.
+ *
+ * Created by gio on 11/07/15.
+ */
+public class AnimWalk extends ViewObject {
 
     private static final int FRAME_COLS = 4;/*Grandezza della matrice degli sprite per l'animazione. Direi che 20 sprites bastano e avanzano*/
     private static final int FRAME_ROWS = 7;
@@ -24,9 +27,9 @@ public class Animator implements ApplicationListener {
     GridPoint2 currPoint;
     float stateTime;
     float frameDuration=0;
-    public Animator(float frameDuration, TextureRegion... keyFrames){
-         this.frameDuration=frameDuration;
-         walkFrames=keyFrames;
+    public AnimWalk(float frameDuration, TextureRegion... keyFrames){
+        this.frameDuration=frameDuration;
+        walkFrames=keyFrames;
     }
 
     @Override
@@ -57,24 +60,5 @@ public class Animator implements ApplicationListener {
         spriteBatch.begin();
         spriteBatch.draw(currentFrame, currPoint.x,currPoint.y);             // #17
         spriteBatch.end();
-    }
-    @Override
-    public void dispose(){
-        
-    }
-
-    @Override
-    public void resume(){
-
-    }
-
-    @Override
-    public void pause(){
-
-    }
-
-    @Override
-    public void resize(int a,int b){
-
     }
 }

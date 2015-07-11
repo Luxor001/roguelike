@@ -1,10 +1,10 @@
-package com.panacea.RufusPyramid;
+package com.panacea.RufusPyramid.view.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.panacea.RufusPyramid.common.ViewObject;
-import com.panacea.RufusPyramid.creatures.TestAnimation;
+import com.panacea.RufusPyramid.view.Animator;
+import com.panacea.RufusPyramid.view.ViewObject;
 import com.panacea.RufusPyramid.map.MapDrawer;
 
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class GameScreen implements Screen {
     public void show() {
         map = new MapDrawer();  //map.create richiamato automaticamente da ViewObject
         viewList.add(map);
-        viewList.add(new TestAnimation());
+        viewList.add(new Animator());
     }
 
     public void render(float delta) {
