@@ -65,7 +65,7 @@ public class AnimWalk extends ViewObject {
         stateTime += Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
         spriteBatch.begin();
-        spriteBatch.draw(currentFrame, currPoint.x,currPoint.y);             // #17
+        spriteBatch.draw(currentFrame, currPoint.x,currPoint.y, 32, 32);             // #17
         spriteBatch.end();
     }
 }
