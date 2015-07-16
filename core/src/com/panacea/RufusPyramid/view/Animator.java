@@ -22,7 +22,7 @@ public class Animator extends ViewObject {
         walkAnim.create();
 
         screenLimits = new GridPoint2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        InputManager.getInstance().addProcessor(new TestInput());
+//        InputManager.getInstance().addProcessor(new TestInput());
     }
 
     @Override

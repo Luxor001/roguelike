@@ -1,11 +1,13 @@
 package com.panacea.RufusPyramid.view.animations;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.view.GameCamera;
 import com.panacea.RufusPyramid.view.ViewObject;
 
 /**
@@ -45,16 +47,21 @@ public class AnimWalk extends ViewObject {
         }
         walkAnimation = new Animation(frameDuration, walkFrames);      // #11
         spriteBatch = new SpriteBatch();                // #12
+        spriteBatch.setProjectionMatrix(GameCamera.getInstance().combined);
         stateTime = 0f;                         // #13
+        currPoint = new GridPoint2(0,0);
     }
 
     public void updateLocation(GridPoint2 point){
-        currPoint=point;
+        /*currPoint=point;*/
     }
 
     @Override
     public void render() {
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);  /*pulisci lo schermo*/
+        OrthographicCamera camera = GameCamera.getInstance();
+        camera.update();
+        spriteBatch.setProjectionMatrix(camera.combined);
         stateTime += Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
         spriteBatch.begin();

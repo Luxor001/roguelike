@@ -16,13 +16,12 @@ import com.panacea.RufusPyramid.map.Tile;
  */
 public class MapView extends ViewObject {
 
-    private static final int TILE_WIDTH = 40;
-    private static final int TILE_HEIGHT = 40;
+    private static final int TILE_WIDTH = 32;
+    private static final int TILE_HEIGHT = 32;
 
-    private OrthographicCamera camera;
-    private OrthoCamController cameraController;
 
     private MapContainer map;
+    private OrthographicCamera camera;
 
     private Sprite[][] spriteMap;
     private SpriteCache spriteCache;
@@ -36,10 +35,7 @@ public class MapView extends ViewObject {
     public void create() {
         super.create();
 
-        camera = createCamera();
-
-        cameraController = new OrthoCamController(camera);
-        InputManager.getInstance().addProcessor(cameraController);
+        camera = GameCamera.getInstance();
 
         int numRows = 30;       //TODO map.rLenght()
         int numColumns = 30;    //TODO map.cLenght()
@@ -63,8 +59,6 @@ public class MapView extends ViewObject {
             }
         }
         spriteCacheIndex = spriteCache.endCache();
-
-        this.spriteCache = new SpriteCache();
     }
 
     @Override
@@ -91,17 +85,5 @@ public class MapView extends ViewObject {
     private static Texture getTexture(Tile tile) {
         //TODO return wall texture and then return proper texture using tile values
         return new Texture(Gdx.files.internal("data/wall23.gif"));
-    }
-
-
-    public OrthographicCamera createCamera() {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * 10, 10);
-        camera.update();
-
-        return camera;
     }
 }
