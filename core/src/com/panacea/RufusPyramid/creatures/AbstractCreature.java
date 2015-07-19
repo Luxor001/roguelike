@@ -1,6 +1,14 @@
 package com.panacea.RufusPyramid.creatures;
 
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.OrderedSet;
+import com.panacea.RufusPyramid.common.AttributeChangeEvent;
+import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.map.Tile;
+
+import java.util.ArrayList;
 
 /**
  * Deve davvero essere una classe astratta? O basta chiamarla "GenericCreature" ?
@@ -8,6 +16,8 @@ import com.panacea.RufusPyramid.map.Tile;
 public abstract class AbstractCreature implements ICreature {
 
     private static int nextFreeIdCreature = -1;
+
+    private ArrayList<PositionChangeListener> changeListeners;
 
     private int idCreature;
     private String name, description;
@@ -27,6 +37,8 @@ public abstract class AbstractCreature implements ICreature {
         this.setSpeed(speed);
         this.setPosition(null);
         this.backpack = new Backpack();
+
+        this.changeListeners = new ArrayList<PositionChangeListener>();
     }
 
     private static int getUniqueCreatureId() {
@@ -125,5 +137,36 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public void setSpeed(double currentSpeed) {
         this.speed = currentSpeed;
+    }
+
+    public void addChangeListener(PositionChangeListener listener) {
+        this.changeListeners.add(listener);
+    }
+
+    private void firePositionChangeEvent() {
+        PositionChangeEvent event = new PositionChangeEvent(this.getPosition().getPosition(), new ArrayList<GridPoint2>());
+        for (PositionChangeListener listener : this.changeListeners) {
+            listener.changed(event, this);
+        }
+    }
+
+    public static class PositionChangeEvent extends AttributeChangeEvent<GridPoint2> {
+        private final ArrayList<GridPoint2> path;
+
+        public PositionChangeEvent(GridPoint2 newAttributeValue, ArrayList<GridPoint2> path) {
+            super(newAttributeValue);
+            this.path = path;
+        }
+
+        public ArrayList<GridPoint2> getPath() {
+            return this.path;
+        }
+    }
+
+    public static abstract class PositionChangeListener implements AttributeChangeListener<PositionChangeEvent> {
+        public PositionChangeListener() {
+        }
+
+        public abstract void changed(PositionChangeEvent event, Object source);
     }
 }

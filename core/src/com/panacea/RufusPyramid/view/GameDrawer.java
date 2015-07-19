@@ -30,6 +30,7 @@ public class GameDrawer extends ViewObject {
         this.viewList = new LinkedList<ViewObject>();
         this.viewList.add(map);
         this.viewList.add(new Animator());
+        this.viewList.add(new HeroDrawer());
     }
 
     @Override

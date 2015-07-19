@@ -60,9 +60,9 @@ public class HeroController {
 
 
     public enum MoveDirection {
-        NORD,   NORD_EAST,
-        EAST,   SUD_EAST,
-        SUD,    SUD_WEST,
-        WEST,   NORD_WEST
+        NORTH,  NORTH_EAST,
+        EAST,   SOUTH_EAST,
+        SOUTH,  SOUTH_WEST,
+        WEST,   NORTH_WEST
     }
 }
