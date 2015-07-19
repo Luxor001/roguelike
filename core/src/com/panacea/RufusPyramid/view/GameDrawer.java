@@ -1,5 +1,7 @@
 package com.panacea.RufusPyramid.view;
 
+import com.panacea.RufusPyramid.GameModel;
+import com.panacea.RufusPyramid.creatures.HeroController;
 import com.panacea.RufusPyramid.map.MapContainer;
 
 import java.util.LinkedList;
@@ -30,7 +32,10 @@ public class GameDrawer extends ViewObject {
         this.viewList = new LinkedList<ViewObject>();
         this.viewList.add(map);
         this.viewList.add(new Animator());
-        this.viewList.add(new HeroDrawer());
+        this.viewList.add(new HeroDrawer(GameModel.get().getHero()));
+
+        //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
+        new HeroController(GameModel.get().getHero());
     }
 
     @Override
@@ -45,6 +50,9 @@ public class GameDrawer extends ViewObject {
     @Override
     public void render() {
         super.render();
+
+        GameCamera.get().update();
+        GameBatch.get().setProjectionMatrix(GameCamera.get().combined);
 
         for (ViewObject view : viewList) {
             view.render();

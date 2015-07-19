@@ -8,6 +8,7 @@ import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.map.Tile;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -124,6 +125,25 @@ public abstract class AbstractCreature implements ICreature {
         this.position = currentPosition;
     }
 
+    /**
+     * Modifica la posizione dell'eroe e ne provoca un'animazione di camminata.
+     * @param currentPosition posizione da impostare.
+     * @param path lista ordinata delle tiles percorse per arrivare alla currentPosition.
+     */
+    public void setPosition(Tile currentPosition, ArrayList<Tile> path) {
+        this.position = currentPosition;
+        if (path.lastIndexOf(currentPosition) != path.size()-1 ) {
+            throw new IllegalArgumentException(
+                    "L'ultimo elemento della lista path deve essere la Tile settata (corrispondente al paramentro currentPosition).");
+        }
+
+        ArrayList<GridPoint2> pointPath = new ArrayList<GridPoint2>();
+        for (Tile tile: path) {
+            pointPath.add(tile.getPosition());
+        }
+        this.firePositionChangeEvent(pointPath);
+    }
+
     @Override
     public Backpack getEquipment() {
         return this.backpack;
@@ -143,8 +163,8 @@ public abstract class AbstractCreature implements ICreature {
         this.changeListeners.add(listener);
     }
 
-    private void firePositionChangeEvent() {
-        PositionChangeEvent event = new PositionChangeEvent(this.getPosition().getPosition(), new ArrayList<GridPoint2>());
+    private void firePositionChangeEvent(ArrayList<GridPoint2> path) {
+        PositionChangeEvent event = new PositionChangeEvent(this.getPosition().getPosition(), path);
         for (PositionChangeListener listener : this.changeListeners) {
             listener.changed(event, this);
         }

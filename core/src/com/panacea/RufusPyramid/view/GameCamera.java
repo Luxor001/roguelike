@@ -13,7 +13,12 @@ public class GameCamera {
 
     private GameCamera() {};
 
-    public static OrthographicCamera getInstance() {
+    /**
+     * Ritorna l'unica istanza della camera del gioco, creandola se necessario.
+     * @return l'unica istanza della camera.
+     */
+    public static OrthographicCamera get() {
+        //TODO istanziare di default all'avvio del gioco
         if (camera == null) {
             camera = createCamera();
             cameraController = new OrthoCamController(camera);
@@ -28,7 +33,7 @@ public class GameCamera {
         float h = Gdx.graphics.getHeight();
 
         OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * 150, 150);
+        camera.setToOrtho(false, (w / h) * 250, 250);
 //        camera.setToOrtho(false, 800, 480);
         camera.position.set(0, 0, 0);
         camera.update();

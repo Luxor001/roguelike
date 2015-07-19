@@ -21,7 +21,7 @@ public class Animator extends ViewObject {
     public void create() {
         TextureRegion region = new TextureRegion();
         walkAnim = new AnimWalk(0.33f, region);
-        walkAnim.create(path);
+        walkAnim.create(/*path*/);
 
         screenLimits = new GridPoint2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        InputManager.getInstance().addProcessor(new TestInput());

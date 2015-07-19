@@ -45,10 +45,10 @@ public class HeroInputManager extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (screenY > screenHeight-screenHeight/4) {
             //move up
-            this.hero.moveOneStep(HeroController.MoveDirection.NORTH);
+            this.hero.moveOneStep(HeroController.MoveDirection.SOUTH);
         } else if (screenY < screenHeight/4) {
             //move down
-            this.hero.moveOneStep(HeroController.MoveDirection.SOUTH);
+            this.hero.moveOneStep(HeroController.MoveDirection.NORTH);
         } else if (screenX < screenWidth/2) {
             //move left
             this.hero.moveOneStep(HeroController.MoveDirection.WEST);

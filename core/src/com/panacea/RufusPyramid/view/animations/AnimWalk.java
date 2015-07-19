@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.view.GameBatch;
 import com.panacea.RufusPyramid.view.GameCamera;
 import com.panacea.RufusPyramid.view.ViewObject;
 
@@ -39,8 +40,8 @@ public class AnimWalk extends ViewObject {
         walkFrames=keyFrames;
     }
 
-    public void create(ArrayList<GridPoint2> path) {
-        this.path = path;
+    public void create(/*ArrayList<GridPoint2> path*/) {
+//        this.path = path;
         animationTexture = new Texture(Gdx.files.internal("data/spritesheet2.png")); // #9
         TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/FRAME_COLS, animationTexture.getHeight()/FRAME_ROWS);              // #10
         walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
@@ -51,10 +52,11 @@ public class AnimWalk extends ViewObject {
             }
         }
         walkAnimation = new Animation(frameDuration, walkFrames);      // #11
-        spriteBatch = new SpriteBatch();                // #12
-        spriteBatch.setProjectionMatrix(GameCamera.getInstance().combined);
+        spriteBatch = GameBatch.get();                // #12
+//        spriteBatch.setProjectionMatrix(GameCamera.get().combined);
         stateTime = 0f;                         // #13
-        currPoint = path.get(0);
+//        currPoint = path.get(0);
+        currPoint = new GridPoint2();
         this.walkImageIndex = -1;
     }
 
@@ -69,9 +71,9 @@ public class AnimWalk extends ViewObject {
 //        currPoint = path.get(walkImageIndex);
         float delta = Gdx.graphics.getDeltaTime();
 
-        OrthographicCamera camera = GameCamera.getInstance();
-        camera.update();
-        spriteBatch.setProjectionMatrix(camera.combined);
+//        OrthographicCamera camera = GameCamera.get();
+//        camera.update();
+//        spriteBatch.setProjectionMatrix(camera.combined);
         stateTime += delta;           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
 

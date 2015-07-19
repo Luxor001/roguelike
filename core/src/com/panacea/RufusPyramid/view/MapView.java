@@ -35,7 +35,7 @@ public class MapView extends ViewObject {
     public void create() {
         super.create();
 
-        camera = GameCamera.getInstance();
+        camera = GameCamera.get();
 
         int numRows = 30;       //TODO map.rLenght()
         int numColumns = 30;    //TODO map.cLenght()
