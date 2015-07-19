@@ -12,7 +12,8 @@ public class GameScreen implements Screen {
     public void show() {
         GameModel.createInstance();
         objectsDrawer = new GameDrawer();
-        objectsDrawer.create();
+//        objectsDrawer.create();
+        Gdx.app.log(GameScreen.class.toString(), "show() di GameScreen");
     }
 
     public void render(float delta) {

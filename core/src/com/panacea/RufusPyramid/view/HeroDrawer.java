@@ -27,12 +27,14 @@ public class HeroDrawer extends ViewObject {
             @Override
             public void changed(AbstractCreature.PositionChangeEvent event, Object source) {
                 //Faccio l'animazione di camminata in base ai dati dell'evento
+                Gdx.app.log(HeroDrawer.class.toString(), "Catturato un evento PositionChangeEvent.");
                 HeroDrawer.this.walkAnimation((DefaultHero) source, event.getPath());
                 //Poi renderizzo l'eroe in setStanding (da impostare al termine dell'animazione)
 //                HeroDrawer.this.setStanding();
             }
         };
         this.heroModel.addChangeListener(this.posChangeListener);
+        Gdx.app.log(HeroDrawer.class.toString(), "creazione di HeroDrawer");
         sprite = getHeroSprite(heroModel);
         this.setStanding();
     }
@@ -61,7 +63,7 @@ public class HeroDrawer extends ViewObject {
 //                break;
             case STANDING:
                 GridPoint2 pos = this.heroModel.getPosition().getPosition();
-                Gdx.app.log(HeroDrawer.class.toString(), "Eroe in camminata alla posizione: " + pos.x + "-" + pos.y);
+//                Gdx.app.log(HeroDrawer.class.toString(), "Eroe in camminata alla posizione: " + pos.x + "-" + pos.y);
                 spritePosition = this.heroModel.getPosition().getPosition();
                 SpriteBatch batch = GameBatch.get();
 

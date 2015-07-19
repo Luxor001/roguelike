@@ -8,10 +8,15 @@ import com.badlogic.gdx.ApplicationListener;
  * Created by gioele.masini on 06/07/2015.
  */
 public class ViewObject implements ApplicationListener {
+    //TODO rimuovere l'implements di ApplicationListener?
+
     public ViewObject() {
         this.create();
     }
 
+    /**
+     * Non è da chiamare! Viene richiamato automaticamente con il costruttore
+     */
     @Override
     public void create() {
 

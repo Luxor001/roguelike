@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.creatures;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -131,6 +132,7 @@ public abstract class AbstractCreature implements ICreature {
      * @param path lista ordinata delle tiles percorse per arrivare alla currentPosition.
      */
     public void setPosition(Tile currentPosition, ArrayList<Tile> path) {
+//        Gdx.app.log(AbstractCreature.class.toString(), "Chiamata a setPosition(), tile a " + currentPosition.getPosition().x + "," + currentPosition.getPosition().y);
         this.position = currentPosition;
         if (path.lastIndexOf(currentPosition) != path.size()-1 ) {
             throw new IllegalArgumentException(
@@ -164,9 +166,11 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     private void firePositionChangeEvent(ArrayList<GridPoint2> path) {
+        Gdx.app.log(AbstractCreature.class.toString(), "Chiamata a firePositionChangeEvent()");
         PositionChangeEvent event = new PositionChangeEvent(this.getPosition().getPosition(), path);
         for (PositionChangeListener listener : this.changeListeners) {
             listener.changed(event, this);
+            Gdx.app.log(AbstractCreature.class.toString(), "firePositionChangeEvent(), foreach iteration.");
         }
     }
 

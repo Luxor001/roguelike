@@ -8,10 +8,6 @@ import com.panacea.RufusPyramid.creatures.DefaultHero;
 import com.panacea.RufusPyramid.creatures.HeroController;
 
 public class HeroInputManager extends InputAdapter {
-//    final OrthographicCamera camera;
-//    final Vector3 curr = new Vector3();
-//    final Vector3 last = new Vector3(-1, -1, -1);
-//    final Vector3 delta = new Vector3();
 
     private int screenWidth = Gdx.graphics.getWidth();
     private int screenHeight = Gdx.graphics.getHeight();
@@ -19,7 +15,6 @@ public class HeroInputManager extends InputAdapter {
     private HeroController hero;
 
     public HeroInputManager(HeroController hero) {
-//        this.camera = camera;
         this.hero = hero;
     }
 
