@@ -63,7 +63,7 @@ public class HeroController {
     private static Tile getNextTile(Tile startingTile, MoveDirection direction) {
         //TODO da integrare con il metodo fatto da belli per la mappa
         int tileDimension = 32;
-        GridPoint2 pos = startingTile.getPosition();
+        GridPoint2 pos = new GridPoint2(startingTile.getPosition());
         switch(direction) {
             case NORTH:
                 pos.y += tileDimension;
@@ -78,7 +78,7 @@ public class HeroController {
                 pos.x += -tileDimension;
                 break;
         }
-        return startingTile;
+        return new Tile(pos, Tile.TileType.Solid);
     }
 
 

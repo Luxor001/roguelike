@@ -16,6 +16,17 @@ public class GameDrawer extends ViewObject {
     private List<ViewObject> viewList;
     MapView map;
 
+    public GameDrawer() {
+        map = new MapView(new MapContainer(30, 30));  //map.create richiamato automaticamente da ViewObject
+        this.viewList = new LinkedList<ViewObject>();
+        this.viewList.add(map);
+        this.viewList.add(new Animator());
+        this.viewList.add(new HeroDrawer(GameModel.get().getHero()));
+
+        //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
+        new HeroController(GameModel.get().getHero());
+    }
+
     public void add(ViewObject toAdd) {
         this.viewList.add(toAdd);
     }
@@ -26,16 +37,9 @@ public class GameDrawer extends ViewObject {
 
     @Override
     public void create() {
-        super.create();
-
-        map = new MapView(new MapContainer(30, 30));  //map.create richiamato automaticamente da ViewObject
-        this.viewList = new LinkedList<ViewObject>();
-        this.viewList.add(map);
-        this.viewList.add(new Animator());
-        this.viewList.add(new HeroDrawer(GameModel.get().getHero()));
-
-        //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
-        new HeroController(GameModel.get().getHero());
+        for (ViewObject view : viewList) {
+            view.create();
+        }
     }
 
     @Override
@@ -48,14 +52,14 @@ public class GameDrawer extends ViewObject {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void render(float delta) {
+        super.render(delta);
 
         GameCamera.get().update();
         GameBatch.get().setProjectionMatrix(GameCamera.get().combined);
 
         for (ViewObject view : viewList) {
-            view.render();
+            view.render(delta);
         }
     }
 

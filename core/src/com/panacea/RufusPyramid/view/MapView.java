@@ -62,8 +62,8 @@ public class MapView extends ViewObject {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void render(float delta) {
+        super.render(delta);
 
 
         Gdx.gl.glEnable(GL20.GL_BLEND);

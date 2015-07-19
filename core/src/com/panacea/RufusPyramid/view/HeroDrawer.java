@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.creatures.AbstractCreature;
 import com.panacea.RufusPyramid.creatures.DefaultHero;
+import com.panacea.RufusPyramid.view.animations.AnimWalk;
 
 import java.util.ArrayList;
 
@@ -27,14 +28,14 @@ public class HeroDrawer extends ViewObject {
             @Override
             public void changed(AbstractCreature.PositionChangeEvent event, Object source) {
                 //Faccio l'animazione di camminata in base ai dati dell'evento
-                Gdx.app.log(HeroDrawer.class.toString(), "Catturato un evento PositionChangeEvent.");
+//                Gdx.app.log(HeroDrawer.class.toString(), "Catturato un evento PositionChangeEvent.");
                 HeroDrawer.this.walkAnimation((DefaultHero) source, event.getPath());
                 //Poi renderizzo l'eroe in setStanding (da impostare al termine dell'animazione)
 //                HeroDrawer.this.setStanding();
             }
         };
         this.heroModel.addChangeListener(this.posChangeListener);
-        Gdx.app.log(HeroDrawer.class.toString(), "creazione di HeroDrawer");
+//        Gdx.app.log(HeroDrawer.class.toString(), "creazione di HeroDrawer");
         sprite = getHeroSprite(heroModel);
         this.setStanding();
     }
@@ -45,7 +46,10 @@ public class HeroDrawer extends ViewObject {
     }
 
     private void walkAnimation(DefaultHero source, ArrayList<GridPoint2> path) {
-        //TODO animate
+        //TODO effettuare l'animazione di punto in punto con un ciclo.
+        this.startWalk(path.get(0), path.get(1));
+        GridPoint2 a = path.get(0), b = path.get(1);
+        Gdx.app.log(HeroDrawer.class.toString(), "Inizio animazione, hero walking. Da " + a.x + "," + a.y + " a " + b.x + "," + b.y);
         currentState = HeroState.WALKING;
     }
 
@@ -54,13 +58,17 @@ public class HeroDrawer extends ViewObject {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void render(float delta) {
+        super.render(delta);
 
         switch(this.currentState) {
             case WALKING:
                 //TODO fare l'animazione di camminata
-//                break;
+                if (animWalk != null) {
+                    animWalk.render(delta);
+//                    Gdx.app.log(HeroDrawer.class.toString(), "Hero walking, animazione in corso.");
+                }
+                break;
             case STANDING:
                 GridPoint2 pos = this.heroModel.getPosition().getPosition();
 //                Gdx.app.log(HeroDrawer.class.toString(), "Eroe in camminata alla posizione: " + pos.x + "-" + pos.y);
@@ -73,9 +81,15 @@ public class HeroDrawer extends ViewObject {
 
                 break;
             default:
-                Gdx.app.debug(HeroDrawer.class.toString(), "Non so che sprite disegnare! Stato corrente: " + this.currentState);
+                Gdx.app.error(HeroDrawer.class.toString(), "Non so che sprite disegnare! Stato corrente: " + this.currentState);
                 break;
         }
+    }
+
+    private AnimWalk animWalk = null;
+    private void startWalk(GridPoint2 startPos, GridPoint2 endPos) {
+        animWalk = new AnimWalk(startPos, endPos, 40.0f);
+        animWalk.create();
     }
 
     private enum HeroState {

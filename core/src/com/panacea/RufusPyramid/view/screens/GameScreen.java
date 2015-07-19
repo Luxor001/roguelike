@@ -12,15 +12,16 @@ public class GameScreen implements Screen {
     public void show() {
         GameModel.createInstance();
         objectsDrawer = new GameDrawer();
-//        objectsDrawer.create();
-        Gdx.app.log(GameScreen.class.toString(), "show() di GameScreen");
+        objectsDrawer.create();
+//        Gdx.app.log(GameScreen.class.toString(), "show() di GameScreen");
     }
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        objectsDrawer.render();
+//        objectsDrawer.render(Gdx.graphics.getDeltaTime());
+        objectsDrawer.render(delta);
     }
 
     public void resize(int width, int height) {

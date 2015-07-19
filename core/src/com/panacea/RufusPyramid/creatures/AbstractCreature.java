@@ -166,11 +166,11 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     private void firePositionChangeEvent(ArrayList<GridPoint2> path) {
-        Gdx.app.log(AbstractCreature.class.toString(), "Chiamata a firePositionChangeEvent()");
+//        Gdx.app.log(AbstractCreature.class.toString(), "Chiamata a firePositionChangeEvent()");
         PositionChangeEvent event = new PositionChangeEvent(this.getPosition().getPosition(), path);
         for (PositionChangeListener listener : this.changeListeners) {
             listener.changed(event, this);
-            Gdx.app.log(AbstractCreature.class.toString(), "firePositionChangeEvent(), foreach iteration.");
+//            Gdx.app.log(AbstractCreature.class.toString(), "firePositionChangeEvent(), foreach iteration.");
         }
     }
 

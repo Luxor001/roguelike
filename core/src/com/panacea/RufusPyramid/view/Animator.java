@@ -19,8 +19,7 @@ public class Animator extends ViewObject {
     public static int x,y;
 
     public void create() {
-        TextureRegion region = new TextureRegion();
-        walkAnim = new AnimWalk(0.33f, region);
+        walkAnim = new AnimWalk(new GridPoint2(0,0), new GridPoint2(0,32), 40.0f);
         walkAnim.create(/*path*/);
 
         screenLimits = new GridPoint2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -28,12 +27,12 @@ public class Animator extends ViewObject {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void render(float delta) {
+        super.render(delta);
 
         //x++;//movimento di prova..
         //walkAnim.updateLocation(new GridPoint2(x, y)); //aggiorno la posizione da disegnare della "tile"
-        walkAnim.render();
+        walkAnim.render(delta);
 
         if(x >= screenLimits.x) //se esci fuori dallo schermo, resetta a 0
             x=0;

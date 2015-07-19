@@ -1,14 +1,13 @@
 package com.panacea.RufusPyramid.view.animations;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.view.GameBatch;
-import com.panacea.RufusPyramid.view.GameCamera;
 import com.panacea.RufusPyramid.view.ViewObject;
 
 import java.util.ArrayList;
@@ -20,8 +19,9 @@ import java.util.ArrayList;
  */
 public class AnimWalk extends ViewObject {
 
+    //TODO mantieni un'unica immagine come TextureRegion e da lì prendi le immagini che ti servono
     private static final int FRAME_COLS = 4;/*Grandezza della matrice degli sprite per l'animazione. Direi che 20 sprites bastano e avanzano*/
-    private static final int FRAME_ROWS = 7;
+    private static final int FRAME_ROWS = 1;
 
     private Animation walkAnimation;
     private Texture animationTexture;
@@ -31,18 +31,36 @@ public class AnimWalk extends ViewObject {
 
     private ArrayList<GridPoint2> path;
     private int walkImageIndex;     //Ricorda qual è l'ultimo frame disegnato
+
+    private GridPoint2 startPoint;
     private GridPoint2 currPoint;
+    private GridPoint2 endPoint;
+
+    float speed;
     float stateTime;
     float frameDuration=0;
 
-    public AnimWalk(float frameDuration, TextureRegion... keyFrames){
-        this.frameDuration=frameDuration;
-        walkFrames=keyFrames;
+    /* Prova con i vector */
+    Vector2 currentPos;
+    Vector2 velocity;
+    Vector2 deltaMovement;
+    Vector2 endPos;
+    Vector2 direction;
+
+    public AnimWalk(){
+        this.frameDuration = 0.33f;
+//        this.path = path;
     }
 
-    public void create(/*ArrayList<GridPoint2> path*/) {
-//        this.path = path;
-        animationTexture = new Texture(Gdx.files.internal("data/spritesheet2.png")); // #9
+    public AnimWalk(GridPoint2 startPoint, GridPoint2 endPoint, float speed){
+        this.frameDuration = 0.2f;  //TODO imposta frameDuration in base alla velocità! Circa speed/200, ma deve essere in proporzione inversa
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.speed = speed;
+    }
+
+    public void create() {
+        animationTexture = new Texture(Gdx.files.internal("data/spritesheet2_walk.png")); // #9
         TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/FRAME_COLS, animationTexture.getHeight()/FRAME_ROWS);              // #10
         walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
@@ -53,11 +71,25 @@ public class AnimWalk extends ViewObject {
         }
         walkAnimation = new Animation(frameDuration, walkFrames);      // #11
         spriteBatch = GameBatch.get();                // #12
-//        spriteBatch.setProjectionMatrix(GameCamera.get().combined);
         stateTime = 0f;                         // #13
 //        currPoint = path.get(0);
-        currPoint = new GridPoint2();
+        currPoint = this.startPoint;
         this.walkImageIndex = -1;
+
+        /* Prova con i vector */
+        // Reference: http://stackoverflow.com/questions/17694076/moving-a-point-vector-on-an-angle-libgdx
+        // Declared as fields, so they will be reused
+        currentPos = new Vector2(startPoint.x, startPoint.y);
+        velocity = new Vector2();
+        deltaMovement = new Vector2();
+
+        endPos = new Vector2(endPoint.x, endPoint.y);
+        direction = new Vector2();
+        // On touch events, set the touch vector, then do this to get the direction vector
+        direction.set(endPos).sub(currentPos).nor();
+
+        // scale it to the speed you want to move, then use it to update your position.
+        velocity = new Vector2(direction).scl(speed);
     }
 
 //    public void updateLocation(GridPoint2 point){
@@ -65,20 +97,38 @@ public class AnimWalk extends ViewObject {
 //    }
 
     @Override
-    public void render() {
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);  /*pulisci lo schermo*/
-//        walkImageIndex = (walkImageIndex + 1) % walkFrames.length;
-//        currPoint = path.get(walkImageIndex);
-        float delta = Gdx.graphics.getDeltaTime();
+    public void render(float delta) {
+        boolean toDispose = false;
+        /* Prova con i vector */
+        deltaMovement.set(velocity).scl(delta);
 
-//        OrthographicCamera camera = GameCamera.get();
-//        camera.update();
-//        spriteBatch.setProjectionMatrix(camera.combined);
-        stateTime += delta;           // #15
-        currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
+        if (currentPos.dst2(endPos) > deltaMovement.len2()) { //Se la distanza tra la posiz. attuale e la posiz. finale è minore di deltaMovement
+            currentPos.add(deltaMovement);
+            stateTime += delta;
+        } else {
+            currentPos.set(endPos);
+            stateTime += delta; //FIXME non è proprio delta, andrebbe fatta una proporzione!
+            toDispose = true;
+        }
+        currPoint.x = Math.round(currentPos.x);
+        currPoint.y = Math.round(currentPos.y);
+        /* Fine */
+
+//        stateTime = (stateTime + delta < this.animDuration ? stateTime + delta : this.animDuration);
+        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 
         spriteBatch.begin();
-        spriteBatch.draw(currentFrame, currPoint.x,currPoint.y, 32, 32);             // #17
+        spriteBatch.draw(currentFrame, currPoint.x, currPoint.y, 32, 32);
         spriteBatch.end();
+
+        if (toDispose) {
+            this.dispose();
+        }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        //TODO libera tutte le risorse e concludi l'animazione (lancio di un evento FinishedAnimationEvent ?)
     }
 }
