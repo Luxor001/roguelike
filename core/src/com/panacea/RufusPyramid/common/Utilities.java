@@ -22,7 +22,7 @@ public class Utilities {
         WEST;
 
         public static GridPoint2 adjCoords(GridPoint2 inputCords,Utilities.Directions direction){
-            GridPoint2 newCords=new GridPoint2(inputCords.x,inputCords.y);
+            GridPoint2 newCords=inputCords;
             if(direction == Utilities.Directions.NORTH)
                 newCords.y--;
             if(direction == Utilities.Directions.EAST)

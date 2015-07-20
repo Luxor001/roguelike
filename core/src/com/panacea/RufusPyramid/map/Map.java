@@ -5,17 +5,10 @@ package com.panacea.RufusPyramid.map;
  */
 public class Map {
 
-    private int level;
-    private MapContainer mapcontainer;
-    public Map(int level, MapContainer mapcontainer){
+    int level;
+    Tile[][] mapTiles;
+    public Map(int level, Tile[][] mapTiles){
         this.level=level;
-        this.mapcontainer=mapcontainer;
-    }
-
-    public MapContainer getMapContainer(){
-        return mapcontainer;
-    }
-    public int getLevel(){
-        return level;
+        this.mapTiles=mapTiles;
     }
 }

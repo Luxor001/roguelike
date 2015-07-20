@@ -7,37 +7,33 @@ import com.badlogic.gdx.ApplicationListener;
  * Contiene tutti i metodi utili allo scopo, fare override di quelli necessari.
  * Created by gioele.masini on 06/07/2015.
  */
-public class ViewObject implements ApplicationListener {
+public class ViewObject {
+    //TODO rimuovere l'implements di ApplicationListener?
+
     public ViewObject() {
-        this.create();
+
     }
 
-    @Override
     public void create() {
 
     }
 
-    @Override
     public void resize(int width, int height) {
 
     }
 
-    @Override
-    public void render() {
+    public void render(float delta) {
 
     }
 
-    @Override
     public void pause() {
 
     }
 
-    @Override
     public void resume() {
 
     }
 
-    @Override
     public void dispose() {
 
     }

@@ -1,5 +1,8 @@
 package com.panacea.RufusPyramid.creatures;
 
+import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.map.Tile;
+
 /**
  * Created by gio on 09/07/15.
  */
@@ -15,6 +18,9 @@ public class DefaultHero extends AbstractCreature {
 //    TODO aggiungere il livello con l'oggetto Level
     public DefaultHero(String name/*, LevelerConfig  */) {
         super(name, DESCRIPTION, MAX_HP, ATTACK, DEFENCE, SPEED);
+        //TODO la posizione di spawn va presa dalla mappa;
+        Tile tile = new Tile(new GridPoint2(), Tile.TileType.Solid);
+        this.setPosition(tile);
     };
 
 
