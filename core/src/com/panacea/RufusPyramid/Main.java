@@ -13,7 +13,7 @@ public class Main extends Game {
         Gdx.input.setInputProcessor(InputManager.getInstance());
         this.setScreen(new com.panacea.RufusPyramid.view.screens.GameScreen());
         MapFactory a=new MapFactory();
-        a.generateMap(122);
+        a.generateMap(2);
 	}
 
 
