@@ -9,12 +9,16 @@ import com.badlogic.gdx.math.GridPoint2;
 public class Tile {
     GridPoint2 position;
     //Items items;
-    TileType type;
+    private TileType type;
 
 
     public Tile(GridPoint2 position, TileType type){ //manca items!
         this.position=position;
         this.type=type;
+    }
+
+    public TileType getType(){
+        return type;
     }
 
     public enum TileType{

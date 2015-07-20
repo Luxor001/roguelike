@@ -1,5 +1,7 @@
 package com.panacea.RufusPyramid.common;
 
+import com.badlogic.gdx.math.GridPoint2;
+
 import java.util.Random;
 
 /**
@@ -17,6 +19,20 @@ public class Utilities {
         NORTH,
         EAST,
         SOUTH,
-        WEST
+        WEST;
+
+        public static GridPoint2 adjCoords(GridPoint2 inputCords,Utilities.Directions direction){
+            GridPoint2 newCords=inputCords;
+            if(direction == Utilities.Directions.NORTH)
+                newCords.y--;
+            if(direction == Utilities.Directions.EAST)
+                newCords.x++;
+            if(direction == Utilities.Directions.SOUTH)
+                newCords.y++;
+            if(direction == Utilities.Directions.WEST)
+                newCords.x--;
+
+            return newCords;
+        }
     }
 }
