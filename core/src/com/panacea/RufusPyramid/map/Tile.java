@@ -28,10 +28,6 @@ public class Tile {
         Hidden
     }
 
-    public GridPoint2 getPosition() {
-        return this.position;
-    }
-
     public class DestructibleTile extends Tile{
         int hp;
 
