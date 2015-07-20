@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.items;
+package com.panacea.RufusPyramid.game.items.items;
 
 /**
  * Token for item interface.

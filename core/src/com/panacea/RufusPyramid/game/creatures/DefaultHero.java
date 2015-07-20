@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.creatures;
+package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.map.Tile;
@@ -22,11 +22,4 @@ public class DefaultHero extends AbstractCreature {
         Tile tile = new Tile(new GridPoint2(), Tile.TileType.Solid);
         this.setPosition(tile);
     };
-
-
-    /**
-     * Classe di configurazione con i valori di incremento delle statistiche e i metodi
-     * per il calcolo delle nuove statistiche all'aumento di livello.
-     */
-
 }

@@ -1,10 +1,10 @@
-package com.panacea.RufusPyramid.creatures;
+package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.InputManager;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
-import com.panacea.RufusPyramid.view.HeroInputManager;
+import com.panacea.RufusPyramid.game.view.HeroInputManager;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,6 @@ public class HeroController {
 
     public HeroController(DefaultHero hero) {
         this.hero = hero;
-        InputManager.getInstance().addProcessor(new HeroInputManager(this));
     }
 
     public HeroController(DefaultHero hero, MapContainer spawnMap, Tile startingPosition) {

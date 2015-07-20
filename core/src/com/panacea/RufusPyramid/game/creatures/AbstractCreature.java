@@ -1,15 +1,10 @@
-package com.panacea.RufusPyramid.creatures;
+package com.panacea.RufusPyramid.game.creatures;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.OrderedSet;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.map.Tile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +21,7 @@ public abstract class AbstractCreature implements ICreature {
     private int maximumHP, currentHP;
     private double attack, defence, speed;
     private Tile position;
-    private Backpack backpack;
+    private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -38,7 +33,7 @@ public abstract class AbstractCreature implements ICreature {
         this.setDefenceValue(defence);
         this.setSpeed(speed);
         this.setPosition(null);
-        this.backpack = new Backpack();
+        this.backpack = new com.panacea.RufusPyramid.game.creatures.Backpack();
 
         this.changeListeners = new ArrayList<PositionChangeListener>();
     }
@@ -134,20 +129,23 @@ public abstract class AbstractCreature implements ICreature {
     public void setPosition(Tile currentPosition, ArrayList<Tile> path) {
 //        Gdx.app.log(AbstractCreature.class.toString(), "Chiamata a setPosition(), tile a " + currentPosition.getPosition().x + "," + currentPosition.getPosition().y);
         this.position = currentPosition;
-        if (path.lastIndexOf(currentPosition) != path.size()-1 ) {
-            throw new IllegalArgumentException(
-                    "L'ultimo elemento della lista path deve essere la Tile settata (corrispondente al paramentro currentPosition).");
-        }
 
-        ArrayList<GridPoint2> pointPath = new ArrayList<GridPoint2>();
-        for (Tile tile: path) {
-            pointPath.add(tile.getPosition());
+        if (this.position != null) {    //TODO && this.map.isPointInsideMap(this.position)
+            if (path.lastIndexOf(currentPosition) != path.size() - 1) {
+                throw new IllegalArgumentException(
+                        "L'ultimo elemento della lista path deve essere la Tile settata (corrispondente al paramentro currentPosition).");
+            }
+
+            ArrayList<GridPoint2> pointPath = new ArrayList<GridPoint2>();
+            for (Tile tile : path) {
+                pointPath.add(tile.getPosition());
+            }
+            this.firePositionChangeEvent(pointPath);
         }
-        this.firePositionChangeEvent(pointPath);
     }
 
     @Override
-    public Backpack getEquipment() {
+    public com.panacea.RufusPyramid.game.creatures.Backpack getEquipment() {
         return this.backpack;
     }
 

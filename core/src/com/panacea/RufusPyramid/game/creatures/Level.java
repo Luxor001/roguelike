@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.creatures;
+package com.panacea.RufusPyramid.game.creatures;
 
 /**
  * Created by gio on 09/07/15.
@@ -43,6 +43,10 @@ public class Level {
 //        return speedValue + this.incRateoSpeed;
 //    }
 
+    /**
+     * Classe di configurazione con i valori di incremento delle statistiche e i metodi
+     * per il calcolo delle nuove statistiche all'aumento di livello.
+     */
     protected class LevelerConfig {
         /**
          *  Incremento delle statistiche all'aumentare di livello

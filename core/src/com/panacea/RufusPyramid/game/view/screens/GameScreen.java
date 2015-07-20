@@ -1,10 +1,10 @@
-package com.panacea.RufusPyramid.view.screens;
+package com.panacea.RufusPyramid.game.view.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.panacea.RufusPyramid.GameModel;
-import com.panacea.RufusPyramid.view.GameDrawer;
+import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
 
 public class GameScreen implements Screen {
     GameDrawer objectsDrawer;

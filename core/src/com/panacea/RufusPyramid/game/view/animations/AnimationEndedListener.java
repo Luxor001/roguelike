@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.view.animations;
+package com.panacea.RufusPyramid.game.view.animations;
 
 /**
  * Created by gio on 20/07/15.

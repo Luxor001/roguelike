@@ -1,7 +1,7 @@
-package com.panacea.RufusPyramid.view;
+package com.panacea.RufusPyramid.game.view;
 
-import com.panacea.RufusPyramid.GameModel;
-import com.panacea.RufusPyramid.creatures.HeroController;
+import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.map.MapContainer;
 
 import java.util.LinkedList;
@@ -12,32 +12,29 @@ import java.util.List;
  * E' eventualmente possibile aggiungerne e rimuoverne di altri.
  * Created by gio on 11/07/15.
  */
-public class GameDrawer extends ViewObject {
-    private List<ViewObject> viewList;
+public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
+    private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
     MapView map;
 
     public GameDrawer() {
         map = new MapView(new MapContainer(30, 30));  //map.create richiamato automaticamente da ViewObject
-        this.viewList = new LinkedList<ViewObject>();
+        this.viewList = new LinkedList<com.panacea.RufusPyramid.game.view.ViewObject>();
         this.viewList.add(map);
         this.viewList.add(new Animator());
         this.viewList.add(new HeroDrawer(GameModel.get().getHero()));
-
-        //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
-        new HeroController(GameModel.get().getHero());
     }
 
-    public void add(ViewObject toAdd) {
+    public void add(com.panacea.RufusPyramid.game.view.ViewObject toAdd) {
         this.viewList.add(toAdd);
     }
 
-    public void remove(ViewObject toRemove) {
+    public void remove(com.panacea.RufusPyramid.game.view.ViewObject toRemove) {
         this.viewList.remove(toRemove);
     }
 
     @Override
     public void create() {
-        for (ViewObject view : viewList) {
+        for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.create();
         }
     }
@@ -46,7 +43,7 @@ public class GameDrawer extends ViewObject {
     public void resize(int width, int height) {
         super.resize(width, height);
 
-        for (ViewObject view : viewList) {
+        for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.resize(width, height);
         }
     }
@@ -58,7 +55,7 @@ public class GameDrawer extends ViewObject {
         GameCamera.get().update();
         GameBatch.get().setProjectionMatrix(GameCamera.get().combined);
 
-        for (ViewObject view : viewList) {
+        for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.render(delta);
         }
     }
@@ -67,7 +64,7 @@ public class GameDrawer extends ViewObject {
     public void pause() {
         super.pause();
 
-        for (ViewObject view : viewList) {
+        for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.pause();
         }
     }
@@ -76,7 +73,7 @@ public class GameDrawer extends ViewObject {
     public void resume() {
         super.resume();
 
-        for (ViewObject view : viewList) {
+        for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.resume();
         }
     }
@@ -85,7 +82,7 @@ public class GameDrawer extends ViewObject {
     public void dispose() {
         super.dispose();
 
-        for (ViewObject view : viewList) {
+        for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.dispose();
         }
     }

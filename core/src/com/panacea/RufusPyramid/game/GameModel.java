@@ -1,7 +1,6 @@
-package com.panacea.RufusPyramid;
+package com.panacea.RufusPyramid.game;
 
-import com.panacea.RufusPyramid.creatures.DefaultHero;
-import com.panacea.RufusPyramid.map.Map;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.map.MapContainer;
 
 import java.util.ArrayList;

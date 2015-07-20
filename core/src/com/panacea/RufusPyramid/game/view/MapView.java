@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.view;
+package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.common.InputManager;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
 

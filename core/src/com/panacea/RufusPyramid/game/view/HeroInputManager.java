@@ -1,13 +1,13 @@
-package com.panacea.RufusPyramid.view;
+package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
-import com.panacea.RufusPyramid.creatures.DefaultHero;
-import com.panacea.RufusPyramid.creatures.HeroController;
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
+import com.panacea.RufusPyramid.game.creatures.HeroController;
 
 public class HeroInputManager extends InputAdapter {
+    //TODO estendere GestureDetector?
 
     private int screenWidth = Gdx.graphics.getWidth();
     private int screenHeight = Gdx.graphics.getHeight();
@@ -16,31 +16,16 @@ public class HeroInputManager extends InputAdapter {
 
     private boolean isPaused = false;
 
+    private Vector2 touchDownPosition;
+
     public HeroInputManager(HeroController hero) {
         this.hero = hero;
     }
 
-//    @Override
-//    public boolean touchDragged (int x, int y, int pointer) {
-////        camera.unproject(curr.set(x, y, 0));
-////        if (!(last.x == -1 && last.y == -1 && last.z == -1)) {
-////            camera.unproject(delta.set(last.x, last.y, 0));
-////            delta.sub(curr);
-////            camera.position.add(delta.x, delta.y, 0);
-////        }
-////        last.set(x, y, 0);
-////        return false;
-//    }
-//
-//    @Override
-//    public boolean touchUp (int x, int y, int pointer, int button) {
-////        last.set(-1, -1, -1);
-////        return false;
-//    }
-
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchUp (int screenX, int screenY, int pointer, int button) {
         if (isPaused) return false;
+        if (hasBeenDragged(this.touchDownPosition, new Vector2(screenX, screenY))) return false;
 
         if (screenY > screenHeight-screenHeight/4) {
             //move up
@@ -60,7 +45,22 @@ public class HeroInputManager extends InputAdapter {
         return true;
     }
 
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        this.touchDownPosition = new Vector2(screenX, screenY);
+        return false;
+    }
+
     public void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
+    }
+
+    private boolean hasBeenDragged(Vector2 touchDownPosition, Vector2 touchUpPosition) {
+        int sensibility = 5;
+        Vector2 diff = touchDownPosition.sub(touchUpPosition);
+        if (Math.abs(diff.x) > sensibility || Math.abs(diff.y) > sensibility) {
+            return true;
+        }
+        return false;
     }
 }

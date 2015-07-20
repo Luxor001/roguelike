@@ -1,25 +1,20 @@
-package com.panacea.RufusPyramid.view;
+package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.common.InputManager;
-import com.panacea.RufusPyramid.view.animations.AnimWalk;
-
-import java.util.ArrayList;
 
 /*Snippet preso da https://github.com/libgdx/libgdx/wiki/2D-Animation*/
 public class Animator extends ViewObject {
 
-    private AnimWalk walkAnim;
+    private com.panacea.RufusPyramid.game.view.animations.AnimWalk walkAnim;
     public GridPoint2 screenLimits;
 
     int counter=0;
     public static int x,y;
 
     public void create() {
-        walkAnim = new AnimWalk(new GridPoint2(0,0), new GridPoint2(0,32), 40.0f);
+        walkAnim = new com.panacea.RufusPyramid.game.view.animations.AnimWalk(new GridPoint2(0,0), new GridPoint2(0,32), 40.0f);
         walkAnim.create(/*path*/);
 
         screenLimits = new GridPoint2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

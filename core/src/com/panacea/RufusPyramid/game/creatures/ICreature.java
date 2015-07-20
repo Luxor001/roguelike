@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.creatures;
+package com.panacea.RufusPyramid.game.creatures;
 
 import com.panacea.RufusPyramid.map.Tile;
 

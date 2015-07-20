@@ -1,17 +1,18 @@
-package com.panacea.RufusPyramid.view;
+package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.InputManager;
-import com.panacea.RufusPyramid.creatures.AbstractCreature;
-import com.panacea.RufusPyramid.creatures.DefaultHero;
-import com.panacea.RufusPyramid.creatures.HeroController;
-import com.panacea.RufusPyramid.view.animations.AbstrAnimation;
-import com.panacea.RufusPyramid.view.animations.AnimWalk;
-import com.panacea.RufusPyramid.view.animations.AnimationEndedEvent;
-import com.panacea.RufusPyramid.view.animations.AnimationEndedListener;
+import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.HeroController;
+import com.panacea.RufusPyramid.game.view.animations.AbstrAnimation;
+import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
+import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
+import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class HeroDrawer extends ViewObject {
 
     private DefaultHero heroModel;
     private HeroController heroController;
-    private HeroInputManager heroInput;
+    private com.panacea.RufusPyramid.game.view.HeroInputManager heroInput;
     private AbstractCreature.PositionChangeListener posChangeListener;
     private HeroState currentState;
 
@@ -32,21 +33,24 @@ public class HeroDrawer extends ViewObject {
 
     public HeroDrawer(/*HeroController heroController, */DefaultHero heroModel) {
         this.heroModel = heroModel;
-        this.heroController = heroController;
-//        this.heroInput = new HeroInputManager(heroController);
-//        InputManager.getInstance().addProcessor(this.heroInput);
+
+
+        //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
+        this.heroController = new HeroController(GameModel.get().getHero());
+        this.heroInput = new HeroInputManager(this.heroController);
+        InputManager.getInstance().addProcessor(this.heroInput);
 
         this.posChangeListener = new AbstractCreature.PositionChangeListener() {
             @Override
             public void changed(AbstractCreature.PositionChangeEvent event, Object source) {
-                //Faccio l'animazione di camminata in base ai dati dell'evento
-//                HeroDrawer.this.heroInput.setPaused(true);
+                //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
+                HeroDrawer.this.heroInput.setPaused(true);
                 AnimationEndedListener listener = new AnimationEndedListener() {
                     @Override
                     public void ended(AnimationEndedEvent event, Object source) {
-                        //Poi renderizzo l'eroe in setStanding (da impostare al termine dell'animazione)
+                        //Poi renderizzo l'eroe in setStanding e riabilito l'input
                         HeroDrawer.this.setStanding();
-                        //HeroDrawer.this.heroInput.setPaused(false);
+                        HeroDrawer.this.heroInput.setPaused(false);
                     }
                 };
                 HeroDrawer.this.walkAnimation((DefaultHero) source, event.getPath(), listener);
@@ -91,7 +95,7 @@ public class HeroDrawer extends ViewObject {
                 GridPoint2 pos = this.heroModel.getPosition().getPosition();
 //                Gdx.app.log(HeroDrawer.class.toString(), "Eroe in camminata alla posizione: " + pos.x + "-" + pos.y);
                 spritePosition = this.heroModel.getPosition().getPosition();
-                SpriteBatch batch = GameBatch.get();
+                SpriteBatch batch = com.panacea.RufusPyramid.game.view.GameBatch.get();
 
                 batch.begin();
                 batch.draw(this.sprite, spritePosition.x, spritePosition.y, 32, 32);

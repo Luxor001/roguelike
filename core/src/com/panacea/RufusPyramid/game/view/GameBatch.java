@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.view;
+package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
