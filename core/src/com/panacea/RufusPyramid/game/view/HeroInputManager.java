@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 
 public class HeroInputManager extends InputAdapter {
@@ -42,6 +43,12 @@ public class HeroInputManager extends InputAdapter {
         } else {
             return false;   //not processed
         }
+
+
+        /* TODO Vai alla posizione (x,y) sulla mappa, tramite un algoritmo di path*/
+        Vector3 gamePos = GameCamera.get().unproject(new Vector3(screenX, screenY, 0));
+        GridPoint2 mapPos = new GridPoint2(Math.round(gamePos.x/32), Math.round(gamePos.y/32));
+
         return true;
     }
 
