@@ -1,53 +1,48 @@
-package com.panacea.RufusPyramid.game.creatures;
+package com.panacea.RufusPyramid.game.actions;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.map.MapContainer;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
- * Created by gio on 11/07/15.
+ * Created by gio on 22/07/15.
  */
-public class HeroController {
+public class MoveAction implements IAction {
+    private final Utilities.Directions direction;
+    private final IAgent model;
 
-    private DefaultHero hero;
-
-
-    public HeroController(DefaultHero hero) {
-        this.hero = hero;
+    public MoveAction(IAgent modelToMove, Utilities.Directions direction) {
+        this.model = modelToMove;
+        this.direction = direction;
     }
 
-    public HeroController(DefaultHero hero, MapContainer spawnMap, Tile startingPosition) {
-        this(hero);
-        hero.setPosition(startingPosition);
+
+    @Override
+    public boolean perform() {
+        return this.moveOneStep((ICreature)this.model, this.direction);
     }
 
-    public void setPosition(MapContainer spawnMap, GridPoint2 spawnPosition) {
-
+    @Override
+    public int getCost() {
+        return 0;
     }
 
-    public void moveToPosition(GridPoint2 finalPosition) {
+//    public boolean isPerformable() {
+//
+//    }
 
-    }
-
-    /**
-     * Move one step to input directory.
-     * @param direction direction to move
-     * @return true if moved successfully, false otherwise
-     */
-    public boolean moveOneStep(Utilities.Directions direction) {
-        Tile startingTile = this.hero.getPosition();
+    public boolean moveOneStep(ICreature creature, Utilities.Directions direction) {
+        Tile startingTile = creature.getPosition();
         Tile arrivalTile = getNextTile(startingTile, direction);
         ArrayList<Tile> path = new ArrayList<Tile>();
         path.add(startingTile);
         path.add(arrivalTile);
         if (isTileWalkable(arrivalTile)) {
             //TODO Animator.walk(this.hero, startingTile, arrivalTile);
-            this.hero.setPosition(arrivalTile, path);
+            creature.setPosition(arrivalTile);
             return true;
         }
 
@@ -60,9 +55,10 @@ public class HeroController {
         return true;
     }
 
+
     private static Tile getNextTile(Tile startingTile, Utilities.Directions direction) {
         //TODO da integrare con il metodo fatto da belli per la mappa
-        GridPoint2 pos = HeroController.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
+        GridPoint2 pos = MoveAction.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
 
 
         return new Tile(pos, Tile.TileType.Solid);

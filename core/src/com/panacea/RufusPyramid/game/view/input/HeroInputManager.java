@@ -1,11 +1,13 @@
-package com.panacea.RufusPyramid.game.view;
+package com.panacea.RufusPyramid.game.view.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
+import com.panacea.RufusPyramid.game.view.GameCamera;
 
 public class HeroInputManager extends InputAdapter {
     //TODO estendere GestureDetector?
@@ -30,18 +32,18 @@ public class HeroInputManager extends InputAdapter {
 
         if (screenY > screenHeight-screenHeight/4) {
             //move up
-            this.hero.moveOneStep(HeroController.MoveDirection.SOUTH);
+            this.hero.moveOneStep(Utilities.Directions.SOUTH);
         } else if (screenY < screenHeight/4) {
             //move down
-            this.hero.moveOneStep(HeroController.MoveDirection.NORTH);
+            this.hero.moveOneStep(Utilities.Directions.NORTH);
         } else if (screenX < screenWidth/2) {
             //move left
-            this.hero.moveOneStep(HeroController.MoveDirection.WEST);
+            this.hero.moveOneStep(Utilities.Directions.WEST);
         } else if (screenX > screenWidth/2) {
             //move right
-            this.hero.moveOneStep(HeroController.MoveDirection.EAST);
+            this.hero.moveOneStep(Utilities.Directions.EAST);
         } else {
-            return false;   //not processed
+            return false;   //not performed
         }
 
 

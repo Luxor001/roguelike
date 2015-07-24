@@ -1,4 +1,4 @@
-package com.panacea.RufusPyramid.game.view;
+package com.panacea.RufusPyramid.game.view.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;

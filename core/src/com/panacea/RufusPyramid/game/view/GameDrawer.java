@@ -1,9 +1,16 @@
 package com.panacea.RufusPyramid.game.view;
 
+import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.map.MapContainer;
+import com.panacea.RufusPyramid.map.Tile;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +29,19 @@ public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
         this.viewList.add(map);
         this.viewList.add(new Animator());
         this.viewList.add(new HeroDrawer(GameModel.get().getHero()));
+        List<ICreature> creatures = new ArrayList<ICreature>();
+        ICreature e1 = new Enemy("Thief", "", 10, 1, 1, 1);
+        e1.setPosition(new Tile(new GridPoint2(0, 0), Tile.TileType.Solid));
+        creatures.add(e1);
+        ICreature e2 = new Enemy("Thief", "", 10, 1, 1, 1);
+        e2.setPosition(new Tile(new GridPoint2(1,1), Tile.TileType.Solid));
+        creatures.add(e2);
+        GameMaster gm = new GameMaster();
+        gm.addAgent(e1);
+        gm.addAgent(e2);
+//        gm.addAgent(new DefaultHero("Ciao"));
+        this.viewList.add(new CreaturesDrawer(creatures));
+        gm.startTurns();
     }
 
     public void add(com.panacea.RufusPyramid.game.view.ViewObject toAdd) {

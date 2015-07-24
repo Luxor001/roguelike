@@ -3,9 +3,13 @@ package com.panacea.RufusPyramid.game.creatures;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
+import com.panacea.RufusPyramid.game.actions.ActionPerformedEvent;
+import com.panacea.RufusPyramid.game.actions.ActionPerformedListener;
+import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Deve davvero essere una classe astratta? O basta chiamarla "GenericCreature" ?
@@ -22,6 +26,8 @@ public abstract class AbstractCreature implements ICreature {
     private double attack, defence, speed;
     private Tile position;
     private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
+    private int energy;
+    private List<ActionPerformedListener> actionPerformedListeners;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -36,6 +42,7 @@ public abstract class AbstractCreature implements ICreature {
         this.backpack = new com.panacea.RufusPyramid.game.creatures.Backpack();
 
         this.changeListeners = new ArrayList<PositionChangeListener>();
+        this.actionPerformedListeners = new ArrayList<ActionPerformedListener>(1);
     }
 
     private static int getUniqueCreatureId() {
@@ -190,5 +197,27 @@ public abstract class AbstractCreature implements ICreature {
         }
 
         public abstract void changed(PositionChangeEvent event, Object source);
+    }
+
+    @Override
+    public int getEnergy() {
+        return this.energy;
+    }
+
+    @Override
+    public void setEnergy(int currentEnergy) {
+        this.energy = currentEnergy;
+    }
+
+    @Override
+    public void addActionProcessedListener(ActionPerformedListener listener) {
+        this.actionPerformedListeners.add(listener);
+    }
+
+    @Override
+    public void fireActionProcessedEvent(ActionPerformedEvent event, IAgent source) {
+        for (ActionPerformedListener listener : this.actionPerformedListeners) {
+            listener.performed(event, source);
+        }
     }
 }

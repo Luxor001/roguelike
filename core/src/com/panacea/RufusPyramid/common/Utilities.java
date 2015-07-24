@@ -19,19 +19,44 @@ public class Utilities {
         NORTH,
         EAST,
         SOUTH,
-        WEST;
+        WEST,
+        NORTH_EAST,
+        NORTH_WEST,
+        SOUTH_EAST,
+        SOUTH_WEST;
 
-        public static GridPoint2 adjCoords(GridPoint2 inputCords,Utilities.Directions direction){
-            GridPoint2 newCords=new GridPoint2(inputCords.x,inputCords.y);
-            if(direction == Utilities.Directions.NORTH)
-                newCords.y--;
-            if(direction == Utilities.Directions.EAST)
-                newCords.x++;
-            if(direction == Utilities.Directions.SOUTH)
-                newCords.y++;
-            if(direction == Utilities.Directions.WEST)
-                newCords.x--;
-
+        public static GridPoint2 adjCoords(GridPoint2 inputCords, Utilities.Directions direction){
+            GridPoint2 newCords = new GridPoint2(inputCords);
+            switch(direction) {
+                case NORTH:
+                    newCords.y++;
+                    break;
+                case EAST:
+                    newCords.x++;
+                    break;
+                case SOUTH:
+                    newCords.y--;
+                    break;
+                case WEST:
+                    newCords.x--;
+                    break;
+                case NORTH_EAST:
+                    newCords.y++;
+                    newCords.x++;
+                    break;
+                case NORTH_WEST:
+                    newCords.y++;
+                    newCords.x--;
+                    break;
+                case SOUTH_EAST:
+                    newCords.y--;
+                    newCords.x++;
+                    break;
+                case SOUTH_WEST:
+                    newCords.y--;
+                    newCords.x--;
+                    break;
+            }
             return newCords;
         }
     }

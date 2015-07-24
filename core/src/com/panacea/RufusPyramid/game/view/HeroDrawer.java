@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.common.InputManager;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
@@ -23,7 +23,7 @@ public class HeroDrawer extends ViewObject {
 
     private DefaultHero heroModel;
     private HeroController heroController;
-    private com.panacea.RufusPyramid.game.view.HeroInputManager heroInput;
+    private com.panacea.RufusPyramid.game.view.input.HeroInputManager heroInput;
     private AbstractCreature.PositionChangeListener posChangeListener;
     private HeroState currentState;
 
@@ -37,8 +37,8 @@ public class HeroDrawer extends ViewObject {
 
         //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
         this.heroController = new HeroController(GameModel.get().getHero());
-        this.heroInput = new HeroInputManager(this.heroController);
-        InputManager.getInstance().addProcessor(this.heroInput);
+        this.heroInput = new com.panacea.RufusPyramid.game.view.input.HeroInputManager(this.heroController);
+        InputManager.get().addProcessor(this.heroInput);
 
         this.posChangeListener = new AbstractCreature.PositionChangeListener() {
             @Override
