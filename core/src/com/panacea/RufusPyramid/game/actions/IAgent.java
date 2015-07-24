@@ -15,12 +15,12 @@ public interface IAgent {
     /**
      * Spara un evento di tipo ActionPerformedEvent.
      */
-    void fireActionProcessedEvent(ActionPerformedEvent event, IAgent source);
+    void fireActionPerformedEvent(ActionPerformedEvent event, IAgent source);
 
     /**
      * Esegue l'azione successiva. L'oggetto dovrà fare le proprie valutazioni,
      * Scegliere la IAction più adeguata e poi eseguirla. Al termine deve essere lanciato un
-     * fireActionProcessedEvent() (anche se l'azione non è andata a buon fine).
+     * fireActionPerformedEvent() (anche se l'azione non è andata a buon fine).
      */
     void performNextAction();
 

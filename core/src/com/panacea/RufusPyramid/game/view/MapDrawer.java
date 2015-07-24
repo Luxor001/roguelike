@@ -13,7 +13,7 @@ import com.panacea.RufusPyramid.map.Tile;
 /**
  * Created by gio on 11/07/15.
  */
-public class MapView extends ViewObject {
+public class MapDrawer extends ViewObject {
 
     private static final int TILE_WIDTH = 32;
     private static final int TILE_HEIGHT = 32;
@@ -26,7 +26,7 @@ public class MapView extends ViewObject {
     private SpriteCache spriteCache;
     private int spriteCacheIndex;
 
-    public MapView(MapContainer map) {
+    public MapDrawer(MapContainer map) {
         this.map = map;
     }
 
@@ -48,7 +48,7 @@ public class MapView extends ViewObject {
 
                 //temporary full wall map
                     Tile tileToDraw = new Tile(new GridPoint2(row, col), Tile.TileType.Solid); //map.getTile(row, col);
-                    Texture tileTexture = MapView.getTexture(tileToDraw);
+                    Texture tileTexture = MapDrawer.getTexture(tileToDraw);
 
                     //TODO set texture in a map
                     Sprite tileSprite = new Sprite(tileTexture);

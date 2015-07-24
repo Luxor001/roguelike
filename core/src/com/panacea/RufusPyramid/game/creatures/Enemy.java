@@ -19,7 +19,7 @@ public class Enemy extends AbstractCreature {
         IAction toPerform = new MoveAction(this, Utilities.Directions.WEST);
         boolean success = toPerform.perform();
         ActionPerformedEvent event = new ActionPerformedEvent(toPerform, success);
-        this.fireActionProcessedEvent(event, this);
-        Gdx.app.log("Enemy", "Moved");
+        this.fireActionPerformedEvent(event, this);
+        Gdx.app.log("Enemy" + this.getName(), "Moved");
     }
 }
