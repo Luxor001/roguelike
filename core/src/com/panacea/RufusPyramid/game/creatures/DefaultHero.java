@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.map.Tile;
 
 /**

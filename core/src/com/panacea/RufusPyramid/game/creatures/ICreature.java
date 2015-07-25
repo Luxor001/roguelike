@@ -1,6 +1,5 @@
 package com.panacea.RufusPyramid.game.creatures;
 
-import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.map.Tile;
 

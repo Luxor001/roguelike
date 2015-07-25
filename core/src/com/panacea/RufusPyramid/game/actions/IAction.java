@@ -1,7 +1,5 @@
 package com.panacea.RufusPyramid.game.actions;
 
-import com.panacea.RufusPyramid.game.creatures.ICreature;
-
 /**
  * Created by gio on 22/07/15.
  */
