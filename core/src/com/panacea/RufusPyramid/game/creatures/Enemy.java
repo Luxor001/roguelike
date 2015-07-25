@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.creatures;
 import com.badlogic.gdx.Gdx;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.actions.ActionPerformedEvent;
+import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 
@@ -15,11 +16,11 @@ public class Enemy extends AbstractCreature {
     }
 
     @Override
-    public void performNextAction() {
+    public void chooseNextAction(ActionResult resultPreviousAction) {
         IAction toPerform = new MoveAction(this, Utilities.Directions.WEST);
         boolean success = toPerform.perform();
         ActionPerformedEvent event = new ActionPerformedEvent(toPerform, success);
-        this.fireActionProcessedEvent(event, this);
+        this.fireActionChosenEvent(event, this);
         Gdx.app.log("Enemy", "Moved");
     }
 }

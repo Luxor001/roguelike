@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game;
 import com.badlogic.gdx.Gdx;
 import com.panacea.RufusPyramid.game.actions.ActionPerformedEvent;
 import com.panacea.RufusPyramid.game.actions.ActionPerformedListener;
+import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 
@@ -34,7 +35,7 @@ public class GameMaster {
 
     public void addAgent(IAgent newAgent) {
         this.agentsPlaying.add(newAgent);
-        newAgent.addActionProcessedListener(this.commonActionPerformedListener);
+        newAgent.addActionChosenListener(this.commonActionPerformedListener);
     }
 
     /**
@@ -46,7 +47,7 @@ public class GameMaster {
      */
     public void startTurns() {
         this.currentAgent = -1;
-        turnToNextAgent().performNextAction();
+        turnToNextAgent().chooseNextAction(null);
     }
 
     /* Turnazioni - vers. ad eventi */
@@ -66,15 +67,15 @@ public class GameMaster {
                 }
 
                 IAgent agentOnTurn = source;
-                IAction actionPerformed = event.getPerformedAction();
+                IAction actionChosen = event.getChosenAction();
 
                 //TODO il risultato (success) deve essere passato tramite l'evento o
                 //TODO deve essere il GameMaster lanciare IAction.perform() ?
-                boolean success = event.getActionResult();
+                ActionResult result = actionChosen.perform();
 
-                if (success) {
+                if (result.hasSuccess()) {
                     //La creatura "paga" il prezzo per l'azione effettuata
-                    payForAction(agentOnTurn, actionPerformed);
+                    payForAction(agentOnTurn, actionChosen);
                 }
 
                 if (agentOnTurn.getEnergy() < MIN_ENERGY_TO_ACT) {
@@ -84,7 +85,7 @@ public class GameMaster {
 
                 //Fine del ciclo di controllo
                 //La creatura che deve ora deve eseguire un'azione è segnata da this.currentAgent
-                agentsPlaying.get(currentAgent).performNextAction();
+                agentsPlaying.get(currentAgent).chooseNextAction();
             }
         };
     }

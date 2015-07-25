@@ -10,19 +10,19 @@ public interface IAgent {
      * Sarà sempre usato da GameMaster per gestire le turnazioni se l'oggetto ne deve fare parte.
      * @param listener il listener da aggiungere
      */
-    void addActionProcessedListener(ActionPerformedListener listener);
+    void addActionChosenListener(ActionPerformedListener listener);
 
     /**
      * Spara un evento di tipo ActionPerformedEvent.
      */
-    void fireActionProcessedEvent(ActionPerformedEvent event, IAgent source);
+    void fireActionChosenEvent(ActionPerformedEvent event, IAgent source);
 
     /**
      * Esegue l'azione successiva. L'oggetto dovrà fare le proprie valutazioni,
      * Scegliere la IAction più adeguata e poi eseguirla. Al termine deve essere lanciato un
-     * fireActionProcessedEvent() (anche se l'azione non è andata a buon fine).
+     * fireActionChosenEvent() (anche se l'azione non è andata a buon fine).
      */
-    void performNextAction();
+    void chooseNextAction(ActionResult resultPreviuosAction);
 
     /**
      * Ritorna l'energia a disposizione dell'agente, usata per eseguire azioni.

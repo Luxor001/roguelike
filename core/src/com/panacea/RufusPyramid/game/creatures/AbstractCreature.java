@@ -210,12 +210,12 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     @Override
-    public void addActionProcessedListener(ActionPerformedListener listener) {
+    public void addActionChosenListener(ActionPerformedListener listener) {
         this.actionPerformedListeners.add(listener);
     }
 
     @Override
-    public void fireActionProcessedEvent(ActionPerformedEvent event, IAgent source) {
+    public void fireActionChosenEvent(ActionPerformedEvent event, IAgent source) {
         for (ActionPerformedListener listener : this.actionPerformedListeners) {
             listener.performed(event, source);
         }

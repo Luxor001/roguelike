@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.map.Tile;
 
 /**
@@ -24,7 +25,7 @@ public class DefaultHero extends AbstractCreature {
     };
 
     @Override
-    public void performNextAction() {
+    public void chooseNextAction(ActionResult resultPreviousAction) {
         //TODO il giocatore ora è libero di impartire ordini al proprio giocatore
         //TODO dal controller abilita l'input utente
         return;

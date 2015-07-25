@@ -5,18 +5,12 @@ package com.panacea.RufusPyramid.game.actions;
  */
 public class ActionPerformedEvent {
     private IAction actionPerformed;
-    private boolean result;
 
-    public ActionPerformedEvent(IAction actionPerformed, boolean actionResult) {
+    public ActionPerformedEvent(IAction actionPerformed) {
         this.actionPerformed = actionPerformed;
-        this.result = actionResult;
     }
 
-    public IAction getPerformedAction() {
+    public IAction getChosenAction() {
         return this.actionPerformed;
-    }
-
-    public boolean getActionResult() {
-        return this.result;
     }
 }

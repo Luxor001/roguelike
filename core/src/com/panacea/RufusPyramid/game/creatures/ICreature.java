@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.map.Tile;
 
@@ -45,8 +46,9 @@ public interface ICreature extends IAgent {
      * quale azione eseguire e richiamare il .perform.
      * In caso di successo dell'azione il metodo deve SEMPRE lanciare un ActionPerformedEvent per permettere
      * al GameMaster di gestire la turnazione.
+     * @param resultPreviousAction
      */
-    public void performNextAction();
+    public void chooseNextAction(ActionResult resultPreviousAction);
 
     public Backpack getEquipment();
 }
