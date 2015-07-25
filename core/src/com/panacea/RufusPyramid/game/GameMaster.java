@@ -8,6 +8,7 @@ import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Gestore delle turnazioni.
@@ -27,15 +28,24 @@ public class GameMaster {
      */
     private final ArrayList<IAgent> agentsPlaying;
     private int currentAgent;
+    private boolean someoneIsPlaying;
 
     public GameMaster() {
         this.agentsPlaying = new ArrayList<IAgent>();
         this.commonActionPerformedListener = getActionProcessedListener();
+        this.someoneIsPlaying = false;
+        this.currentAgent = 0;
     }
 
     public void addAgent(IAgent newAgent) {
         this.agentsPlaying.add(newAgent);
         newAgent.addActionChosenListener(this.commonActionPerformedListener);
+    }
+
+    public void addAllAgents(Collection<IAgent> agents) {
+        for (IAgent agent : agents) {
+            this.addAgent(agent);
+        }
     }
 
     /**
@@ -45,9 +55,20 @@ public class GameMaster {
      * Questo metodo ritornerà quasi immediatamente in quanto tutta
      * la gestione è ad eventi.
      */
-    public void startTurns() {
-        this.currentAgent = -1;
-        turnToNextAgent().chooseNextAction(null);
+//    public void startTurns() {
+//        this.currentAgent = -1;
+//        turnToNextAgent().performNextAction();
+//    }
+
+    public void step() {
+        if (someoneIsPlaying)   return;
+        someoneIsPlaying = true;
+
+        if (thereIsSomeonePlaying()) {
+            //La prima creatura è già segnata da this.currentAgent
+            //NOTA: la primissima creatura non riceverà il bonus di turno
+            agentsPlaying.get(currentAgent).performNextAction();
+        }
     }
 
     /* Turnazioni - vers. ad eventi */
@@ -58,7 +79,7 @@ public class GameMaster {
                 if (!source.equals(agentsPlaying.get(currentAgent))) {
                     Gdx.app.error(
                             this.getClass().getName(),
-                            "ERRORE! Una agent non autorizzato ha appena cercato di eseguire un'azione: " +
+                            "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
                                     "CurrentAgentIndex: " + currentAgent + "\n" +
                                     "wtfAgentIndex: " + agentsPlaying.indexOf(source) + "\n" +
                                     "wtfAgentToString: " + source.toString() + "\n"
@@ -84,8 +105,7 @@ public class GameMaster {
                 }
 
                 //Fine del ciclo di controllo
-                //La creatura che deve ora deve eseguire un'azione è segnata da this.currentAgent
-                agentsPlaying.get(currentAgent).chooseNextAction();
+                someoneIsPlaying = false;
             }
         };
     }
@@ -113,5 +133,9 @@ public class GameMaster {
         //TODO moltiplica per la velocità della creatura
         int turnBonusEnergy = GameMaster.BASE_ENERGY_AT_EVERY_TURN;
         agentOnTurn.setEnergy(agentOnTurn.getEnergy() + turnBonusEnergy);
+    }
+
+    private boolean thereIsSomeonePlaying() {
+        return this.agentsPlaying != null && this.agentsPlaying.size() > 0;
     }
 }

@@ -21,6 +21,6 @@ public class Enemy extends AbstractCreature {
         boolean success = toPerform.perform();
         ActionPerformedEvent event = new ActionPerformedEvent(toPerform, success);
         this.fireActionChosenEvent(event, this);
-        Gdx.app.log("Enemy", "Moved");
+        Gdx.app.log("Enemy" + this.getName(), "Moved");
     }
 }

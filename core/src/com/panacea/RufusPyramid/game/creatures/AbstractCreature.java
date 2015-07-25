@@ -3,9 +3,11 @@ package com.panacea.RufusPyramid.game.creatures;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.actions.ActionPerformedEvent;
 import com.panacea.RufusPyramid.game.actions.ActionPerformedListener;
 import com.panacea.RufusPyramid.game.actions.IAgent;
+import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
@@ -148,6 +150,10 @@ public abstract class AbstractCreature implements ICreature {
                 pointPath.add(tile.getPosition());
             }
             this.firePositionChangeEvent(pointPath);
+
+            this.fireActionPerformedEvent(
+                    new ActionPerformedEvent(new MoveAction(this, Utilities.Directions.EAST), true),
+                    this);
         }
     }
 

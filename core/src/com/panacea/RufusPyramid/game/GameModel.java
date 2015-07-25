@@ -1,9 +1,13 @@
 package com.panacea.RufusPyramid.game;
 
+import com.badlogic.gdx.Gdx;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.map.MapContainer;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by gio on 19/07/15.
@@ -12,6 +16,7 @@ public class GameModel {
     /* Static methods */
     
     private static GameModel SINGLETON = null;
+    private ArrayList<ICreature> creatures;
 
     /**
      * Ritorna l'unica istanza (singleton) di GameModel.
@@ -35,6 +40,7 @@ public class GameModel {
     
     private GameModel() {
         this.currentMapIndex = 0;
+        this.creatures = new ArrayList<ICreature>();
         this.maps = new ArrayList<MapContainer>();
         this.maps.add(new MapContainer(40, 40));
         this.hero = new DefaultHero("Rufus");
@@ -60,5 +66,17 @@ public class GameModel {
     public int addMap(MapContainer newMap) {
         this.getMaps().add(newMap);
         return this.getMaps().indexOf(newMap);
+    }
+
+    public List<ICreature> getCreatures() {
+        return this.creatures;
+    }
+
+    public void addCreature(ICreature newCreature) {
+        if (newCreature instanceof DefaultHero) {
+            Gdx.app.error(this.getClass().toString(), "Per aggiungere l'eroe devi usare il metodo addHero()! Eroe NON aggiunto.");
+            return;
+        }
+        this.creatures.add(newCreature);
     }
 }
