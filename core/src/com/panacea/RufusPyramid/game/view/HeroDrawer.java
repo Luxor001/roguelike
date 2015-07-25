@@ -40,22 +40,22 @@ public class HeroDrawer extends ViewObject {
         this.heroInput = new com.panacea.RufusPyramid.game.view.input.HeroInputManager(this.heroController);
         InputManager.get().addProcessor(this.heroInput);
 
-        this.posChangeListener = new AbstractCreature.PositionChangeListener() {
-            @Override
-            public void changed(AbstractCreature.PositionChangeEvent event, Object source) {
-                //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
-                HeroDrawer.this.heroInput.setPaused(true);
-                AnimationEndedListener listener = new AnimationEndedListener() {
-                    @Override
-                    public void ended(AnimationEndedEvent event, Object source) {
-                        //Poi renderizzo l'eroe in setStanding e riabilito l'input
-                        HeroDrawer.this.setStanding();
-                        HeroDrawer.this.heroInput.setPaused(false);
-                    }
-                };
-                HeroDrawer.this.walkAnimation((DefaultHero) source, event.getPath(), listener);
-            }
-        };
+//        this.posChangeListener = new AbstractCreature.PositionChangeListener() {
+//            @Override
+//            public void changed(AbstractCreature.PositionChangeEvent event, Object source) {
+//                //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
+//                HeroDrawer.this.heroInput.setPaused(true);
+//                AnimationEndedListener listener = new AnimationEndedListener() {
+//                    @Override
+//                    public void ended(AnimationEndedEvent event, Object source) {
+//                        //Poi renderizzo l'eroe in setStanding e riabilito l'input
+//                        HeroDrawer.this.setStanding();
+//                        HeroDrawer.this.heroInput.setPaused(false);
+//                    }
+//                };
+//                HeroDrawer.this.walkAnimation((DefaultHero) source, event.getPath(), listener);
+//            }
+//        };
         this.heroModel.addChangeListener(this.posChangeListener);
         sprite = getHeroSprite(heroModel);
         this.setStanding();

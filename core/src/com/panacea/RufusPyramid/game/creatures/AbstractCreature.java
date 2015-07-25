@@ -4,8 +4,9 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.actions.ActionPerformedEvent;
-import com.panacea.RufusPyramid.game.actions.ActionPerformedListener;
+import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
+import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
+import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.Tile;
@@ -29,7 +30,7 @@ public abstract class AbstractCreature implements ICreature {
     private Tile position;
     private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
     private int energy;
-    private List<ActionPerformedListener> actionPerformedListeners;
+    private List<ActionChosenListener> actionChosenListeners;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -44,7 +45,7 @@ public abstract class AbstractCreature implements ICreature {
         this.backpack = new com.panacea.RufusPyramid.game.creatures.Backpack();
 
         this.changeListeners = new ArrayList<PositionChangeListener>();
-        this.actionPerformedListeners = new ArrayList<ActionPerformedListener>(1);
+        this.actionChosenListeners = new ArrayList<ActionChosenListener>(1);
     }
 
     private static int getUniqueCreatureId() {
@@ -151,8 +152,8 @@ public abstract class AbstractCreature implements ICreature {
             }
             this.firePositionChangeEvent(pointPath);
 
-            this.fireActionPerformedEvent(
-                    new ActionPerformedEvent(new MoveAction(this, Utilities.Directions.EAST), true),
+            this.fireActionChosenEvent(
+                    new ActionChosenEvent(new MoveAction(this, Utilities.Directions.EAST)),
                     this);
         }
     }
@@ -216,14 +217,19 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     @Override
-    public void addActionChosenListener(ActionPerformedListener listener) {
-        this.actionPerformedListeners.add(listener);
+    public void addActionChosenListener(ActionChosenListener listener) {
+        this.actionChosenListeners.add(listener);
     }
 
     @Override
-    public void fireActionChosenEvent(ActionPerformedEvent event, IAgent source) {
-        for (ActionPerformedListener listener : this.actionPerformedListeners) {
+    public void fireActionChosenEvent(ActionChosenEvent event, IAgent source) {
+        for (ActionChosenListener listener : this.actionChosenListeners) {
             listener.performed(event, source);
         }
     }
+
+    public void fireActionChosenEvent(IAction chosenAction) {
+        this.fireActionChosenEvent(new ActionChosenEvent(chosenAction), this);
+    }
+
 }

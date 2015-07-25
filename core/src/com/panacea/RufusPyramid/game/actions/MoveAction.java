@@ -22,7 +22,8 @@ public class MoveAction implements IAction {
 
     @Override
     public ActionResult perform() {
-        return this.moveOneStep((ICreature)this.model, this.direction);
+        boolean success = this.moveOneStep((ICreature)this.model, this.direction);
+        return new ActionResult(success);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
+import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
 
@@ -35,21 +37,22 @@ public class HeroController {
     /**
      * Move one step to input directory.
      * @param direction direction to move
-     * @return true if moved successfully, false otherwise
      */
-    public boolean moveOneStep(Utilities.Directions direction) {
-        Tile startingTile = this.hero.getPosition();
-        Tile arrivalTile = getNextTile(startingTile, direction);
-        ArrayList<Tile> path = new ArrayList<Tile>();
-        path.add(startingTile);
-        path.add(arrivalTile);
-        if (isTileWalkable(arrivalTile)) {
-            //TODO Animator.walk(this.hero, startingTile, arrivalTile);
-            this.hero.setPosition(arrivalTile, path);
-            return true;
-        }
-
-        return false;
+    public void moveOneStep(Utilities.Directions direction) {
+        MoveAction action = new MoveAction(this.hero, direction);
+        this.hero.fireActionChosenEvent(action);
+//        Tile startingTile = this.hero.getPosition();
+//        Tile arrivalTile = getNextTile(startingTile, direction);
+//        ArrayList<Tile> path = new ArrayList<Tile>();
+//        path.add(startingTile);
+//        path.add(arrivalTile);
+//        if (isTileWalkable(arrivalTile)) {
+//            //TODO Animator.walk(this.hero, startingTile, arrivalTile);
+//            this.hero.setPosition(arrivalTile, path);
+//            return true;
+//        }
+//
+//        return false;
     }
 
     protected boolean isTileWalkable(Tile tileToCheck) {

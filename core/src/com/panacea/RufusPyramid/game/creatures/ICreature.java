@@ -39,12 +39,12 @@ public interface ICreature extends IAgent {
     public void setEnergy(int currentEnergy);
 
     /**
-     * Questo metodo è l'unico a poter lanciare un ActionPerformedEvent.
+     * Questo metodo è l'unico a poter lanciare un ActionChosenEvent.
      * Nel caso di creatura gestita dall'AI deve scegliere autonomamente quale azione effettuar
      * e richimarci sopra il .perform()
      * In caso di creatura gestita da utente deve attendere un input, scegliere di conseguenza
      * quale azione eseguire e richiamare il .perform.
-     * In caso di successo dell'azione il metodo deve SEMPRE lanciare un ActionPerformedEvent per permettere
+     * In caso di successo dell'azione il metodo deve SEMPRE lanciare un ActionChosenEvent per permettere
      * al GameMaster di gestire la turnazione.
      * @param resultPreviousAction
      */

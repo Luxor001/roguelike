@@ -6,16 +6,16 @@ package com.panacea.RufusPyramid.game.actions;
  */
 public interface IAgent {
     /**
-     * Aggiunge un listener per gli eventi ActionPerformedEvent.
+     * Aggiunge un listener per gli eventi ActionChosenEvent.
      * Sarà sempre usato da GameMaster per gestire le turnazioni se l'oggetto ne deve fare parte.
      * @param listener il listener da aggiungere
      */
-    void addActionChosenListener(ActionPerformedListener listener);
+    void addActionChosenListener(ActionChosenListener listener);
 
     /**
-     * Spara un evento di tipo ActionPerformedEvent.
+     * Spara un evento di tipo ActionChosenEvent.
      */
-    void fireActionChosenEvent(ActionPerformedEvent event, IAgent source);
+    void fireActionChosenEvent(ActionChosenEvent event, IAgent source);
 
     /**
      * Esegue l'azione successiva. L'oggetto dovrà fare le proprie valutazioni,
