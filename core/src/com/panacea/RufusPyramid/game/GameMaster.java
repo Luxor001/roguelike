@@ -36,7 +36,7 @@ public class GameMaster {
         this.agentsPlaying = new ArrayList<IAgent>();
         this.commonActionPerformedListener = getActionChosenListener();
         this.someoneIsPlaying = false;
-        this.currentAgent = 0;
+        this.currentAgent = -1;
     }
 
     public void addAgent(IAgent newAgent) {
@@ -51,25 +51,19 @@ public class GameMaster {
         }
     }
 
-    /**
-     * Metodo da utilizzare all'avvio del gioco per far iniziare
-     * i turni. Il GameMaster avvia tutto il sistema di turnazione
-     * dicendo alla prima creatura in lista di eseguire un'azione.
-     * Questo metodo ritornerà quasi immediatamente in quanto tutta
-     * la gestione è ad eventi.
-     */
-//    public void startTurns() {
-//        this.currentAgent = -1;
-//        turnToNextAgent().performNextAction();
-//    }
-
     public void step() {
         if (someoneIsPlaying)   return;
         someoneIsPlaying = true;
 
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
-            //La prima creatura è già segnata da this.currentAgent
-            //NOTA: la primissima creatura non riceverà il bonus di turno
+            //Al primo avvio this.currentAgent == -1, viene inizializzata dalla prima chiamata a turnToNextAgent
+
+            IAgent agentOnTurn;
+            do {
+                //Se la creatura corrente non ha più energia per continuare a fare azioni passa automaticamente il turno
+                agentOnTurn = turnToNextAgent();
+            } while (agentOnTurn.getEnergy() < MIN_ENERGY_TO_ACT);
+
             agentsPlaying.get(currentAgent).chooseNextAction(lastResult);
         }
     }
@@ -78,7 +72,7 @@ public class GameMaster {
     private ActionChosenListener getActionChosenListener() {
         return new ActionChosenListener() {
             public void performed(ActionChosenEvent event, IAgent source) {
-                /* Controllo che la creatura che ha effettuato l'azione sia di turno. */
+                /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
                 if (!source.equals(agentsPlaying.get(currentAgent))) {
                     Gdx.app.error(
                             this.getClass().getName(),
@@ -101,11 +95,6 @@ public class GameMaster {
                 if (result.hasSuccess()) {
                     //La creatura "paga" il prezzo per l'azione effettuata
                     payForAction(agentOnTurn, actionChosen);
-                }
-
-                if (agentOnTurn.getEnergy() < MIN_ENERGY_TO_ACT) {
-                    //Se la creatura corrente non ha più energia per continuare a fare azioni passa automaticamente il turno
-                    turnToNextAgent();
                 }
 
                 //Fine del ciclo di controllo
