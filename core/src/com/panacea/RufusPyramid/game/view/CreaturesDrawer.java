@@ -9,7 +9,7 @@ import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
-import com.panacea.RufusPyramid.game.view.animations.AbstrAnimation;
+import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
 import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
@@ -35,13 +35,13 @@ public class CreaturesDrawer extends ViewObject {
     //TODO creare un oggetto che contenga Texture, creaturestate e animations in modo da usare una sola hashmap?
     private HashMap<Integer, Texture> sprites;
     private HashMap<Integer, CreatureState> currentStates;
-    private HashMap<Integer, AbstrAnimation> currentAnimations = null;
+    private HashMap<Integer, AbstractAnimation> currentAnimations = null;
 
     public CreaturesDrawer(List creaturesList) {
         this.creaturesList = creaturesList;
         this.sprites = new HashMap<Integer, Texture>();
         this.currentStates = new HashMap<Integer, CreatureState>();
-        this.currentAnimations = new HashMap<Integer, AbstrAnimation>();
+        this.currentAnimations = new HashMap<Integer, AbstractAnimation>();
 
 //        this.posChangeListener = new AbstractCreature.PositionChangeListener() {
 //            @Override
@@ -99,7 +99,7 @@ public class CreaturesDrawer extends ViewObject {
             switch (this.currentStates.get(creature.getID())) {
                 case WALKING:
                     //TODO fare l'animazione di camminata
-                    AbstrAnimation currentAnimation = this.currentAnimations.get(creature.getID());
+                    AbstractAnimation currentAnimation = this.currentAnimations.get(creature.getID());
                     if (currentAnimation != null) {
                         currentAnimation.render(delta);
                     }
@@ -123,7 +123,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstrAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 40.0f);
+        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 40.0f);
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(creature.getID(), currentAnimation);

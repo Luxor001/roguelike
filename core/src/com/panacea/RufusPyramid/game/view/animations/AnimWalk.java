@@ -17,7 +17,7 @@ import java.util.ArrayList;
  *
  * Created by gio on 11/07/15.
  */
-public class AnimWalk extends AbstrAnimation {
+public class AnimWalk extends AbstractAnimation {
 
     //TODO mantieni un'unica immagine come TextureRegion e da lì prendi le immagini che ti servono
 //    private static final int FRAME_COLS = 4;/*Grandezza della matrice degli sprite per l'animazione. Direi che 20 sprites bastano e avanzano*/

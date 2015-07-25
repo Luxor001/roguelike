@@ -2,10 +2,10 @@ package com.panacea.RufusPyramid.game.view.animations;
 
 import java.util.ArrayList;
 
-public class AbstrAnimation extends com.panacea.RufusPyramid.game.view.ViewObject implements IListenableToTheEnd {
+public class AbstractAnimation extends com.panacea.RufusPyramid.game.view.ViewObject implements IAnimationEndListenable {
     private ArrayList<AnimationEndedListener> endListeners;
 
-    public AbstrAnimation() {
+    public AbstractAnimation() {
         super();
         this.endListeners = new ArrayList<AnimationEndedListener>();
     }
