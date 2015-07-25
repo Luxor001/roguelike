@@ -32,7 +32,7 @@ public class MoveAction implements IAction {
 
     @Override
     public int getCost() {
-        return 0;
+        return 200;
     }
 
 //    public boolean isPerformable() {

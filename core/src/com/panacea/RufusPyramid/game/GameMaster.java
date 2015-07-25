@@ -34,7 +34,7 @@ public class GameMaster {
 
     public GameMaster() {
         this.agentsPlaying = new ArrayList<IAgent>();
-        this.commonActionPerformedListener = getActionProcessedListener();
+        this.commonActionPerformedListener = getActionChosenListener();
         this.someoneIsPlaying = false;
         this.currentAgent = 0;
     }
@@ -75,7 +75,7 @@ public class GameMaster {
     }
 
     /* Turnazioni - vers. ad eventi */
-    private ActionChosenListener getActionProcessedListener() {
+    private ActionChosenListener getActionChosenListener() {
         return new ActionChosenListener() {
             public void performed(ActionChosenEvent event, IAgent source) {
                 /* Controllo che la creatura che ha effettuato l'azione sia di turno. */

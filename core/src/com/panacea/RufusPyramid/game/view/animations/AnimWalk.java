@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameBatch;
 
 import java.util.ArrayList;
@@ -19,8 +20,11 @@ import java.util.ArrayList;
 public class AnimWalk extends AbstrAnimation {
 
     //TODO mantieni un'unica immagine come TextureRegion e da lì prendi le immagini che ti servono
-    private static final int FRAME_COLS = 4;/*Grandezza della matrice degli sprite per l'animazione. Direi che 20 sprites bastano e avanzano*/
-    private static final int FRAME_ROWS = 1;
+//    private static final int FRAME_COLS = 4;/*Grandezza della matrice degli sprite per l'animazione. Direi che 20 sprites bastano e avanzano*/
+//    private static final int FRAME_ROWS = 1;
+    private int frameCols;
+    private int frameRows;
+
 
     private Animation walkAnimation;
     private Texture animationTexture;
@@ -46,27 +50,40 @@ public class AnimWalk extends AbstrAnimation {
     Vector2 endPos;
     Vector2 direction;
 
+    private Class modelClass;
+
     public AnimWalk(){
         this.frameDuration = 0.33f;
 //        this.path = path;
     }
 
-    public AnimWalk(GridPoint2 startPoint, GridPoint2 endPoint, float speed){
+    public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint, float speed){
         super();
         this.frameDuration = 0.2f;  //TODO imposta frameDuration in base alla velocità! Circa speed/200, ma deve essere in proporzione inversa
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.speed = speed;
+        this.modelClass = modelClass;
     }
 
     public void create() {
-        animationTexture = new Texture(Gdx.files.internal("data/spritesheet2_walk.png")); // #9
-        TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/FRAME_COLS, animationTexture.getHeight()/FRAME_ROWS);              // #10
-        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        if (this.modelClass == DefaultHero.class) {
+            this.frameCols = 4;
+            this.frameRows = 1;
+            animationTexture = new Texture(Gdx.files.internal("data/spritesheet2_walk.png"));
+        } else {
+            this.frameCols = 2;
+            this.frameRows = 1;
+            animationTexture = new Texture(Gdx.files.internal("data/thf2_rt2_walk.gif"));
+        }
+
+        TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/this.frameCols, animationTexture.getHeight()/this.frameRows);
+        walkFrames = new TextureRegion[this.frameCols * this.frameRows];
         int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                walkFrames[index++] = tmp[i][j];
+        for (int i = 0; i < this.frameRows; i++) {
+            for (int j = 0; j < this.frameCols; j++) {
+                TextureRegion tr = tmp[i][j];
+                walkFrames[index++] = tr;
             }
         }
         walkAnimation = new Animation(frameDuration, walkFrames);      // #11
