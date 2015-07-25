@@ -22,17 +22,17 @@ public class GameScreen implements Screen {
         GameModel.createInstance();
         this.gm = new GameMaster();
 
-        ICreature e1 = new Enemy("Thief", "", 10, 1, 1, 1);
+        ICreature e1 = new Enemy("Thief1", "", 10, 1, 1, 1);
         e1.setPosition(new Tile(new GridPoint2(0, 0), Tile.TileType.Solid));
         GameModel.get().addCreature(e1);
-        ICreature e2 = new Enemy("Thief", "", 10, 1, 1, 1);
-        e2.setPosition(new Tile(new GridPoint2(1, 1), Tile.TileType.Solid));
+        ICreature e2 = new Enemy("Thief2", "", 10, 1, 1, 1);
+        e2.setPosition(new Tile(new GridPoint2(32, 64), Tile.TileType.Solid));
         GameModel.get().addCreature(e2);
         gm.addAgent(e1);
         gm.addAgent(e2);
         gm.addAgent(GameModel.get().getHero());
 
-        objectsDrawer = new GameDrawer();
+        objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
 //        Gdx.app.log(GameScreen.class.toString(), "show() di GameScreen");
     }

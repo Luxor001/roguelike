@@ -3,11 +3,15 @@ package com.panacea.RufusPyramid.game.actions;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
 
 /**
+ * Azione di movimento. Al lancio di perform() muove la creatura e
+ * ritorna una ActionResult con true se la creatura si è spostata,
+ * false se per qualche motivo non è stato possibile effettuare il movimento.
  * Created by gio on 22/07/15.
  */
 public class MoveAction implements IAction {
@@ -44,6 +48,7 @@ public class MoveAction implements IAction {
         if (isTileWalkable(arrivalTile)) {
             //TODO Animator.walk(this.hero, startingTile, arrivalTile);
             creature.setPosition(arrivalTile);
+            GameDrawer.get().getCreaturesDrawer().startWalk(creature, startingTile.getPosition(), arrivalTile.getPosition());
             return true;
         }
 

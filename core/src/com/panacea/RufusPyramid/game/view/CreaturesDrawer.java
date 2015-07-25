@@ -4,10 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.animations.AbstrAnimation;
+import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
+import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,20 +27,25 @@ public class CreaturesDrawer extends ViewObject {
     private List<ICreature> creaturesList;
     private AbstractCreature.PositionChangeListener posChangeListener;
 
+    ////////////////////////
+    private HeroController heroController;
+    private com.panacea.RufusPyramid.game.view.input.HeroInputManager heroInput;
+    ///////////////////////
+
     //TODO creare un oggetto che contenga Texture, creaturestate e animations in modo da usare una sola hashmap?
     private HashMap<Integer, Texture> sprites;
-    private HashMap<Integer, HeroState> currentStates;
+    private HashMap<Integer, CreatureState> currentStates;
     private HashMap<Integer, AbstrAnimation> currentAnimations = null;
 
     public CreaturesDrawer(List creaturesList) {
         this.creaturesList = creaturesList;
         this.sprites = new HashMap<Integer, Texture>();
-        this.currentStates = new HashMap<Integer, HeroState>();
+        this.currentStates = new HashMap<Integer, CreatureState>();
         this.currentAnimations = new HashMap<Integer, AbstrAnimation>();
 
-        this.posChangeListener = new AbstractCreature.PositionChangeListener() {
-            @Override
-            public void changed(AbstractCreature.PositionChangeEvent event, Object source) {
+//        this.posChangeListener = new AbstractCreature.PositionChangeListener() {
+//            @Override
+//            public void changed(AbstractCreature.PositionChangeEvent event, Object source) {
                 //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
 //                AnimationEndedListener listener = new AnimationEndedListener() {
 //                    @Override
@@ -44,14 +55,26 @@ public class CreaturesDrawer extends ViewObject {
 //                    }
 //                };
 //                CreaturesDrawer.this.walkAnimation((DefaultHero) source, event.getPath(), listener);
-            }
-        };
+//            }
+//        };
         for (ICreature creature : this.creaturesList) {
-//            TODO
-//            creature.addChangeListener(this.posChangeListener);
-            this.sprites.put(creature.getID(), getCreatureSprite(creature));
-            this.setStanding(creature);
+            this.sprites.put(creature.getID(), getSprite(creature));
+            this.setStanding(creature.getID());
+
+            if (creature instanceof DefaultHero) {
+                //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
+                this.heroController = new HeroController(GameModel.get().getHero());
+                this.heroInput = new com.panacea.RufusPyramid.game.view.input.HeroInputManager(this.heroController);
+                InputManager.get().addProcessor(this.heroInput);
+            }
         }
+    }
+
+    private static Texture getSprite(ICreature creature) {
+        if (creature instanceof DefaultHero) {
+            return getHeroSprite((DefaultHero)creature);
+        }
+        return getCreatureSprite(creature);
     }
 
     private static Texture getCreatureSprite(ICreature creature) {
@@ -59,17 +82,13 @@ public class CreaturesDrawer extends ViewObject {
         return new Texture(Gdx.files.internal("data/thf2_rt2.gif"));
     }
 
-    private void walkAnimation(ICreature source, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
-        //TODO effettuare l'animazione di punto in punto con un ciclo.
-//        this.startWalk(path.get(0), path.get(1));
-//        currentAnimation.addListener(listener);
-//        GridPoint2 a = path.get(0), b = path.get(1);
-//        Gdx.app.log(HeroDrawer.class.toString(), "Inizio animazione, hero walking. Da " + a.x + "," + a.y + " a " + b.x + "," + b.y);
-        currentStates.put(source.getID(), HeroState.WALKING);
+    private static Texture getHeroSprite(DefaultHero heroModel) {
+        //TODO ritornare la texture corretta a seconda del modello di eroe scelto.
+        return new Texture(Gdx.files.internal("data/spritesheet2_single.png"));
     }
 
-    private void setStanding(ICreature source) {
-        currentStates.put(source.getID(), HeroState.STANDING);
+    private void setStanding(int creatureID) {
+        currentStates.put(creatureID, CreatureState.STANDING);
     }
 
     @Override
@@ -80,14 +99,13 @@ public class CreaturesDrawer extends ViewObject {
             switch (this.currentStates.get(creature.getID())) {
                 case WALKING:
                     //TODO fare l'animazione di camminata
-//                if (currentAnimation != null) {
-//                    currentAnimation.render(delta);
-////                    Gdx.app.log(HeroDrawer.class.toString(), "Hero walking, animazione in corso.");
-//                }
-//                break;
+                    AbstrAnimation currentAnimation = this.currentAnimations.get(creature.getID());
+                    if (currentAnimation != null) {
+                        currentAnimation.render(delta);
+                    }
+                    break;
                 case STANDING:
                     GridPoint2 pos = creature.getPosition().getPosition();
-//                Gdx.app.log(HeroDrawer.class.toString(), "Eroe in camminata alla posizione: " + pos.x + "-" + pos.y);
                     GridPoint2 spritePosition = creature.getPosition().getPosition();
                     SpriteBatch batch = GameBatch.get();
 
@@ -103,12 +121,33 @@ public class CreaturesDrawer extends ViewObject {
         }
     }
 
-    private void startWalk(GridPoint2 startPos, GridPoint2 endPos) {
-//        currentAnimation = new AnimWalk(startPos, endPos, 40.0f);
-//        currentAnimation.create();
+    private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
+//        this.startWalk(creature, path.get(0), path.get(1));
+        AbstrAnimation currentAnimation = new AnimWalk(path.get(0), path.get(1), 40.0f);
+        currentAnimation.create();
+        currentAnimation.addListener(listener);
+        this.currentAnimations.put(creature.getID(), currentAnimation);
+        currentStates.put(creature.getID(), CreatureState.WALKING);
     }
 
-    private enum HeroState {
+    public void startWalk(final ICreature creature, GridPoint2 startPoint, GridPoint2 endPoint) {
+        //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
+        CreaturesDrawer.this.heroInput.setPaused(true);
+        ArrayList<GridPoint2> path = new ArrayList<GridPoint2>(2);
+        path.add(startPoint);
+        path.add(endPoint);
+        AnimationEndedListener listener = new AnimationEndedListener() {
+            @Override
+            public void ended(AnimationEndedEvent event, Object source) {
+                //Poi renderizzo l'eroe in setStanding e riabilito l'input
+                CreaturesDrawer.this.setStanding(creature.getID());
+                CreaturesDrawer.this.heroInput.setPaused(false);
+            }
+        };
+        this.walkAnimation(creature, path, listener);
+    }
+
+    private enum CreatureState {
         STANDING,
         WALKING
     }

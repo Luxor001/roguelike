@@ -5,6 +5,7 @@ import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.map.MapContainer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,17 +15,28 @@ import java.util.List;
  * Created by gio on 11/07/15.
  */
 public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
-    private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
-    MapDrawer map;
+    private static final GameDrawer SINGLETON = new GameDrawer();
 
-    public GameDrawer() {
-        map = new MapDrawer(new MapContainer(30, 30));  //map.create richiamato automaticamente da ViewObject
+    private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
+    private MapDrawer mapDrawer;
+    private CreaturesDrawer creaturesDrawer;
+
+    public static GameDrawer get() {
+        return GameDrawer.SINGLETON;
+    }
+
+    private GameDrawer() {
+        this.mapDrawer = new MapDrawer(new MapContainer(30, 30));  //map.create richiamato automaticamente da ViewObject
         this.viewList = new LinkedList<com.panacea.RufusPyramid.game.view.ViewObject>();
-        this.viewList.add(map);
+        this.viewList.add(this.mapDrawer);
         this.viewList.add(new Animator());
-        this.viewList.add(new HeroDrawer(GameModel.get().getHero()));
-//        GameMaster gm = new GameMaster();
-        this.viewList.add(new CreaturesDrawer(GameModel.get().getCreatures()));
+
+        List<ICreature> allCreatures = new ArrayList<ICreature>();
+        allCreatures.addAll(GameModel.get().getCreatures());
+        allCreatures.add(GameModel.get().getHero());
+
+        this.creaturesDrawer = new CreaturesDrawer(allCreatures);
+        this.viewList.add(this.creaturesDrawer);
     }
 
     public void add(com.panacea.RufusPyramid.game.view.ViewObject toAdd) {
@@ -88,5 +100,13 @@ public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
         for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.dispose();
         }
+    }
+
+    public MapDrawer getMapDrawer() {
+        return this.mapDrawer;
+    }
+
+    public CreaturesDrawer getCreaturesDrawer() {
+        return this.creaturesDrawer;
     }
 }
