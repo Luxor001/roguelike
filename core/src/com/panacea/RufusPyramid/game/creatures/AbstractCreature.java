@@ -31,6 +31,7 @@ public abstract class AbstractCreature implements ICreature {
     private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
     private int energy;
     private List<ActionChosenListener> actionChosenListeners;
+    private List<CreatureDeadListener> creatureDeadListeners;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -46,6 +47,7 @@ public abstract class AbstractCreature implements ICreature {
 
         this.changeListeners = new ArrayList<PositionChangeListener>();
         this.actionChosenListeners = new ArrayList<ActionChosenListener>(1);
+        this.creatureDeadListeners = new ArrayList<CreatureDeadListener>();
     }
 
     private static int getUniqueCreatureId() {
@@ -65,6 +67,9 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public void setHPCurrent(int currentHP) {
         this.currentHP = currentHP;
+        if (this.currentHP < 0) {
+            this.fireCreatureDeadEvent();
+        }
     }
 
     @Override
@@ -230,6 +235,17 @@ public abstract class AbstractCreature implements ICreature {
 
     public void fireActionChosenEvent(IAction chosenAction) {
         this.fireActionChosenEvent(new ActionChosenEvent(chosenAction), this);
+    }
+
+    public void fireCreatureDeadEvent() {
+        CreatureDeadEvent event = new CreatureDeadEvent(this.getHPCurrent());
+        for (CreatureDeadListener listener : this.creatureDeadListeners) {
+            listener.changed(event, this);
+        }
+    }
+
+    public void addCreatureDeadListener(CreatureDeadListener listener) {
+        this.creatureDeadListeners.add(listener);
     }
 
 }

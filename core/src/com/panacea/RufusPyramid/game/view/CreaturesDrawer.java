@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
+import com.panacea.RufusPyramid.game.view.animations.AnimDamage;
 import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
@@ -17,6 +19,7 @@ import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -36,12 +39,14 @@ public class CreaturesDrawer extends ViewObject {
     private HashMap<Integer, Texture> sprites;
     private HashMap<Integer, CreatureState> currentStates;
     private HashMap<Integer, AbstractAnimation> currentAnimations = null;
+    private DelayedRemovalArray<AbstractAnimation> generalAnimations = null;
 
     public CreaturesDrawer(List creaturesList) {
         this.creaturesList = creaturesList;
         this.sprites = new HashMap<Integer, Texture>();
         this.currentStates = new HashMap<Integer, CreatureState>();
         this.currentAnimations = new HashMap<Integer, AbstractAnimation>();
+        this.generalAnimations = new DelayedRemovalArray<AbstractAnimation>();
 
 //        this.posChangeListener = new AbstractCreature.PositionChangeListener() {
 //            @Override
@@ -119,6 +124,15 @@ public class CreaturesDrawer extends ViewObject {
                     break;
             }
         }
+
+        // Dato che la chiamata a render può provocare la rimozione dell'elemento stesso su cui è chiamata
+        // (tramite lancio dell'evento AnimationEndedEvent, la sua cattura e la conseguente rimozione)
+        // Utilizzo un tipo di lista appositamente implementato per effettuare rimozioni in un ciclo foreach.
+        this.generalAnimations.begin();
+        for (AbstractAnimation anim : this.generalAnimations) {
+            anim.render(delta);
+        }
+        this.generalAnimations.end();
     }
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
@@ -145,6 +159,20 @@ public class CreaturesDrawer extends ViewObject {
             }
         };
         this.walkAnimation(creature, path, listener);
+    }
+
+    public void startDamage(GridPoint2 position, int damage) {
+        final AbstractAnimation currentAnimation = new AnimDamage(position, damage);
+        currentAnimation.create();
+        this.generalAnimations.add(currentAnimation);
+
+        AnimationEndedListener listener = new AnimationEndedListener() {
+            @Override
+            public void ended(AnimationEndedEvent event, Object source) {
+                generalAnimations.removeValue(currentAnimation, false);
+            }
+        };
+        currentAnimation.addListener(listener);
     }
 
     private enum CreatureState {

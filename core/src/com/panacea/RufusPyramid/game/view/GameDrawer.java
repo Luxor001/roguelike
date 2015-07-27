@@ -31,11 +31,11 @@ public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
         this.viewList.add(this.mapDrawer);
         this.viewList.add(new Animator());
 
-        List<ICreature> allCreatures = new ArrayList<ICreature>();
-        allCreatures.addAll(GameModel.get().getCreatures());
-        allCreatures.add(GameModel.get().getHero());
+//        List<ICreature> allCreatures = new ArrayList<ICreature>();
+//        allCreatures.addAll(GameModel.get().getCreatures());
+//        allCreatures.add(GameModel.get().getHero());
 
-        this.creaturesDrawer = new CreaturesDrawer(allCreatures);
+        this.creaturesDrawer = new CreaturesDrawer(GameModel.get().getCreatures());
         this.viewList.add(this.creaturesDrawer);
     }
 

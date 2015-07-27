@@ -32,16 +32,16 @@ public class HeroInputManager extends InputAdapter {
 
         if (screenY > screenHeight-screenHeight/4) {
             //move up
-            this.hero.moveOneStep(Utilities.Directions.SOUTH);
+            this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
         } else if (screenY < screenHeight/4) {
             //move down
-            this.hero.moveOneStep(Utilities.Directions.NORTH);
+            this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
         } else if (screenX < screenWidth/2) {
             //move left
-            this.hero.moveOneStep(Utilities.Directions.WEST);
+            this.hero.chooseTheRightAction(Utilities.Directions.WEST);
         } else if (screenX > screenWidth/2) {
             //move right
-            this.hero.moveOneStep(Utilities.Directions.EAST);
+            this.hero.chooseTheRightAction(Utilities.Directions.EAST);
         } else {
             return false;   //not performed
         }

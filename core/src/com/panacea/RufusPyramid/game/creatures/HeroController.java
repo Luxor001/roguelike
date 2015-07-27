@@ -2,7 +2,9 @@ package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
+import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
@@ -26,12 +28,29 @@ public class HeroController {
         hero.setPosition(startingPosition);
     }
 
-    public void setPosition(MapContainer spawnMap, GridPoint2 spawnPosition) {
-
+    public void moveToPosition(GridPoint2 finalPosition) {
+        //TODO quando avremo un algoritmo di path
     }
 
-    public void moveToPosition(GridPoint2 finalPosition) {
+    public void chooseTheRightAction(Utilities.Directions direction) {
+        GridPoint2 nextPos = getNextTile(this.hero.getPosition(), direction).getPosition();
 
+        //Controllo se c'è una creatura attaccabile nella direzione dove voglio andare
+        for(ICreature creature : GameModel.get().getCreatures()) {
+            GridPoint2 cPos = creature.getPosition().getPosition();
+            if (cPos.x == nextPos.x && cPos.y == nextPos.y) {
+                this.attack(creature);
+                return;
+            }
+        }
+
+        //Altrimenti semplicemente mi sposto lì
+        this.moveOneStep(direction);
+    }
+
+    public void attack(ICreature attacked) {
+        AttackAction action = new AttackAction(this.hero, attacked);
+        this.hero.fireActionChosenEvent(action);
     }
 
     /**
@@ -41,18 +60,6 @@ public class HeroController {
     public void moveOneStep(Utilities.Directions direction) {
         MoveAction action = new MoveAction(this.hero, direction);
         this.hero.fireActionChosenEvent(action);
-//        Tile startingTile = this.hero.getPosition();
-//        Tile arrivalTile = getNextTile(startingTile, direction);
-//        ArrayList<Tile> path = new ArrayList<Tile>();
-//        path.add(startingTile);
-//        path.add(arrivalTile);
-//        if (isTileWalkable(arrivalTile)) {
-//            //TODO Animator.walk(this.hero, startingTile, arrivalTile);
-//            this.hero.setPosition(arrivalTile, path);
-//            return true;
-//        }
-//
-//        return false;
     }
 
     protected boolean isTileWalkable(Tile tileToCheck) {

@@ -50,5 +50,7 @@ public interface ICreature extends IAgent {
      */
     public void chooseNextAction(ActionResult resultPreviousAction);
 
+    public void addCreatureDeadListener(CreatureDeadListener listener);
+
     public Backpack getEquipment();
 }
