@@ -74,7 +74,7 @@ public class AnimWalk extends AbstractAnimation {
         } else {
             this.frameCols = 2;
             this.frameRows = 1;
-            animationTexture = new Texture(Gdx.files.internal("data/thf2_rt2_walk.gif"));
+            animationTexture = new Texture(Gdx.files.internal("data/thf2_rt2_walk.png"));
         }
 
         TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/this.frameCols, animationTexture.getHeight()/this.frameRows);
