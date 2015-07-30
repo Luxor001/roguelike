@@ -44,11 +44,11 @@ public class AnimWalk extends AbstractAnimation {
     private float frameDuration=0;
 
     /* Prova con i vector */
-    Vector2 currentPos;
-    Vector2 velocity;
-    Vector2 deltaMovement;
-    Vector2 endPos;
-    Vector2 direction;
+    private Vector2 currentPos;
+    private Vector2 velocity;
+    private Vector2 deltaMovement;
+    private Vector2 endPos;
+    private Vector2 direction;
 
     private Class modelClass;
 

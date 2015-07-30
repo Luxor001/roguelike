@@ -2,6 +2,7 @@ package com.panacea.RufusPyramid.game.actions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 
@@ -37,8 +38,11 @@ public class AttackAction implements IAction {
         int damage = this.getDamage(attacker.getAttackValue(), attacked.getDefenceValue());
         this.attacked.setHPCurrent(this.attacked.getHPCurrent() - damage);
 
-        Gdx.app.log("", "Enemy hp: " + this.attacked.getHPCurrent());
-
+        if (attacker.equals(GameModel.get().getHero())) {
+            GameModel.get().getDiary().addLine("Hai attaccato " + attacked.getName() + "!");
+        } else {
+            GameModel.get().getDiary().addLine(attacker.getName() + " ti ha attaccato!");
+        }
         GameDrawer.get().getCreaturesDrawer().startDamage(this.attacked.getPosition().getPosition(), damage);
         return true;
     }

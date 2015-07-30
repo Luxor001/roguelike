@@ -20,6 +20,7 @@ public class GameModel {
     
     private static GameModel SINGLETON = null;
     private ArrayList<ICreature> creatures;
+    private Diary diary;
 
     /**
      * Ritorna l'unica istanza (singleton) di GameModel.
@@ -56,6 +57,7 @@ public class GameModel {
         this.maps.add(new MapContainer(40, 40));
         this.hero = new DefaultHero("Rufus");
         this.addCreature(this.hero);
+        this.diary = new Diary();
     }
     
     public ArrayList<MapContainer> getMaps() {
@@ -93,5 +95,7 @@ public class GameModel {
         newCreature.addCreatureDeadListener(this.creatureDeadListener);
     }
 
-
+    public Diary getDiary() {
+        return this.diary;
+    }
 }

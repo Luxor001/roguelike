@@ -33,7 +33,7 @@ public class GameCamera {
         float h = Gdx.graphics.getHeight();
 
         OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * 250, 250);
+        camera.setToOrtho(false, (w / h) * 360, 360);       // 216x360
 //        camera.setToOrtho(false, 800, 480);
         camera.position.set(0, 0, 0);
         camera.update();

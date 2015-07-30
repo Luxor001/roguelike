@@ -10,6 +10,7 @@ import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.creatures.ThiefEnemy;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class GameScreen implements Screen {
     GameMaster gm;
 
     public void show() {
+        Gdx.input.setInputProcessor(InputManager.get());
         GameModel.createInstance();
         this.gm = new GameMaster();
 

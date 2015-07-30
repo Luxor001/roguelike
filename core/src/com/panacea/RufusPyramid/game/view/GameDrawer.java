@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.view;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
 import com.panacea.RufusPyramid.map.MapContainer;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
     private static final GameDrawer SINGLETON = new GameDrawer();
+    private final UIDrawer uiDrawer;
 
     private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
     private MapDrawer mapDrawer;
@@ -37,6 +39,8 @@ public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
 
         this.creaturesDrawer = new CreaturesDrawer(GameModel.get().getCreatures());
         this.viewList.add(this.creaturesDrawer);
+        this.uiDrawer = new UIDrawer();
+        this.viewList.add(this.uiDrawer);
     }
 
     public void add(com.panacea.RufusPyramid.game.view.ViewObject toAdd) {
