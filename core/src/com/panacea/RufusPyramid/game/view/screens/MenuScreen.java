@@ -13,13 +13,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.panacea.RufusPyramid.game.view.GameCamera;
 
 /**
  * Created by gio on 30/07/15.
  */
 public class MenuScreen implements Screen {
 
-    private Stage stage = new Stage();
+    /**
+     * Altezza del viewport, la larghezza viene determinata usando larghezza e altezza reali del dispositivo:
+     * VIEWPORT_WIDTH = (w / h) * VIEWPORT_HEIGHT
+     */
+    private static final float VIEWPORT_HEIGHT = 640f;
+
+    private float w = (float)Gdx.graphics.getWidth();
+    private float h = (float)Gdx.graphics.getHeight();
+    private Stage stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT));
     private Table table = new Table();
 
     Skin skin;
@@ -66,8 +78,8 @@ public class MenuScreen implements Screen {
 
         //The elements are displayed in the order you add them.
         //The first appear on top, the last at the bottom.
-        table.add(title).padBottom(40).padLeft(20).row();
-        table.add(buttonPlay).size(150,60).padBottom(20).row();
+        table.add(title).padBottom(40).row();
+        table.add(buttonPlay).size(150, 60).padBottom(20).row();
         table.add(buttonExit).size(150,60).padBottom(20).row();
 
         table.setFillParent(true);

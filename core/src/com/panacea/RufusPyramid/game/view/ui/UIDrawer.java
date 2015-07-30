@@ -63,8 +63,8 @@ public class UIDrawer extends ViewObject {
     public void create() {
         super.create();
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+        float w = (float)Gdx.graphics.getWidth();
+        float h = (float)Gdx.graphics.getHeight();
 
         batch = new SpriteBatch();
         renderer = new ShapeRenderer();
