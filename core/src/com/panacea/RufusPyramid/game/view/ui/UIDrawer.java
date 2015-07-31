@@ -99,6 +99,7 @@ public class UIDrawer extends ViewObject {
         table.pack();
 
         button = new TextButton("Menu", skin);
+        button.setSize(60, 40);
         button.setPosition(0, stage.getHeight() - button.getHeight());
         button.addListener(new ClickListener() {
             @Override
