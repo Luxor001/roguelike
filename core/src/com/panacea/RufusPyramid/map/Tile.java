@@ -24,8 +24,9 @@ public class Tile {
     public enum TileType{
         Solid,
         Walkable,
+        Door,
         Destructible,
-        Hidden
+        Hidden,
     }
 
     public GridPoint2 getPosition() {
