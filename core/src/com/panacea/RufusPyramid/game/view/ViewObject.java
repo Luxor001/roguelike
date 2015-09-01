@@ -1,7 +1,5 @@
 package com.panacea.RufusPyramid.game.view;
 
-import com.badlogic.gdx.ApplicationListener;
-
 /**
  * Classe da estendere per creare oggetti renderizzabili.
  * Contiene tutti i metodi utili allo scopo, fare override di quelli necessari.

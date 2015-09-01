@@ -1,10 +1,13 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.common.InputManager;
+import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
+import com.panacea.RufusPyramid.game.actions.AttackAction;
+import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
-import com.panacea.RufusPyramid.game.view.HeroInputManager;
 
 import java.util.ArrayList;
 
@@ -25,32 +28,38 @@ public class HeroController {
         hero.setPosition(startingPosition);
     }
 
-    public void setPosition(MapContainer spawnMap, GridPoint2 spawnPosition) {
-
+    public void moveToPosition(GridPoint2 finalPosition) {
+        //TODO quando avremo un algoritmo di path
     }
 
-    public void moveToPosition(GridPoint2 finalPosition) {
+    public void chooseTheRightAction(Utilities.Directions direction) {
+        GridPoint2 nextPos = getNextTile(this.hero.getPosition(), direction).getPosition();
 
+        //Controllo se c'è una creatura attaccabile nella direzione dove voglio andare
+        for(ICreature creature : GameModel.get().getCreatures()) {
+            GridPoint2 cPos = creature.getPosition().getPosition();
+            if (cPos.x == nextPos.x && cPos.y == nextPos.y) {
+                this.attack(creature);
+                return;
+            }
+        }
+
+        //Altrimenti semplicemente mi sposto lì
+        this.moveOneStep(direction);
+    }
+
+    public void attack(ICreature attacked) {
+        AttackAction action = new AttackAction(this.hero, attacked);
+        this.hero.fireActionChosenEvent(action);
     }
 
     /**
      * Move one step to input directory.
      * @param direction direction to move
-     * @return true if moved successfully, false otherwise
      */
-    public boolean moveOneStep(MoveDirection direction) {
-        Tile startingTile = this.hero.getPosition();
-        Tile arrivalTile = getNextTile(startingTile, direction);
-        ArrayList<Tile> path = new ArrayList<Tile>();
-        path.add(startingTile);
-        path.add(arrivalTile);
-        if (isTileWalkable(arrivalTile)) {
-            //TODO Animator.walk(this.hero, startingTile, arrivalTile);
-            this.hero.setPosition(arrivalTile, path);
-            return true;
-        }
-
-        return false;
+    public void moveOneStep(Utilities.Directions direction) {
+        MoveAction action = new MoveAction(this.hero, direction);
+        this.hero.fireActionChosenEvent(action);
     }
 
     protected boolean isTileWalkable(Tile tileToCheck) {
@@ -59,32 +68,48 @@ public class HeroController {
         return true;
     }
 
-    private static Tile getNextTile(Tile startingTile, MoveDirection direction) {
+    private static Tile getNextTile(Tile startingTile, Utilities.Directions direction) {
         //TODO da integrare con il metodo fatto da belli per la mappa
-        int tileDimension = 32;
-        GridPoint2 pos = new GridPoint2(startingTile.getPosition());
-        switch(direction) {
-            case NORTH:
-                pos.y += tileDimension;
-                break;
-            case SOUTH:
-                pos.y += -tileDimension;
-                break;
-            case EAST:
-                pos.x += tileDimension;
-                break;
-            case WEST:
-                pos.x += -tileDimension;
-                break;
-        }
+        GridPoint2 pos = HeroController.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
+
+
         return new Tile(pos, Tile.TileType.Solid);
     }
 
-
-    public enum MoveDirection {
-        NORTH,  NORTH_EAST,
-        EAST,   SOUTH_EAST,
-        SOUTH,  SOUTH_WEST,
-        WEST,   NORTH_WEST
+    //TODO non credo che la tile debba mantenere la posizione "reale" (32x32 pixels) ma solo quella virtuale (1x1)
+    //TODO a quel punto usa il metodo adjCoords in Utilities
+    private static GridPoint2 adjCoords(GridPoint2 inputCords, Utilities.Directions direction){
+        GridPoint2 newCords = new GridPoint2(inputCords);
+        switch(direction) {
+            case NORTH:
+                newCords.y+=32;
+                break;
+            case EAST:
+                newCords.x+=32;
+                break;
+            case SOUTH:
+                newCords.y-=32;
+                break;
+            case WEST:
+                newCords.x-=32;
+                break;
+            case NORTH_EAST:
+                newCords.y+=32;
+                newCords.x+=32;
+                break;
+            case NORTH_WEST:
+                newCords.y+=32;
+                newCords.x-=32;
+                break;
+            case SOUTH_EAST:
+                newCords.y-=32;
+                newCords.x+=32;
+                break;
+            case SOUTH_WEST:
+                newCords.y-=32;
+                newCords.x-=32;
+                break;
+        }
+        return newCords;
     }
 }

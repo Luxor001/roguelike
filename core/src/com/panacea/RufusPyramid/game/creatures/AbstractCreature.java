@@ -3,9 +3,16 @@ package com.panacea.RufusPyramid.game.creatures;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
+import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
+import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
+import com.panacea.RufusPyramid.game.actions.IAction;
+import com.panacea.RufusPyramid.game.actions.IAgent;
+import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Deve davvero essere una classe astratta? O basta chiamarla "GenericCreature" ?
@@ -22,6 +29,9 @@ public abstract class AbstractCreature implements ICreature {
     private double attack, defence, speed;
     private Tile position;
     private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
+    private int energy;
+    private List<ActionChosenListener> actionChosenListeners;
+    private List<CreatureDeadListener> creatureDeadListeners;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -36,6 +46,8 @@ public abstract class AbstractCreature implements ICreature {
         this.backpack = new com.panacea.RufusPyramid.game.creatures.Backpack();
 
         this.changeListeners = new ArrayList<PositionChangeListener>();
+        this.actionChosenListeners = new ArrayList<ActionChosenListener>(1);
+        this.creatureDeadListeners = new ArrayList<CreatureDeadListener>();
     }
 
     private static int getUniqueCreatureId() {
@@ -55,6 +67,9 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public void setHPCurrent(int currentHP) {
         this.currentHP = currentHP;
+        if (this.currentHP < 0) {
+            this.fireCreatureDeadEvent();
+        }
     }
 
     @Override
@@ -141,6 +156,10 @@ public abstract class AbstractCreature implements ICreature {
                 pointPath.add(tile.getPosition());
             }
             this.firePositionChangeEvent(pointPath);
+
+            this.fireActionChosenEvent(
+                    new ActionChosenEvent(new MoveAction(this, Utilities.Directions.EAST)),
+                    this);
         }
     }
 
@@ -191,4 +210,42 @@ public abstract class AbstractCreature implements ICreature {
 
         public abstract void changed(PositionChangeEvent event, Object source);
     }
+
+    @Override
+    public int getEnergy() {
+        return this.energy;
+    }
+
+    @Override
+    public void setEnergy(int currentEnergy) {
+        this.energy = currentEnergy;
+    }
+
+    @Override
+    public void addActionChosenListener(ActionChosenListener listener) {
+        this.actionChosenListeners.add(listener);
+    }
+
+    @Override
+    public void fireActionChosenEvent(ActionChosenEvent event, IAgent source) {
+        for (ActionChosenListener listener : this.actionChosenListeners) {
+            listener.performed(event, source);
+        }
+    }
+
+    public void fireActionChosenEvent(IAction chosenAction) {
+        this.fireActionChosenEvent(new ActionChosenEvent(chosenAction), this);
+    }
+
+    public void fireCreatureDeadEvent() {
+        CreatureDeadEvent event = new CreatureDeadEvent(this.getHPCurrent());
+        for (CreatureDeadListener listener : this.creatureDeadListeners) {
+            listener.changed(event, this);
+        }
+    }
+
+    public void addCreatureDeadListener(CreatureDeadListener listener) {
+        this.creatureDeadListeners.add(listener);
+    }
+
 }

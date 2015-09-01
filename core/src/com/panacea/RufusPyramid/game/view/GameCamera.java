@@ -2,14 +2,14 @@ package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.panacea.RufusPyramid.common.InputManager;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 /**
  * Created by gio on 16/07/15.
  */
 public class GameCamera {
     private static OrthographicCamera camera = null;
-    private static OrthoCamController cameraController;
+    private static com.panacea.RufusPyramid.game.view.input.OrthoCamController cameraController;
 
     private GameCamera() {};
 
@@ -21,8 +21,8 @@ public class GameCamera {
         //TODO istanziare di default all'avvio del gioco
         if (camera == null) {
             camera = createCamera();
-            cameraController = new OrthoCamController(camera);
-            InputManager.getInstance().addProcessor(cameraController);
+            cameraController = new com.panacea.RufusPyramid.game.view.input.OrthoCamController(camera);
+            InputManager.get().addProcessor(cameraController);
         }
         return camera;
     }
@@ -33,9 +33,10 @@ public class GameCamera {
         float h = Gdx.graphics.getHeight();
 
         OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * 250, 250);
+        camera.setToOrtho(false, (w / h) * 640f, 640f);       // 360x640
 //        camera.setToOrtho(false, 800, 480);
         camera.position.set(0, 0, 0);
+        camera.zoom = .5f;
         camera.update();
 
         return camera;

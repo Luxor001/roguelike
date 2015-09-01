@@ -8,5 +8,7 @@ public class GameController {
 
     public void initializeGame() {
         //TODO
+        GameMaster gm = new GameMaster();
+
     }
 }

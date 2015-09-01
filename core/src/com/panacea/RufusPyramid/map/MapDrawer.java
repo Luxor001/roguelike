@@ -6,9 +6,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.panacea.RufusPyramid.common.InputManager;
-import com.panacea.RufusPyramid.game.view.OrthoCamController;
 import com.panacea.RufusPyramid.game.view.ViewObject;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.game.view.input.OrthoCamController;
 
 public class MapDrawer extends ViewObject {
 
@@ -23,7 +23,7 @@ public class MapDrawer extends ViewObject {
         camera = createCamera();
 
         cameraController = new OrthoCamController(camera);
-        InputManager.getInstance().addProcessor(cameraController);
+        InputManager.get().addProcessor(cameraController);
 
 //        font = new BitmapFont();
 //        batch = new SpriteBatch();

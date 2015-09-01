@@ -1,6 +1,6 @@
 package com.panacea.RufusPyramid.game.creatures;
 
-import com.panacea.RufusPyramid.game.items.items.IItem;
+import com.panacea.RufusPyramid.game.items.IItem;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

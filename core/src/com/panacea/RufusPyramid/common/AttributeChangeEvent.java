@@ -1,7 +1,5 @@
 package com.panacea.RufusPyramid.common;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
-
 /**
  * Created by gio on 18/07/15.
  */
