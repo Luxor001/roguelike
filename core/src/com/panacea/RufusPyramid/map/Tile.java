@@ -27,6 +27,7 @@ public class Tile {
         Door,
         Destructible,
         Hidden,
+        NextLevel
     }
 
     public GridPoint2 getPosition() {

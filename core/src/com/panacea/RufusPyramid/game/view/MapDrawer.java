@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
-import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
 
@@ -36,18 +35,18 @@ public class MapDrawer extends ViewObject {
 
         camera = GameCamera.get();
 
-        int numRows = 30;       //TODO map.rLenght()
-        int numColumns = 30;    //TODO map.cLenght()
+        int numRows = map.rLenght();       //TODO map.rLenght()
+        int numColumns = map.cLenght();    //TODO map.cLenght()
 
         //Imposto le immagini e i parametri per la visualizzazione
         spriteMap = new Sprite[numRows][numColumns];
-        spriteCache = new SpriteCache();
+        spriteCache = new SpriteCache(numRows*numColumns,true);
         spriteCache.beginCache();
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numColumns; col++) {
 
                 //temporary full wall map
-                    Tile tileToDraw = new Tile(new GridPoint2(row, col), Tile.TileType.Solid); //map.getTile(row, col);
+                    Tile tileToDraw = map.getTile(row,col);//map.getTile(row, col);
                     Texture tileTexture = MapDrawer.getTexture(tileToDraw);
 
                     //TODO set texture in a map
@@ -81,7 +80,19 @@ public class MapDrawer extends ViewObject {
     }
 
     private static Texture getTexture(Tile tile) {
+        Texture text = new Texture(Gdx.files.internal("data/wall23.gif"));
+        switch(tile.getType()){
+            case Solid:
+                text = new Texture(Gdx.files.internal("data/wall23.gif"));
+                break;
+            case Walkable:
+                text = new Texture(Gdx.files.internal("data/ground.png"));
+                break;
+            case Door:
+                text = new Texture(Gdx.files.internal("data/door1_close.png"));
+                break;
+        }
         //TODO return wall texture and then return proper texture using tile values
-        return new Texture(Gdx.files.internal("data/wall23.gif"));
+        return text;
     }
 }

@@ -50,26 +50,17 @@ public class MapContainer {
             return tiles[row][col];
     }
     public Tile getTile(GridPoint2 position){
-        if(position.y > rLenght() || position.x > cLenght() || position.y < 0 || position.x < 0)
+        if(position.y > rLenght() -1  || position.x > cLenght()-1 || position.y < 0 || position.x < 0)
             return null;
         else
             return tiles[position.y][position.x];
     }
 
-    public Directions getAdjacentWall(GridPoint2 coordinate){ //this method scans the map at the given coordinate to find a possible solid wall
-
-        try{
-
-       for (Directions dir : Directions.values()) {
-            if(getTile(Directions.adjCoords(coordinate,dir)).getType() == TileType.Solid){
-                return dir;
-            }
-        }
-        }
-        catch(Exception e){
-            int a=0;
-        }
-        return null;
+    public boolean getAdjacentWall(MapFactory.BorderCord coordinate){ //this method scans the map at the given coordinate to find a possible solid wall
+        Tile tile=getTile(Directions.adjCoords(coordinate.getCoord(),coordinate.getBound()));
+        if(tile != null && tile.getType() == TileType.Solid)
+                return true;
+        return false;
     }
 
     public int getTilesNumber(TileType type){ //this method counts the tiles of a certain type in the container.
@@ -99,15 +90,16 @@ public class MapContainer {
         try{
             PrintWriter writer = new PrintWriter(fileName, "UTF-8");
             for(int y=rLenght()-1; y >= 0;y--){
-                writer.write("\n");
                 for(int x=0; x < cLenght();x++){
-                    if (getTile(x, y).getType() == TileType.Solid)
+                    if (getTile(y, x).getType() == TileType.Solid)
                         writer.write('1');
-                    if (getTile(x, y).getType() == TileType.Walkable)
+                    if (getTile(y, x).getType() == TileType.Walkable)
                         writer.write('0');
-                    if(getTile(x,y).getType() == TileType.Door)
+                    if(getTile(y, x).getType() == TileType.Door)
                         writer.write('2');
                 }
+                if(y != 0)
+                    writer.write("\n");
             }
             writer.close();
         }

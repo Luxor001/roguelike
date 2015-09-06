@@ -16,18 +16,12 @@ public class MapDrawer extends ViewObject {
     private TiledMapRenderer renderer;
     private OrthographicCamera camera;
     private OrthoCamController cameraController;
-//    private BitmapFont font;
-//    private SpriteBatch batch;
 
     public void create() {
         camera = createCamera();
 
         cameraController = new OrthoCamController(camera);
         InputManager.get().addProcessor(cameraController);
-
-//        font = new BitmapFont();
-//        batch = new SpriteBatch();
-
         map = new TmxMapLoader().load("data/level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1f / 32f);
     }
@@ -47,9 +41,6 @@ public class MapDrawer extends ViewObject {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-//        batch.begin();
-//        font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
-//        batch.end();
     }
 
     public void dispose() {

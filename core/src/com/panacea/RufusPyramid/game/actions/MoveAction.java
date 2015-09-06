@@ -63,47 +63,8 @@ public class MoveAction implements IAction {
 
 
     private static Tile getNextTile(Tile startingTile, Utilities.Directions direction) {
-        //TODO da integrare con il metodo fatto da belli per la mappa
-        GridPoint2 pos = MoveAction.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
-
-
+        GridPoint2 pos = Utilities.Directions.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
         return new Tile(pos, Tile.TileType.Solid);
     }
 
-    //TODO non credo che la tile debba mantenere la posizione "reale" (32x32 pixels) ma solo quella virtuale (1x1)
-    //TODO a quel punto usa il metodo adjCoords in Utilities
-    private static GridPoint2 adjCoords(GridPoint2 inputCords, Utilities.Directions direction){
-        GridPoint2 newCords = new GridPoint2(inputCords);
-        switch(direction) {
-            case NORTH:
-                newCords.y+=32;
-                break;
-            case EAST:
-                newCords.x+=32;
-                break;
-            case SOUTH:
-                newCords.y-=32;
-                break;
-            case WEST:
-                newCords.x-=32;
-                break;
-            case NORTH_EAST:
-                newCords.y+=32;
-                newCords.x+=32;
-                break;
-            case NORTH_WEST:
-                newCords.y+=32;
-                newCords.x-=32;
-                break;
-            case SOUTH_EAST:
-                newCords.y-=32;
-                newCords.x+=32;
-                break;
-            case SOUTH_WEST:
-                newCords.y-=32;
-                newCords.x-=32;
-                break;
-        }
-        return newCords;
-    }
 }

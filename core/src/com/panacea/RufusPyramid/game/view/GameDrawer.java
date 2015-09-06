@@ -1,12 +1,8 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.panacea.RufusPyramid.game.GameModel;
-import com.panacea.RufusPyramid.game.creatures.Enemy;
-import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
-import com.panacea.RufusPyramid.map.MapContainer;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +24,7 @@ public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
     }
 
     private GameDrawer() {
-        this.mapDrawer = new MapDrawer(new MapContainer(30, 30));  //map.create richiamato automaticamente da ViewObject
+        this.mapDrawer = new MapDrawer(GameModel.get().getCurrentMap());  //map.create richiamato automaticamente da ViewObject
         this.viewList = new LinkedList<com.panacea.RufusPyramid.game.view.ViewObject>();
         this.viewList.add(this.mapDrawer);
         this.viewList.add(new Animator());

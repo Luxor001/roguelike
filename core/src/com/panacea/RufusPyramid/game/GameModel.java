@@ -1,16 +1,19 @@
 package com.panacea.RufusPyramid.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
+import com.panacea.RufusPyramid.map.MapFactory;
+import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by gio on 19/07/15.
@@ -54,12 +57,17 @@ public class GameModel {
         this.currentMapIndex = 0;
         this.creatures = new ArrayList<ICreature>();
         this.maps = new ArrayList<MapContainer>();
-        this.maps.add(new MapContainer(40, 40));
+
+        MapFactory factory=new MapFactory();
+        Map newmap = factory.generateMap(new Random(System.nanoTime()).nextInt());
+        this.maps.add(newmap.getMapContainer());
         this.hero = new DefaultHero("Rufus");
+        GridPoint2 spawnpoint=newmap.getSpawnPoint();
+        this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
         this.addCreature(this.hero);
         this.diary = new Diary();
     }
-    
+
     public ArrayList<MapContainer> getMaps() {
         return this.maps;
     }

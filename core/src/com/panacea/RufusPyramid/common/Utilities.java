@@ -9,6 +9,9 @@ import java.util.Random;
  */
 public class Utilities {
 
+    public static int DEFAULT_BLOCK_WIDTH = 32;
+    public static int DEFAULT_BLOCK_HEIGHT = 32;
+
     public static int randInt(int min, int max,int seed) {
         Random rand = new Random(seed);
         int randomNum = rand.nextInt((max - min) + 1) + min;
@@ -19,16 +22,20 @@ public class Utilities {
         NORTH,
         EAST,
         SOUTH,
-        WEST;
+        WEST,
+        NORTH_WEST,
+        NORTH_EAST,
+        SOUTH_EAST,
+        SOUTH_WEST;
 
         public static GridPoint2 adjCoords(GridPoint2 inputCords,Utilities.Directions direction){
             GridPoint2 newCords=new GridPoint2(inputCords.x,inputCords.y);
             if(direction == Utilities.Directions.NORTH)
-                newCords.y--;
+                newCords.y++;
             if(direction == Utilities.Directions.EAST)
                 newCords.x++;
             if(direction == Utilities.Directions.SOUTH)
-                newCords.y++;
+                newCords.y--;
             if(direction == Utilities.Directions.WEST)
                 newCords.x--;
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
@@ -19,7 +20,6 @@ import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -115,7 +115,7 @@ public class CreaturesDrawer extends ViewObject {
                     SpriteBatch batch = GameBatch.get();
 
                     batch.begin();
-                    batch.draw(this.sprites.get(creature.getID()), spritePosition.x, spritePosition.y, 32, 32);
+                    batch.draw(this.sprites.get(creature.getID()), (spritePosition.x) * Utilities.DEFAULT_BLOCK_WIDTH +  Utilities.DEFAULT_BLOCK_WIDTH, spritePosition.y * Utilities.DEFAULT_BLOCK_HEIGHT +  Utilities.DEFAULT_BLOCK_HEIGHT, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
                     batch.end();
 
                     break;
