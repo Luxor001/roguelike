@@ -46,7 +46,7 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         GridPoint2 spawnPoint;
         int randX=Utilities.randInt((int)rooms.get(0).getX(), (int)(rooms.get(0).getX()+ rooms.get(0).width - 1),seed);
         int randY=Utilities.randInt((int)rooms.get(0).getY(), (int)(rooms.get(0).getY()+ rooms.get(0).height - 1),seed);
-        spawnPoint = new GridPoint2(1,1);
+        spawnPoint = new GridPoint2(randX,randY);
 
 
         System.out.println(spawnPoint.x + " " + spawnPoint.y +" "+ seed);

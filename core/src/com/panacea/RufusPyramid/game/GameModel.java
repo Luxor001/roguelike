@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
@@ -58,13 +59,20 @@ public class GameModel {
         this.creatures = new ArrayList<ICreature>();
         this.maps = new ArrayList<MapContainer>();
 
-        MapFactory factory=new MapFactory();
-        Map newmap = factory.generateMap(new Random(System.nanoTime()).nextInt());
-        this.maps.add(newmap.getMapContainer());
+
+        Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt());
+        this.maps.add(newMap.getMapContainer());
         this.hero = new DefaultHero("Rufus");
-        GridPoint2 spawnpoint=newmap.getSpawnPoint();
+        GridPoint2 spawnpoint=newMap.getSpawnPoint();
         this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
         this.addCreature(this.hero);
+
+        Enemy newEnemy;
+        for(int i=0; i < 10; i++) {
+            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
+            newEnemy.setPosition(newMap.getRandomEnemyPosition());
+            this.addCreature(newEnemy);
+        }
         this.diary = new Diary();
     }
 

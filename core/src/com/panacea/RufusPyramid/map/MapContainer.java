@@ -1,10 +1,14 @@
 package com.panacea.RufusPyramid.map;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.common.Utilities.Directions;
 import com.panacea.RufusPyramid.map.Tile.TileType;
 
 import java.io.PrintWriter;
+import java.util.Random;
+
+import javax.rmi.CORBA.Util;
 
 /**
  * Created by lux on 10/07/15.
@@ -84,6 +88,25 @@ public class MapContainer {
         MapContainer m=new MapContainer(cLenght(),rLenght());
         m.setTiles(clonedTiles);
         return m;
+    }
+
+    public Tile getRandomTile(TileType type){
+
+        if(getTilesNumber(type) != 0){ //TODO: non è efficiente, lo so, ma non abbiamo molto tempo! probabilmente è meglio fare un "getTilesbyType" ed ottenere tutte le tiles di un certo tipo, e poi randomizzare su quello
+            Tile randomTile = null;
+            int tries=0;
+            do {
+                int seed = (int)System.nanoTime();
+                int randx = Utilities.randInt(0,cLenght()-1,seed);
+                int randy = Utilities.randInt(0,rLenght()-1,seed);
+                if(getTile(randy,randx).getType() == type)
+                    randomTile=getTile(randy,randx);
+                tries++;
+            }while(randomTile == null || tries < 5000);
+            return randomTile;
+        }
+        else
+            return null;
     }
 
     public void printMap(String fileName){

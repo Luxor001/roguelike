@@ -115,7 +115,7 @@ public class CreaturesDrawer extends ViewObject {
                     SpriteBatch batch = GameBatch.get();
 
                     batch.begin();
-                    batch.draw(this.sprites.get(creature.getID()), (spritePosition.x) * Utilities.DEFAULT_BLOCK_WIDTH +  Utilities.DEFAULT_BLOCK_WIDTH, spritePosition.y * Utilities.DEFAULT_BLOCK_HEIGHT +  Utilities.DEFAULT_BLOCK_HEIGHT, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
+                    batch.draw(this.sprites.get(creature.getID()), (spritePosition.x) * Utilities.DEFAULT_BLOCK_WIDTH, spritePosition.y * Utilities.DEFAULT_BLOCK_HEIGHT, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
                     batch.end();
 
                     break;

@@ -16,6 +16,10 @@ public class Map {
         this.mapcontainer=mapcontainer;
     }
 
+    public Tile getRandomEnemyPosition(){
+        return mapcontainer.getRandomTile(Tile.TileType.Walkable);
+    }
+
     public MapContainer getMapContainer(){
         return mapcontainer;
     }
