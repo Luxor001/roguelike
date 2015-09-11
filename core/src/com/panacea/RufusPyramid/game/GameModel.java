@@ -72,7 +72,9 @@ public class GameModel {
             newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
             newEnemy.setPosition(newMap.getRandomEnemyPosition());
             this.addCreature(newEnemy);
+            // gm.addAgent(e2);*/
         }
+
         this.diary = new Diary();
     }
 

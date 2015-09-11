@@ -6,8 +6,11 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.view.GameCamera;
+
+import javax.rmi.CORBA.Util;
 
 public class HeroInputManager extends InputAdapter {
     //TODO estendere GestureDetector?
@@ -30,28 +33,95 @@ public class HeroInputManager extends InputAdapter {
         if (isPaused) return false;
         if (hasBeenDragged(this.touchDownPosition, new Vector2(screenX, screenY))) return false;
 
-        if (screenY > screenHeight-screenHeight/4) {
-            //move up
-            this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
-        } else if (screenY < screenHeight/4) {
-            //move down
-            this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
-        } else if (screenX < screenWidth/2) {
-            //move left
-            this.hero.chooseTheRightAction(Utilities.Directions.WEST);
-        } else if (screenX > screenWidth/2) {
-            //move right
-            this.hero.chooseTheRightAction(Utilities.Directions.EAST);
-        } else {
-            return false;   //not performed
+       GridPoint2 inputCoords = new GridPoint2(screenX,screenY);
+
+        Utilities.Directions inputDirections = getInputDirections(inputCoords);
+        Utilities.Directions slackDirections = getSlackPredominance(inputCoords);
+
+        switch(inputDirections){
+            case NORTH_EAST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.EAST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
+                break;
+
+            case SOUTH_EAST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.EAST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
+                break;
+
+            case SOUTH_WEST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.WEST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
+                break;
+
+            case NORTH_WEST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.WEST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
+                break;
         }
 
+        GridPoint2 heroPosition=  GameModel.get().getHero().getPosition().getPosition();
+        GridPoint2 absolutePos= Utilities.convertToAbsolutePos(heroPosition);
+        GameCamera.get().position.set(absolutePos.x,absolutePos.y,0); /*Update the camera based on the hero position*/
 
         /* TODO Vai alla posizione (x,y) sulla mappa, tramite un algoritmo di path*/
         Vector3 gamePos = GameCamera.get().unproject(new Vector3(screenX, screenY, 0));
         GridPoint2 mapPos = new GridPoint2(Math.round(gamePos.x/32), Math.round(gamePos.y/32));
 
         return true;
+    }
+    private Utilities.Directions getSlackPredominance(GridPoint2 clickCoords){ //this method tells which direction (vertical or horizontal) of the user input is more significant
+        int screenX=clickCoords.x;
+        int screenY = clickCoords.y;
+
+        int verticalSlack;
+        int horizontalSlack;
+        if(screenX > screenWidth/2) //destra
+            horizontalSlack = screenX - screenWidth/2;
+        else//sinistra
+            horizontalSlack = screenWidth/2 - screenX;
+
+
+        if(screenY > screenHeight / 2) //su
+            verticalSlack = screenY - screenHeight/2;
+        else//giù
+            verticalSlack = screenHeight/2 - screenY;
+
+        if(horizontalSlack > verticalSlack)
+            return Utilities.Directions.HORIZONTAL;
+        else
+            return Utilities.Directions.VERTICAL;
+    }
+
+    private Utilities.Directions getInputDirections(GridPoint2 clickCoords){ //this method understand which boundaries of the screen are been touched ( e.g: up and right of the screen-->NORTH_EAST)
+        Utilities.Directions inputDirections;
+
+        int screenX = clickCoords.x;
+        int screenY = clickCoords.y;
+        if(screenX >= screenWidth/2) //destra
+        {
+            if (screenY >= screenHeight / 2)//su
+                inputDirections = Utilities.Directions.SOUTH_EAST;
+            else
+                inputDirections = Utilities.Directions.NORTH_EAST;
+        }
+        else                        //sinistra
+        {
+            if (screenY >= screenHeight / 2)//su
+                inputDirections = Utilities.Directions.SOUTH_WEST;
+            else
+                inputDirections = Utilities.Directions.NORTH_WEST;
+        }
+
+        return inputDirections;
     }
 
     @Override

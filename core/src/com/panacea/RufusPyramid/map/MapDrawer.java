@@ -24,6 +24,7 @@ public class MapDrawer extends ViewObject {
         InputManager.get().addProcessor(cameraController);
         map = new TmxMapLoader().load("data/level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1f / 32f);
+       // camera.position.set
     }
 
     public OrthographicCamera createCamera() {

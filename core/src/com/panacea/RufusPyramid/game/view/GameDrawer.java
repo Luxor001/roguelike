@@ -1,5 +1,8 @@
 package com.panacea.RufusPyramid.game.view;
 
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector3;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
 
@@ -66,6 +69,10 @@ public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
     @Override
     public void render(float delta) {
         super.render(delta);
+
+        GridPoint2 heroPosition=  GameModel.get().getHero().getPosition().getPosition();
+        GridPoint2 absolutePos= Utilities.convertToAbsolutePos(heroPosition);
+        GameCamera.get().position.set(absolutePos.x,absolutePos.y,0); /*Update the camera based on the hero position*/
 
         GameCamera.get().update();
         GameBatch.get().setProjectionMatrix(GameCamera.get().combined);

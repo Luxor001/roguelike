@@ -26,7 +26,9 @@ public class Utilities {
         NORTH_WEST,
         NORTH_EAST,
         SOUTH_EAST,
-        SOUTH_WEST;
+        SOUTH_WEST,
+        HORIZONTAL,/*used for user input Recognition*/
+        VERTICAL;
 
         public static GridPoint2 adjCoords(GridPoint2 inputCords,Utilities.Directions direction){
             GridPoint2 newCords=new GridPoint2(inputCords.x,inputCords.y);
@@ -41,5 +43,14 @@ public class Utilities {
 
             return newCords;
         }
+    }
+
+    public static GridPoint2 convertToAbsolutePos(GridPoint2 position){
+        GridPoint2 newPosition= new GridPoint2(position.x * DEFAULT_BLOCK_WIDTH, position.y * DEFAULT_BLOCK_HEIGHT);
+        return newPosition;
+    }
+    public static GridPoint2 convertToRelativePos(GridPoint2 position){
+        GridPoint2 newPosition= new GridPoint2(position.x / DEFAULT_BLOCK_WIDTH, position.y / DEFAULT_BLOCK_HEIGHT);
+        return newPosition;
     }
 }
