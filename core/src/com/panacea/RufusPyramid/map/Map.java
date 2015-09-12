@@ -10,10 +10,21 @@ public class Map {
     private int level;
     private MapContainer mapcontainer;
     private GridPoint2 spawnPosition;
+    private MapType type;
 
-    public Map(int level, MapContainer mapcontainer){
+    public enum MapType{ //defines the "style" of the map, such the texture itself on the drawer
+        DUNGEON_COBBLE,
+        DUNGEON_SAND,
+        DUNGEON_SEWERS;
+    }
+    public Map(int level, MapType type, MapContainer mapcontainer){
         this.level=level;
         this.mapcontainer=mapcontainer;
+        this.type=type;
+    }
+    public Map(int level, MapType type){
+        this.level=level;
+        this.type=type;
     }
 
     public Tile getRandomEnemyPosition(){
@@ -23,6 +34,9 @@ public class Map {
     public MapContainer getMapContainer(){
         return mapcontainer;
     }
+    public void setMapContainer(MapContainer mapcontainer){ this.mapcontainer=mapcontainer; }
+
+    public MapType getType(){ return type; }
     public int getLevel(){
         return level;
     }

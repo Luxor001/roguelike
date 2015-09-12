@@ -42,7 +42,7 @@ public class GameModel {
     /* Instance methods */
     
     private DefaultHero hero;
-    private ArrayList<MapContainer> maps;
+    private ArrayList<Map> maps;
     private int currentMapIndex;
     
     private CreatureDeadListener creatureDeadListener = new CreatureDeadListener() {
@@ -57,11 +57,11 @@ public class GameModel {
     private GameModel() {
         this.currentMapIndex = 0;
         this.creatures = new ArrayList<ICreature>();
-        this.maps = new ArrayList<MapContainer>();
+        this.maps = new ArrayList<Map>();
 
 
         Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt());
-        this.maps.add(newMap.getMapContainer());
+        this.maps.add(newMap);
         this.hero = new DefaultHero("Rufus");
         GridPoint2 spawnpoint=newMap.getSpawnPoint();
         this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
@@ -78,11 +78,11 @@ public class GameModel {
         this.diary = new Diary();
     }
 
-    public ArrayList<MapContainer> getMaps() {
+    public ArrayList<Map> getMaps() {
         return this.maps;
     }
 
-    public MapContainer getCurrentMap() {
+    public Map getCurrentMap() {
         return this.maps.get(this.currentMapIndex);
     }
 
@@ -95,7 +95,7 @@ public class GameModel {
      *
      *  @return L'indice con il quale la mappa è stata aggiunta, quindi il numero del livello corrispondente.
      */
-    public int addMap(MapContainer newMap) {
+    public int addMap(Map newMap) {
         this.getMaps().add(newMap);
         return this.getMaps().indexOf(newMap);
     }

@@ -11,6 +11,8 @@ import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
 
+import javax.rmi.CORBA.Util;
+
 /**
  * Created by gio on 11/07/15.
  */
@@ -33,20 +35,25 @@ public class HeroController {
     }
 
     public void chooseTheRightAction(Utilities.Directions direction) {
-        GridPoint2 nextPos = getNextTile(this.hero.getPosition(), direction).getPosition();
+        Tile nextPos = getNextTile(this.hero.getPosition(), direction);
 
         //Controllo se c'è una creatura attaccabile nella direzione dove voglio andare
         for(ICreature creature : GameModel.get().getCreatures()) {
             GridPoint2 cPos = creature.getPosition().getPosition();
-            if (cPos.x == nextPos.x && cPos.y == nextPos.y) {
+            if (cPos.x == nextPos.getPosition().x && cPos.y == nextPos.getPosition().y) {
                 this.attack(creature);
                 return;
             }
         }
 
         //Altrimenti semplicemente mi sposto lì
-        this.moveOneStep(direction);
-    }
+
+        if(nextPos.getType() == Tile.TileType.Walkable)
+           this.moveOneStep(direction);
+
+        if(nextPos.getType() == Tile.TileType.Door)
+            this.openDoor(nextPos);
+        }
 
     public void attack(ICreature attacked) {
         AttackAction action = new AttackAction(this.hero, attacked);
@@ -62,54 +69,19 @@ public class HeroController {
         this.hero.fireActionChosenEvent(action);
     }
 
+    public void openDoor(Tile doorTile){
+
+    }
+
     protected boolean isTileWalkable(Tile tileToCheck) {
         //TODO
         //return tileToCheck.isWalkable();
         return true;
     }
 
+
     private static Tile getNextTile(Tile startingTile, Utilities.Directions direction) {
-        //TODO da integrare con il metodo fatto da belli per la mappa
-        GridPoint2 pos = HeroController.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
-
-
-        return new Tile(pos, Tile.TileType.Solid);
-    }
-
-    //TODO non credo che la tile debba mantenere la posizione "reale" (32x32 pixels) ma solo quella virtuale (1x1)
-    //TODO a quel punto usa il metodo adjCoords in Utilities
-    private static GridPoint2 adjCoords(GridPoint2 inputCords, Utilities.Directions direction){
-        GridPoint2 newCords = new GridPoint2(inputCords);
-        switch(direction) {
-            case NORTH:
-                newCords.y+=32;
-                break;
-            case EAST:
-                newCords.x+=32;
-                break;
-            case SOUTH:
-                newCords.y-=32;
-                break;
-            case WEST:
-                newCords.x-=32;
-                break;
-            case NORTH_EAST:
-                newCords.y+=32;
-                newCords.x+=32;
-                break;
-            case NORTH_WEST:
-                newCords.y+=32;
-                newCords.x-=32;
-                break;
-            case SOUTH_EAST:
-                newCords.y-=32;
-                newCords.x+=32;
-                break;
-            case SOUTH_WEST:
-                newCords.y-=32;
-                newCords.x-=32;
-                break;
-        }
-        return newCords;
+        GridPoint2 pos = Utilities.Directions.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
+        return GameModel.get().getCurrentMap().getMapContainer().getTile(pos);
     }
 }

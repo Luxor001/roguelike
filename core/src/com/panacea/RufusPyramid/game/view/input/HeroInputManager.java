@@ -34,7 +34,7 @@ public class HeroInputManager extends InputAdapter {
         if (hasBeenDragged(this.touchDownPosition, new Vector2(screenX, screenY))) return false;
 
        GridPoint2 inputCoords = new GridPoint2(screenX,screenY);
-
+        GridPoint2 oldHeroPos= GameModel.get().getHero().getPosition().getPosition();
         Utilities.Directions inputDirections = getInputDirections(inputCoords);
         Utilities.Directions slackDirections = getSlackPredominance(inputCoords);
 
@@ -67,6 +67,7 @@ public class HeroInputManager extends InputAdapter {
                     this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
                 break;
         }
+
 
         GridPoint2 heroPosition=  GameModel.get().getHero().getPosition().getPosition();
         GridPoint2 absolutePos= Utilities.convertToAbsolutePos(heroPosition);

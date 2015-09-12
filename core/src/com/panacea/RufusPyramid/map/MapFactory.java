@@ -35,6 +35,9 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         rooms=new ArrayList<Rectangle>();
         this.seed=seed;
         random=new Random(seed);
+        int randType = Utilities.randInt(0,Map.MapType.values().length-1, seed);
+        Map newMap=new Map(1, Map.MapType.values()[randType]);
+
         mapContainer =new MapContainer(MAX_MAP_HEIGHT,MAX_MAP_WIDTH);
         initializeMap();
 
@@ -48,16 +51,15 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         int randY=Utilities.randInt((int)rooms.get(0).getY(), (int)(rooms.get(0).getY()+ rooms.get(0).height - 1),seed);
         spawnPoint = new GridPoint2(randX,randY);
 
-
-        System.out.println(spawnPoint.x + " " + spawnPoint.y +" "+ seed);
-        Map newMap=new Map(1,mapContainer);
+        newMap.setMapContainer(mapContainer);
         newMap.setSpawnPoint(spawnPoint);
+
         return newMap; //TODO: impostare logica livello (qui è 1, perchè? )
     }
 
 
     private void initializeMap(){ //fill the mapContainer with solid and creates a starting room on casual position
-     /*step 1, riempimento della mappa con tile solide*/
+
         for(int row=0; row < mapContainer.rLenght();row++)
             for(int column=0; column < mapContainer.cLenght();column++)
                 mapContainer.insertTile(new Tile(new GridPoint2(column,row), Tile.TileType.Solid));
