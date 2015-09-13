@@ -5,4 +5,6 @@ package com.panacea.RufusPyramid.game.items;
  */
 public class IItem {
 
+
+
 }

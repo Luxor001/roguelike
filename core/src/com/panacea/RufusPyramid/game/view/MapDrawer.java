@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
@@ -13,7 +14,10 @@ import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
+import com.sun.java.util.jar.pack.*;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.xml.soap.Text;
@@ -36,7 +40,10 @@ public class MapDrawer extends ViewObject {
 
     private static TextureRegion[] walls;
     private static TextureRegion[] grounds;
+    private static TextureRegion[] grounds_deco;
+    private static TextureRegion[] doors; //doors consists in a 64x32 block, "closed" state in the first 32px
 
+    private ArrayList<Tile> dynamicMapTiles=new ArrayList<Tile>();
     public MapDrawer(Map map) {
         this.map = map;
     }
@@ -50,8 +57,7 @@ public class MapDrawer extends ViewObject {
         int numRows = mapCont.rLenght();
         int numColumns = mapCont.cLenght();
 
-        //initializeTextures(map.getType()); //FIXME: da fixare
-        initializeTextures(Map.MapType.DUNGEON_SAND);
+        initializeTextures(map.getType());
         //Imposto le immagini e i parametri per la visualizzazione
         spriteMap = new Sprite[numRows][numColumns];
         spriteCache = new SpriteCache(numRows*numColumns,true);
@@ -60,14 +66,21 @@ public class MapDrawer extends ViewObject {
             for (int col = 0; col < numColumns; col++) {
 
                     Tile tileToDraw = mapCont.getTile(row, col);
-                    TextureRegion tileTexture = MapDrawer.getTexture(map.getType(), tileToDraw);
+                    if(tileToDraw.getType() != Tile.TileType.Door) {
+                        TextureRegion tileTexture = MapDrawer.getTexture(map.getType(), tileToDraw);
 
-                    //TODO set texture in a map
-                    Sprite tileSprite = new Sprite(tileTexture);
-                    GridPoint2 absolutePos=Utilities.convertToAbsolutePos(new GridPoint2(col,row));
-                    tileSprite.setPosition(absolutePos.x,absolutePos.y);
-                    spriteMap[row][col] = tileSprite;
-                    spriteCache.add(tileSprite, tileSprite.getX(), tileSprite.getY());
+                        //TODO set texture in a map
+                        Sprite tileSprite = new Sprite(tileTexture);
+                        GridPoint2 absolutePos = Utilities.convertToAbsolutePos(new GridPoint2(col, row));
+                        tileSprite.setPosition(absolutePos.x, absolutePos.y);
+                        spriteMap[row][col] = tileSprite;
+                        spriteCache.add(tileSprite, tileSprite.getX(), tileSprite.getY());
+                    }
+                else
+                    {
+                        dynamicMapTiles.add(tileToDraw);
+                    }
+
             }
         }
         spriteCacheIndex = spriteCache.endCache();
@@ -85,6 +98,14 @@ public class MapDrawer extends ViewObject {
         spriteCache.begin();
         spriteCache.draw(spriteCacheIndex);
         spriteCache.end();
+
+        SpriteBatch batch = GameBatch.get();
+        batch.begin();
+        for (Tile tile:dynamicMapTiles) {
+            GridPoint2 absolutePos=Utilities.convertToAbsolutePos(tile.getPosition());
+            batch.draw(getTexture(map.getType(),tile),absolutePos.x,absolutePos.y);
+        }
+        batch.end();
 //        for (Sprite[] row : spriteMap) {
 //            for (Sprite tile : row) {
 //                tile.draw(spriteCache);
@@ -100,25 +121,31 @@ public class MapDrawer extends ViewObject {
 
         switch (mapType){
             case DUNGEON_COBBLE:
-                path = "dungeon1.png";
+                path = "dungeon1";
                 wallsFrameCols=7;
                 break;
             case DUNGEON_SAND:
-                path = "dungeon2.png";
+                path = "dungeon2";
                 groundsFrameCols=4;
                 wallsFrameCols=10;
                 break;
             case DUNGEON_SEWERS:
-                path = "dungeon3.png";
+                path = "dungeon3";
                 wallsFrameCols=7;
                 break;
+            case DUNGEON_CAVE:
+                path = "dungeon4";
+                break;
             default:
-                path = "dungeon1.png";
+                path = "dungeon1";
                 break;
         }
 
-        walls = loadTextureRegion("data/walls/"+path,wallsFrameCols,1);
-        grounds = loadTextureRegion("data/grounds/"+path,groundsFrameCols,1);
+        walls = loadTextureRegion(new Texture("data/walls/"+path+".png"));
+        grounds = loadTextureRegion(new Texture("data/grounds/"+path+".png"));
+        if(new File("data/grounds/"+path+"_deco.png").exists())
+          grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));
+        doors = loadTextureRegion(new Texture("data/mapObjects/doors_"+path+".png"));
 
     }
     private TextureRegion[] loadTextureRegion(String path, int frameCols, int frameRows){ //questo metodo esegue lo splitting di una texture e restituisce un array di textureRegion monodimensionale (ricorda: le texture possono essere un INSIEME di immagini!, le textureRegion ne rappresentano solo una!)
@@ -157,15 +184,19 @@ public class MapDrawer extends ViewObject {
                 textRegion = walls[Utilities.randInt(0,walls.length-1,(int) System.nanoTime())];
                 break;
             case Walkable:
-                textRegion = grounds[Utilities.randInt(0,grounds.length-1,(int) System.nanoTime())];
+                if(Utilities.randInt(0,3,(int)System.nanoTime()) == 3 && grounds_deco != null)
+                    textRegion = grounds_deco[Utilities.randInt(0,grounds_deco.length-1,(int) System.nanoTime())];
+                else
+                   textRegion = grounds[Utilities.randInt(0,grounds.length-1,(int) System.nanoTime())];
                 break;
             case Door:{
-                text = new Texture(Gdx.files.internal("data/door1_close.png"));
-                textRegion = loadTextureRegion(text)[0];
+                if(tile.getDoorState())
+                    textRegion =doors[1];
+                else
+                    textRegion = doors[0];
             }
                 break;
         }
-        //TODO return wall texture and then return proper texture using tile values
         return textRegion;
     }
 }

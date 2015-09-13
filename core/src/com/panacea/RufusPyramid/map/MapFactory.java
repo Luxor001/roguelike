@@ -36,10 +36,11 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         this.seed=seed;
         random=new Random(seed);
         int randType = Utilities.randInt(0,Map.MapType.values().length-1, seed);
-        Map newMap=new Map(1, Map.MapType.values()[randType]);
-
+        Map newMap=new Map(1, Map.MapType.DUNGEON_COBBLE);
+        //FIXME: da fixare
         mapContainer =new MapContainer(MAX_MAP_HEIGHT,MAX_MAP_WIDTH);
         initializeMap();
+
 
         boolean succeed;
         do{

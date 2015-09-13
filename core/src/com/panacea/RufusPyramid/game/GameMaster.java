@@ -22,7 +22,7 @@ public class GameMaster {
     private static final int BASE_ENERGY_AT_EVERY_TURN = 200;
     private static final int MIN_ENERGY_TO_ACT = 1000;
     private final ActionChosenListener commonActionPerformedListener;
-
+    public static final int DEFAULT_ACTION_COST = 200;
     /**
      * Lista ordinata delle agent che prendono parte alla turnazione.
      */

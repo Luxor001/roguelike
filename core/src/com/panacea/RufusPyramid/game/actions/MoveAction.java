@@ -1,7 +1,9 @@
 package com.panacea.RufusPyramid.game.actions;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.map.Tile;
@@ -32,7 +34,7 @@ public class MoveAction implements IAction {
 
     @Override
     public int getCost() {
-        return 200;
+        return GameMaster.DEFAULT_ACTION_COST;
     }
 
 //    public boolean isPerformable() {

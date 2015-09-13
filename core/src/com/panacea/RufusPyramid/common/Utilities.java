@@ -2,6 +2,7 @@ package com.panacea.RufusPyramid.common;
 
 import com.badlogic.gdx.math.GridPoint2;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -53,4 +54,5 @@ public class Utilities {
         GridPoint2 newPosition= new GridPoint2(position.x / DEFAULT_BLOCK_WIDTH, position.y / DEFAULT_BLOCK_HEIGHT);
         return newPosition;
     }
+
 }

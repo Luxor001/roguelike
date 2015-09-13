@@ -15,7 +15,8 @@ public class Map {
     public enum MapType{ //defines the "style" of the map, such the texture itself on the drawer
         DUNGEON_COBBLE,
         DUNGEON_SAND,
-        DUNGEON_SEWERS;
+        DUNGEON_SEWERS,
+        DUNGEON_CAVE
     }
     public Map(int level, MapType type, MapContainer mapcontainer){
         this.level=level;

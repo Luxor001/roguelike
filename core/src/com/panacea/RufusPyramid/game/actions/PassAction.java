@@ -1,5 +1,7 @@
 package com.panacea.RufusPyramid.game.actions;
 
+import com.panacea.RufusPyramid.game.GameMaster;
+
 /**
  * Created by gio on 27/07/15.
  */
@@ -11,6 +13,6 @@ public class PassAction implements IAction {
 
     @Override
     public int getCost() {
-        return 200;
+        return GameMaster.DEFAULT_ACTION_COST;
     }
 }

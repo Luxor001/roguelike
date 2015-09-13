@@ -26,6 +26,7 @@ public class GameModel {
     private ArrayList<ICreature> creatures;
     private Diary diary;
 
+
     /**
      * Ritorna l'unica istanza (singleton) di GameModel.
      * @return l'unica istanza di GameModel.

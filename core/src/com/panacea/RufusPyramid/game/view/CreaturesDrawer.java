@@ -83,7 +83,7 @@ public class CreaturesDrawer extends ViewObject {
     }
 
     private static Texture getCreatureSprite(ICreature creature) {
-        //TODO ritornare la texture corretta a seconda del modello di eroe scelto.
+        //TODO ritornare la texture corretta a seconda del modello di "cattivo" scelto.
         return new Texture(Gdx.files.internal("data/thf2_rt2.gif"));
     }
 

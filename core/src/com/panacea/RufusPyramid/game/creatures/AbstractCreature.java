@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.IAction;

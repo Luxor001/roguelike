@@ -10,7 +10,7 @@ public class Tile {
     GridPoint2 position;
     //Items items;
     private TileType type;
-
+    private boolean isOpen = false;
 
     public Tile(GridPoint2 position, TileType type){ //manca items!
         this.position=position;
@@ -50,5 +50,12 @@ public class Tile {
             super(position, type);
             this.altImg=altImg;
         }
+    }
+
+    public boolean getDoorState(){ //FIXME: non è un gran chè, forse è meglio astrarre la porta come "object" della mappa?
+        return isOpen;
+    }
+    public void setDoorState(boolean value){ //FIXME: non è un gran chè, forse è meglio astrarre la porta come "object" della mappa?
+        isOpen=value;
     }
 }

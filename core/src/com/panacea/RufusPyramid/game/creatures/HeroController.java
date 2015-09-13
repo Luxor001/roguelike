@@ -52,7 +52,10 @@ public class HeroController {
            this.moveOneStep(direction);
 
         if(nextPos.getType() == Tile.TileType.Door)
-            this.openDoor(nextPos);
+            if(!nextPos.getDoorState())
+                this.openDoor(nextPos);
+            else
+                this.moveOneStep(direction);
         }
 
     public void attack(ICreature attacked) {
@@ -70,7 +73,7 @@ public class HeroController {
     }
 
     public void openDoor(Tile doorTile){
-
+        doorTile.setDoorState(true);
     }
 
     protected boolean isTileWalkable(Tile tileToCheck) {
