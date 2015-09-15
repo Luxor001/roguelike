@@ -2,6 +2,12 @@ package com.panacea.RufusPyramid.game.items;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
+import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
+import com.panacea.RufusPyramid.game.actions.IAgent;
+import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
+
+import java.util.List;
 
 /**
  * Created by Lux on 13/09/2015.
@@ -9,6 +15,7 @@ import com.panacea.RufusPyramid.common.Utilities;
 public class ChestItem extends Item{
 
     private Item itemStored;
+    private List<ActionChosenListener> openChestListeners;
 
     public ChestItem(Item itemStored){
         super();
@@ -40,9 +47,15 @@ public class ChestItem extends Item{
     public void addOpenChestListener(){
 
     }
-
-    public void openChestEvent(){
-
+/*
+    public void fireOpenChestEvent(IAgent source){
+        for (ActionChosenListener listener : this.openChestListeners) {
+            listener.performed();
+        }
     }
+
+    public void addOpenChestListener(ActionChosenListener listener)  {
+        this.openChestListeners.add(listener)
+    }*/
 
 }

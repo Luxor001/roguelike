@@ -20,4 +20,6 @@ public abstract class Item {
         this.position = position; //TODO: Fare controllo se posizione è valida!
         return true;
     }
+
+
 }

@@ -22,6 +22,7 @@ public class InteractAction implements IAction {
     @Override
     public ActionResult perform() {
         if(ChestItem.class.isInstance(itemToInteract)){ //se è un chest..
+
             //destroy il chest
             //mostra al prox turno
         }
