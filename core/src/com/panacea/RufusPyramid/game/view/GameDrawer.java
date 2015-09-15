@@ -14,13 +14,14 @@ import java.util.List;
  * E' eventualmente possibile aggiungerne e rimuoverne di altri.
  * Created by gio on 11/07/15.
  */
-public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
+public class GameDrawer extends ViewObject {
     private static final GameDrawer SINGLETON = new GameDrawer();
     private final UIDrawer uiDrawer;
 
     private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
     private MapDrawer mapDrawer;
     private CreaturesDrawer creaturesDrawer;
+    private ItemsDrawer itemsDrawer;
 
     public static GameDrawer get() {
         return GameDrawer.SINGLETON;
@@ -38,8 +39,12 @@ public class GameDrawer extends com.panacea.RufusPyramid.game.view.ViewObject {
 
         this.creaturesDrawer = new CreaturesDrawer(GameModel.get().getCreatures());
         this.viewList.add(this.creaturesDrawer);
+
         this.uiDrawer = new UIDrawer();
         this.viewList.add(this.uiDrawer);
+
+        this.itemsDrawer = new ItemsDrawer(GameModel.get().getCurrentMap().getItems());
+        this.viewList.add(this.itemsDrawer);
     }
 
     public void add(com.panacea.RufusPyramid.game.view.ViewObject toAdd) {

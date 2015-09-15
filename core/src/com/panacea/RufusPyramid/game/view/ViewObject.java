@@ -5,7 +5,7 @@ package com.panacea.RufusPyramid.game.view;
  * Contiene tutti i metodi utili allo scopo, fare override di quelli necessari.
  * Created by gioele.masini on 06/07/2015.
  */
-public class ViewObject {
+public abstract class ViewObject {
     //TODO rimuovere l'implements di ApplicationListener?
 
     public ViewObject() {

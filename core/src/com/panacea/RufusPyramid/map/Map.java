@@ -1,6 +1,9 @@
 package com.panacea.RufusPyramid.map;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.game.items.Item;
+
+import java.util.List;
 
 /**
  * Created by lux on 08/07/15.
@@ -11,6 +14,7 @@ public class Map {
     private MapContainer mapcontainer;
     private GridPoint2 spawnPosition;
     private MapType type;
+    private List<Item> itemsInMap;
 
     public enum MapType{ //defines the "style" of the map, such the texture itself on the drawer
         DUNGEON_COBBLE,
@@ -47,5 +51,9 @@ public class Map {
     }
     public GridPoint2 getSpawnPoint(){
         return this.spawnPosition;
+    }
+
+    public List<Item> getItems(){
+        return itemsInMap;
     }
 }
