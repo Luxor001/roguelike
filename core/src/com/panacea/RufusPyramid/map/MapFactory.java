@@ -37,7 +37,6 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         random=new Random(seed);
         int randType = Utilities.randInt(0,Map.MapType.values().length-1, seed);
         Map newMap=new Map(1, Map.MapType.DUNGEON_COBBLE);
-        //FIXME: da fixare
         mapContainer =new MapContainer(MAX_MAP_HEIGHT,MAX_MAP_WIDTH);
         initializeMap();
 
@@ -47,14 +46,13 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
             succeed=addRoom();
         }while(succeed && rooms.size() <= MAX_AMISSIBLE_ROOMS);
 
-        GridPoint2 spawnPoint;
+        Tile spawnPoint;
         int randX=Utilities.randInt((int)rooms.get(0).getX(), (int)(rooms.get(0).getX()+ rooms.get(0).width - 1),seed);
         int randY=Utilities.randInt((int)rooms.get(0).getY(), (int)(rooms.get(0).getY()+ rooms.get(0).height - 1),seed);
-        spawnPoint = new GridPoint2(randX,randY);
+        spawnPoint = mapContainer.getTile(randY,randX);
 
         newMap.setMapContainer(mapContainer);
         newMap.setSpawnPoint(spawnPoint);
-
         return newMap; //TODO: impostare logica livello (qui è 1, perchè? )
     }
 

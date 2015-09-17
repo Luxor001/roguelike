@@ -7,6 +7,9 @@ import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.items.ChestItem;
+import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.equipItems.Weapon;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.MapFactory;
@@ -25,6 +28,7 @@ public class GameModel {
     private static GameModel SINGLETON = null;
     private ArrayList<ICreature> creatures;
     private Diary diary;
+    private ArrayList<Item> items;
 
 
     /**
@@ -59,12 +63,13 @@ public class GameModel {
         this.currentMapIndex = 0;
         this.creatures = new ArrayList<ICreature>();
         this.maps = new ArrayList<Map>();
+        this.items = new ArrayList<Item>();
 
 
         Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt());
         this.maps.add(newMap);
         this.hero = new DefaultHero("Rufus");
-        GridPoint2 spawnpoint=newMap.getSpawnPoint();
+        GridPoint2 spawnpoint=newMap.getSpawnPoint().getPosition();
         this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
         this.addCreature(this.hero);
 
@@ -76,6 +81,21 @@ public class GameModel {
             // gm.addAgent(e2);*/
         }
 
+        Item newItem=new Weapon(Weapon.WeaponType.AXE);
+        Tile randomPos = getCurrentMap().getRandomItemLocation();
+       /* if(randomPos != null && randomPos.getPosition() != spawnpoint) {
+            newItem.setPosition(randomPos.getPosition());
+            this.addItem(newItem);
+        }*/
+
+        newItem=new ChestItem(new Weapon(Weapon.WeaponType.DAGGER));
+     //   randomPos = getCurrentMap().getRandomItemLocation();
+        randomPos = getCurrentMap().getSpawnPoint();
+     //   if(randomPos != null && randomPos.getPosition() != spawnpoint) {//DA RIMETTERE!!
+        if(randomPos != null) {
+            newItem.setPosition(randomPos.getPosition());
+            this.addItem(newItem);
+        }
         this.diary = new Diary();
     }
 
@@ -86,6 +106,7 @@ public class GameModel {
     public Map getCurrentMap() {
         return this.maps.get(this.currentMapIndex);
     }
+
 
     public DefaultHero getHero() {
         return this.hero;
@@ -103,6 +124,14 @@ public class GameModel {
 
     public List<ICreature> getCreatures() {
         return this.creatures;
+    }
+
+    public ArrayList<Item> getItems(){
+        return this.items;
+    }
+
+    public void addItem(Item item){
+        this.items.add(item);
     }
 
     public void addCreature(ICreature newCreature) {

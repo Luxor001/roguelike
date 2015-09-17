@@ -8,131 +8,105 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.utils.XmlReader;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.items.equipItems.EquipmentItem;
 import com.panacea.RufusPyramid.game.items.Item;
-import com.panacea.RufusPyramid.map.Map;
-import com.panacea.RufusPyramid.map.MapContainer;
-import com.panacea.RufusPyramid.map.Tile;
+import com.panacea.RufusPyramid.game.items.equipItems.Weapon;
+import com.panacea.RufusPyramid.game.items.equipItems.Wearable;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import org.xml.sax.*;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.soap.Text;
 
 /**
  * Created by Lux on 15/09/2015.
  */
-public class ItemsDrawer extends ViewObject{
+public class ItemsDrawer extends ViewObject {
 
     private List<Item> items;
 
     public ItemsDrawer(List<Item> items) {
         this.items = items;
     }
+    private HashMap<String,TextureRegion> textures;
+    private static String ITEMS_XML_PATH = "data/items.xml";
 
     @Override
     public void create() {
         super.create();
-
-        /*
-        MapContainer mapCont= map.getMapContainer();
-        camera = GameCamera.get();
-
-        int numRows = mapCont.rLenght();
-        int numColumns = mapCont.cLenght();
-
-        initializeTextures(map.getType());
-        //Imposto le immagini e i parametri per la visualizzazione
-        spriteMap = new Sprite[numRows][numColumns];
-        spriteCache = new SpriteCache(numRows*numColumns,true);
-        spriteCache.beginCache();
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numColumns; col++) {
-
-                Tile tileToDraw = mapCont.getTile(row, col);
-                if(tileToDraw.getType() != Tile.TileType.Door) {
-                    TextureRegion tileTexture = MapDrawer.getTexture(map.getType(), tileToDraw);
-
-                    //TODO set texture in a map
-                    Sprite tileSprite = new Sprite(tileTexture);
-                    GridPoint2 absolutePos = Utilities.convertToAbsolutePos(new GridPoint2(col, row));
-                    tileSprite.setPosition(absolutePos.x, absolutePos.y);
-                    spriteMap[row][col] = tileSprite;
-                    spriteCache.add(tileSprite, tileSprite.getX(), tileSprite.getY());
-                }
-                else
-                {
-                    dynamicMapTiles.add(tileToDraw);
-                }
-
-            }
-        }
-        spriteCacheIndex = spriteCache.endCache();*/
+        textures = new HashMap<String, TextureRegion>();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
         SpriteBatch batch = GameBatch.get();
         batch.begin();
-        for (Item item:items) {
-            GridPoint2 absolutePos=Utilities.convertToAbsolutePos(item.getPosition());
-            batch.draw(getTexture(item.getClass()),absolutePos.x,absolutePos.y);
-        }
-        batch.end();
-
-    }
-    /*
-
-    private void initializeTextures(Map.MapType mapType){ //load the texture regions based on current map type
-        String path="";
-        int wallsFrameCols = 0;
-        int groundsFrameCols = 0;
-
-        switch (mapType){
-            case DUNGEON_COBBLE:
-                path = "dungeon1";
-                wallsFrameCols=7;
-                break;
-            case DUNGEON_SAND:
-                path = "dungeon2";
-                groundsFrameCols=4;
-                wallsFrameCols=10;
-                break;
-            case DUNGEON_SEWERS:
-                path = "dungeon3";
-                wallsFrameCols=7;
-                break;
-            case DUNGEON_CAVE:
-                path = "dungeon4";
-                break;
-            default:
-                path = "dungeon1";
-                break;
-        }
-
-        walls = loadTextureRegion(new Texture("data/walls/"+path+".png"));
-        grounds = loadTextureRegion(new Texture("data/grounds/"+path+".png"));
-        if(new File("data/grounds/"+path+"_deco.png").exists())
-            grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));
-        doors = loadTextureRegion(new Texture("data/mapObjects/doors_"+path+".png"));
-
-    }
-    private TextureRegion[] loadTextureRegion(String path, int frameCols, int frameRows){ //questo metodo esegue lo splitting di una texture e restituisce un array di textureRegion monodimensionale (ricorda: le texture possono essere un INSIEME di immagini!, le textureRegion ne rappresentano solo una!)
-        Texture base = new Texture(Gdx.files.internal(path));
-        TextureRegion[][] tmp = TextureRegion.split(base, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
-        TextureRegion[] newTextRegion = new TextureRegion[frameCols * frameRows];
-        int index = 0;
-        for (int i = 0; i < frameRows; i++) {
-            for (int j = 0; j < frameCols; j++) {
-                TextureRegion tr = tmp[i][j];
-                newTextRegion[index++] = tr;
+        for (Item item : items) {
+            if(item.getPosition() != null) { //if item it's hidden do not show him..
+                GridPoint2 absolutePos = Utilities.convertToAbsolutePos(item.getPosition());
+                batch.draw(getTexture(item), absolutePos.x, absolutePos.y , 0, 0, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT, 0.7f, 0.7f, 0); //FIXME:reduce the with of the image by a 30%
             }
         }
-        return newTextRegion;
+        batch.end();
     }
+
+    public TextureRegion getTexture(Item item) { //get the item Texture. if it's not in the cache, load it
+        String key;
+        key = getKey(item);
+        try {
+            if (!textures.containsKey(key)) { //if the element it's NOT in the cache, put it
+                TextureRegion toAdd = loadTexture(item, key);
+                if (toAdd != null)
+                    textures.put(key, toAdd);
+                else
+                    throw new Exception("Texture vuota in ItemsDrawer!"); //texture not found!! DAMMIT!
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return textures.get(key);
+    }
+
+    private String getKey(Item item){
+        String type = item.getItemType();
+        String className = item.getClass().getSimpleName();
+        return className+type;
+    }
+
+    public TextureRegion loadTexture(Item item,String key){
+        TextureRegion itemText=null;
+        String type = item.getItemType();
+        try {
+
+            XmlReader xml = new XmlReader();
+            XmlReader.Element xml_element = xml.parse(Gdx.files.internal(ITEMS_XML_PATH));
+            String baseClass= item.getClass().getSimpleName();
+
+            XmlReader.Element baseRoot = xml_element.getChildByNameRecursive(baseClass);
+            String basePath=baseRoot.get("path");
+            int textRegionIndex = Integer.parseInt(baseRoot.getChildByName(type).get("value"));
+            Texture newTexture = new Texture(Gdx.files.internal("data/"+basePath));
+
+            itemText = loadTextureRegion(newTexture)[textRegionIndex];
+
+        } catch (Exception sxe) {
+            sxe.printStackTrace();
+        }
+
+        return itemText;
+    }
+
     private static TextureRegion[] loadTextureRegion(Texture text){
         int frameRows = text.getHeight() / Utilities.DEFAULT_BLOCK_HEIGHT;
         int frameCols = text.getWidth() / Utilities.DEFAULT_BLOCK_WIDTH;
@@ -147,30 +121,4 @@ public class ItemsDrawer extends ViewObject{
         }
         return newTextRegion;
     }
-
-    private static TextureRegion getTexture(Map.MapType mapType, Tile tile) {
-        TextureRegion textRegion = null;
-        Texture text=null;
-        switch(tile.getType()){
-            case Solid:
-                textRegion = walls[Utilities.randInt(0,walls.length-1,(int) System.nanoTime())];
-                break;
-            case Walkable:
-                if(Utilities.randInt(0,3,(int)System.nanoTime()) == 3 && grounds_deco != null)
-                    textRegion = grounds_deco[Utilities.randInt(0,grounds_deco.length-1,(int) System.nanoTime())];
-                else
-                    textRegion = grounds[Utilities.randInt(0,grounds.length-1,(int) System.nanoTime())];
-                break;
-            case Door:{
-                if(tile.getDoorState())
-                    textRegion =doors[1];
-                else
-                    textRegion = doors[0];
-            }
-            break;
-        }
-        return textRegion;
-    }*/
-}
-
 }

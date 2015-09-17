@@ -12,7 +12,7 @@ public class Map {
 
     private int level;
     private MapContainer mapcontainer;
-    private GridPoint2 spawnPosition;
+    private Tile spawnPosition;
     private MapType type;
     private List<Item> itemsInMap;
 
@@ -35,6 +35,9 @@ public class Map {
     public Tile getRandomEnemyPosition(){
         return mapcontainer.getRandomTile(Tile.TileType.Walkable);
     }
+    public Tile getRandomItemLocation(){
+        return mapcontainer.getRandomTile(Tile.TileType.Walkable);
+    }
 
     public MapContainer getMapContainer(){
         return mapcontainer;
@@ -46,14 +49,15 @@ public class Map {
         return level;
     }
 
-    public void setSpawnPoint(GridPoint2 spawnPosition){
+    public void setSpawnPoint(Tile spawnPosition){
         this.spawnPosition=spawnPosition;
     }
-    public GridPoint2 getSpawnPoint(){
+    public Tile getSpawnPoint(){
         return this.spawnPosition;
     }
 
     public List<Item> getItems(){
         return itemsInMap;
     }
+
 }

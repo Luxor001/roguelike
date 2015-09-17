@@ -43,7 +43,7 @@ public class GameDrawer extends ViewObject {
         this.uiDrawer = new UIDrawer();
         this.viewList.add(this.uiDrawer);
 
-        this.itemsDrawer = new ItemsDrawer(GameModel.get().getCurrentMap().getItems());
+        this.itemsDrawer = new ItemsDrawer(GameModel.get().getItems());
         this.viewList.add(this.itemsDrawer);
     }
 

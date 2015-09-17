@@ -9,7 +9,7 @@ public class GoldItem extends Item {
     private int goldAmount = 0;
 
     public GoldItem(int goldAmount){
-        super();
+        super("GoldItem");
         this.goldAmount=goldAmount;
     }
 }
