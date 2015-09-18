@@ -1,30 +1,16 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.XmlReader;
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.GameModel;
-import com.panacea.RufusPyramid.game.items.equipItems.EquipmentItem;
 import com.panacea.RufusPyramid.game.items.Item;
-import com.panacea.RufusPyramid.game.items.equipItems.Weapon;
-import com.panacea.RufusPyramid.game.items.equipItems.Wearable;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
 
-import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.xml.soap.Text;
 
 /**
  * Created by Lux on 15/09/2015.
@@ -48,7 +34,6 @@ public class ItemsDrawer extends ViewObject {
     @Override
     public void render(float delta) {
         super.render(delta);
-
         SpriteBatch batch = GameBatch.get();
         batch.begin();
         for (Item item : items) {

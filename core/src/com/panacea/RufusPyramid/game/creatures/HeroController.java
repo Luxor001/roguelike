@@ -5,6 +5,7 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
+import com.panacea.RufusPyramid.game.actions.InteractAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.map.MapContainer;
@@ -50,9 +51,11 @@ public class HeroController {
         for(Item item: GameModel.get().getItems()){
            GridPoint2 itemPos = item.getPosition();
             if(itemPos.x == nextPos.getPosition().x && itemPos.y == nextPos.getPosition().y) {
-
+                this.interact(item);
+                return;
             }
         }
+
         //Altrimenti semplicemente mi sposto lì
 
         if(nextPos.getType() == Tile.TileType.Walkable)
@@ -67,6 +70,11 @@ public class HeroController {
 
     public void attack(ICreature attacked) {
         AttackAction action = new AttackAction(this.hero, attacked);
+        this.hero.fireActionChosenEvent(action);
+    }
+
+    public void interact(Item interacted){
+        InteractAction action = new InteractAction(interacted, hero);
         this.hero.fireActionChosenEvent(action);
     }
 

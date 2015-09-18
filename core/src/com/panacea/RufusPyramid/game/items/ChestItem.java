@@ -1,9 +1,7 @@
 package com.panacea.RufusPyramid.game.items;
 
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.actions.OpenedChestListener;
-import com.panacea.RufusPyramid.game.items.equipItems.EquipmentItem;
 
 import java.util.List;
 
@@ -32,25 +30,14 @@ public class ChestItem extends Item{
                 break;
             }
             case 2:{
-                //itemStored = new EquipmentItem(super.getPosition());
+
                 break;
             }
         }
     }
 
-    public Item openChest(){
-        itemStored.setPosition(super.getPosition());
+    public Item getItemStored(){
         return itemStored;
-    }
-
-    public void addOpenChestListener(OpenedChestListener listener){
-        openChestListeners.add(listener);
-    }
-
-    public void fireOpenChestEvent(IAgent source){
-        for (OpenedChestListener listener : this.openChestListeners) {
-            listener.opened();
-        }
     }
 
 

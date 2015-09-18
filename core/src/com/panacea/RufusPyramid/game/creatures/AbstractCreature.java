@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
@@ -12,6 +13,7 @@ import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.Tile;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public abstract class AbstractCreature implements ICreature {
     private List<ActionChosenListener> actionChosenListeners;
     private List<CreatureDeadListener> creatureDeadListeners;
 
+    private ArrayList<Effect> effects;
+
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
         this.setName(name);
@@ -49,6 +53,8 @@ public abstract class AbstractCreature implements ICreature {
         this.changeListeners = new ArrayList<PositionChangeListener>();
         this.actionChosenListeners = new ArrayList<ActionChosenListener>(1);
         this.creatureDeadListeners = new ArrayList<CreatureDeadListener>();
+
+        this.effects = new ArrayList<Effect>();
     }
 
     private static int getUniqueCreatureId() {
@@ -220,6 +226,20 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public void setEnergy(int currentEnergy) {
         this.energy = currentEnergy;
+    }
+
+    @Override
+    public List<Effect> getEffects(){
+        return effects;
+    } //The effects (+ATTACK, -DEFENCE ecc.ecc.) this creatures currently has.
+    @Override
+    public void addEffect(Effect effect){
+        effects.add(effect);
+    }
+    public void addEffects(List<Effect> effects){
+        for (Effect currEffect: effects) {
+            this.effects.add(currEffect);
+        }
     }
 
     @Override

@@ -1,8 +1,12 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.map.Tile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * General creature interface.
@@ -37,6 +41,10 @@ public interface ICreature extends IAgent {
 
     public int getEnergy();
     public void setEnergy(int currentEnergy);
+
+    List<Effect> getEffects();
+    void addEffect(Effect effect);
+    void addEffects(List<Effect> effect);
 
     /**
      * Questo metodo è l'unico a poter lanciare un ActionChosenEvent.
