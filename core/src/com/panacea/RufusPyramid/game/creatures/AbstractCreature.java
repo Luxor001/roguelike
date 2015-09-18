@@ -5,7 +5,6 @@ import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.IAction;
@@ -13,7 +12,6 @@ import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.map.Tile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

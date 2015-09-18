@@ -10,17 +10,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
-import com.sun.java.util.jar.pack.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
-
-import javax.xml.soap.Text;
 
 /**
  * Created by gio on 11/07/15.

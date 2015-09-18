@@ -2,7 +2,6 @@ package com.panacea.RufusPyramid.common;
 
 import com.badlogic.gdx.math.GridPoint2;
 
-import java.util.HashMap;
 import java.util.Random;
 
 /**

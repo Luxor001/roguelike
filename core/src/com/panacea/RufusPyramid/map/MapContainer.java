@@ -6,9 +6,6 @@ import com.panacea.RufusPyramid.common.Utilities.Directions;
 import com.panacea.RufusPyramid.map.Tile.TileType;
 
 import java.io.PrintWriter;
-import java.util.Random;
-
-import javax.rmi.CORBA.Util;
 
 /**
  * Created by lux on 10/07/15.

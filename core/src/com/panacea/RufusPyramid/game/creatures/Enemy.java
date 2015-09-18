@@ -1,11 +1,7 @@
 package com.panacea.RufusPyramid.game.creatures;
 
-import com.badlogic.gdx.Gdx;
-import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAction;
-import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 
 /**

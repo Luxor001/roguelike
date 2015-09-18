@@ -8,7 +8,7 @@ import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.items.ChestItem;
 import com.panacea.RufusPyramid.game.items.Item;
-import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
+import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 
 import java.util.ArrayList;
 
@@ -50,13 +50,13 @@ public class InteractAction implements IAction {
             items.add(itemStored);
         }
 
-        if(itemToInteract instanceof Weapon){
+        if(UsableItem.class.isAssignableFrom(itemToInteract.getClass())){
             Diary diario= GameModel.get().getDiary();
-            Weapon convItem = (Weapon)itemToInteract;
+            UsableItem convItem = (UsableItem)itemToInteract;
             items.remove(convItem);
             DefaultHero hero = GameModel.get().getHero();
             hero.setPosition(GameModel.get().getCurrentMap().getMapContainer().getTile(convItem.getPosition()));
-            hero.addEffects(((Weapon) itemToInteract).getEffects());
+            hero.addEffects(((UsableItem) itemToInteract).getEffects());
 
             diario.addLine("Hai raccolto "+convItem.getItemName()+"!");
      //       diario.addLine("+"+attackBonus+" Attack!");

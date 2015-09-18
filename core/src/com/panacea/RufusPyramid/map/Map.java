@@ -1,6 +1,5 @@
 package com.panacea.RufusPyramid.map;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.game.items.Item;
 
 import java.util.List;

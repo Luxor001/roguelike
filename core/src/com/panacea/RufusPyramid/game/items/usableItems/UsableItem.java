@@ -1,6 +1,5 @@
 package com.panacea.RufusPyramid.game.items.usableItems;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.items.Item;
 

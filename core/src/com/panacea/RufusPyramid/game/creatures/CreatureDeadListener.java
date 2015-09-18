@@ -1,6 +1,5 @@
 package com.panacea.RufusPyramid.game.creatures;
 
-import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 
 /**

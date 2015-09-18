@@ -1,6 +1,5 @@
 package com.panacea.RufusPyramid.game.actions;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameMaster;

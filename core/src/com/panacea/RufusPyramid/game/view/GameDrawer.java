@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector3;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.view.ui.UIDrawer;

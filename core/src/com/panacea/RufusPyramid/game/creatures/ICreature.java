@@ -5,7 +5,6 @@ import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.map.Tile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

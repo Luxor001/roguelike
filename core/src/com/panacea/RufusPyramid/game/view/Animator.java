@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
 import com.panacea.RufusPyramid.game.view.animations.AnimDamage;
