@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameBatch;
 
@@ -36,7 +37,6 @@ public class AnimWalk extends AbstractAnimation {
     private int walkImageIndex;     //Ricorda qual è l'ultimo frame disegnato
 
     private GridPoint2 startPoint;
-    private GridPoint2 currPoint;
     private GridPoint2 endPoint;
 
     private float speed;
@@ -89,18 +89,18 @@ public class AnimWalk extends AbstractAnimation {
         walkAnimation = new Animation(frameDuration, walkFrames);      // #11
         spriteBatch = GameBatch.get();                // #12
         stateTime = 0f;                         // #13
-//        currPoint = path.get(0);
-        currPoint = this.startPoint;
         this.walkImageIndex = -1;
 
         /* Prova con i vector */
         // Reference: http://stackoverflow.com/questions/17694076/moving-a-point-vector-on-an-angle-libgdx
         // Declared as fields, so they will be reused
-        currentPos = new Vector2(startPoint.x, startPoint.y);
+        GridPoint2 absoluteStartPoint = Utilities.convertToAbsolutePos(startPoint);
+        currentPos = new Vector2(absoluteStartPoint.x, absoluteStartPoint.y);
         velocity = new Vector2();
         deltaMovement = new Vector2();
 
-        endPos = new Vector2(endPoint.x, endPoint.y);
+        GridPoint2 absoluteEndPoint = Utilities.convertToAbsolutePos(endPoint);
+        endPos = new Vector2(absoluteEndPoint.x, absoluteEndPoint.y);
         direction = new Vector2();
         // On touch events, set the touch vector, then do this to get the direction vector
         direction.set(endPos).sub(currentPos).nor();
@@ -108,10 +108,6 @@ public class AnimWalk extends AbstractAnimation {
         // scale it to the speed you want to move, then use it to update your position.
         velocity = new Vector2(direction).scl(speed);
     }
-
-//    public void updateLocation(GridPoint2 point){
-//        /*currPoint=point;*/
-//    }
 
     @Override
     public void render(float delta) {
@@ -128,15 +124,13 @@ public class AnimWalk extends AbstractAnimation {
             stateTime += delta; //FIXME non è proprio delta, andrebbe fatta una proporzione!
             toDispose = true;
         }
-        currPoint.x = Math.round(currentPos.x);
-        currPoint.y = Math.round(currentPos.y);
         /* Fine */
 
 //        stateTime = (stateTime + delta < this.animDuration ? stateTime + delta : this.animDuration);
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 
         spriteBatch.begin();
-        spriteBatch.draw(currentFrame, currPoint.x, currPoint.y, 32, 32);
+        spriteBatch.draw(currentFrame, currentPos.x, currentPos.y, 32, 32);
         spriteBatch.end();
 
         if (toDispose) {
