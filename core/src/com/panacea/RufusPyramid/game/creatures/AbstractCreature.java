@@ -35,16 +35,18 @@ public abstract class AbstractCreature implements ICreature {
     private List<CreatureDeadListener> creatureDeadListeners;
 
     private ArrayList<Effect> effects;
+    private Stats baseStats;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
         this.setName(name);
         this.setDescription(description);
-        this.setHPMaximum(maximumHP);
-        this.setHPCurrent(this.getHPMaximum());
-        this.setAttackValue(attack);
-        this.setDefenceValue(defence);
-        this.setSpeed(speed);
+        this.baseStats = new Stats(maximumHP, attack, defence, speed);
+        this.baseStats.setMaximumHP(maximumHP);
+        this.baseStats.setAttack(attack);
+        this.baseStats.setDefence(defence);
+        this.baseStats.setSpeed(speed);
+        this.setHPCurrent(this.baseStats.getMaximumHP());
         this.setPosition(null);
         this.backpack = new com.panacea.RufusPyramid.game.creatures.Backpack();
 
@@ -265,6 +267,36 @@ public abstract class AbstractCreature implements ICreature {
 
     public void addCreatureDeadListener(CreatureDeadListener listener) {
         this.creatureDeadListeners.add(listener);
+    }
+
+    public boolean hasEffects(){
+        return !effects.isEmpty();
+    }
+
+    public Stats getCurrentStats(){ //current stats calculated by the effects of the creature
+
+        Stats currStats = new Stats(baseStats);
+        for(Effect effect: effects){
+            float value = effect.getCoefficient();
+            switch(effect.getTye()){
+                case ATTACK:{
+                    currStats.setAttack(baseStats.getAttack() + value);
+                    break;
+                }
+                case DEFENSE:{
+                    currStats.setAttack(baseStats.getDefence() + value);
+                    break;
+                }
+                case SPEED:{
+                    currStats.setAttack(baseStats.getSpeed() + value);
+                    break;
+                }
+                case MAX_HEALTH:{
+                    currStats.setMaximumHP(baseStats.getMaximumHP() + (int)value);
+                }
+            }
+        }
+        return currStats;
     }
 
 }

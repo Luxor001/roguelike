@@ -15,7 +15,6 @@ import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

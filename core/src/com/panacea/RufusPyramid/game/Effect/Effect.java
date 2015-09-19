@@ -7,10 +7,12 @@ public class Effect {
 
     public enum EffectType{
         HEALTH,
+        MAX_HEALTH,
         MANA,
         ATTACK,
         DEFENSE,
-        POISON
+        POISON,
+        SPEED
     }
 
     private float coefficient;

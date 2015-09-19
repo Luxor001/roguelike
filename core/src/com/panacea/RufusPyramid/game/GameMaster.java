@@ -1,11 +1,14 @@
 package com.panacea.RufusPyramid.game;
 
 import com.badlogic.gdx.Gdx;
+import com.panacea.RufusPyramid.game.Effect.Effect;
+import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
+import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,6 +87,9 @@ public class GameMaster {
                     return;
                 }
 
+                if(source instanceof AbstractCreature)
+                    checkEffects((AbstractCreature)source);
+
                 IAgent agentOnTurn = source;
                 IAction actionChosen = event.getChosenAction();
 
@@ -132,5 +138,18 @@ public class GameMaster {
 
     private boolean thereIsSomeonePlaying() {
         return this.agentsPlaying != null && this.agentsPlaying.size() > 0;
+    }
+
+    private void checkEffects(AbstractCreature creature){ //remove or updates temporary effects
+         for(Effect effect: creature.getEffects()){
+             if(effect instanceof TemporaryEffect){
+                 TemporaryEffect tempEffect = (TemporaryEffect)effect;
+                 if(tempEffect.getTurns() == 0){
+                     creature.getEffects().remove(effect);
+                 }
+                 else
+                    tempEffect.setTurns(tempEffect.getTurns()-1);
+             }
+         }
     }
 }
