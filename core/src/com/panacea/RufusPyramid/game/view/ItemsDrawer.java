@@ -12,6 +12,8 @@ import com.panacea.RufusPyramid.game.items.Item;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.rmi.CORBA.Util;
+
 /**
  * Created by Lux on 15/09/2015.
  */
@@ -23,7 +25,6 @@ public class ItemsDrawer extends ViewObject {
         this.items = items;
     }
     private HashMap<String,TextureRegion> textures;
-    private static String ITEMS_XML_PATH = "data/items.xml";
 
     @Override
     public void create() {
@@ -75,12 +76,12 @@ public class ItemsDrawer extends ViewObject {
         try {
 
             XmlReader xml = new XmlReader();
-            XmlReader.Element xml_element = xml.parse(Gdx.files.internal(ITEMS_XML_PATH));
+            XmlReader.Element xml_element = xml.parse(Gdx.files.internal(Utilities.ITEMS_XML_PATH));
             String baseClass= item.getClass().getSimpleName();
 
             XmlReader.Element baseRoot = xml_element.getChildByNameRecursive(baseClass);
             String basePath=baseRoot.get("path");
-            int textRegionIndex = Integer.parseInt(baseRoot.getChildByName(type).get("value"));
+            int textRegionIndex = Integer.parseInt(baseRoot.getChildByName(type).get("TexturePosition"));
             Texture newTexture = new Texture(Gdx.files.internal("data/"+basePath));
 
             itemText = loadTextureRegion(newTexture)[textRegionIndex];

@@ -12,7 +12,8 @@ public class Effect {
         ATTACK,
         DEFENSE,
         POISON,
-        SPEED
+        SPEED,
+        INVINCIBILITY
     }
 
     private float coefficient;

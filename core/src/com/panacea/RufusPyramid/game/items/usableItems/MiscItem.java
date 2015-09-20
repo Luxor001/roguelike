@@ -10,16 +10,18 @@ import java.util.ArrayList;
 public class MiscItem extends UsableItem{
 
     public enum MiscItemType{
-        A,
         INVINCIBILITY_POTION,
         HEALTH_POTION,
-        KEY,
         RAW_MEAT
     }
 
     private MiscItemType type;
     public MiscItem(MiscItemType type, ArrayList<Effect> effects, String itemName){
         super(type.name(), effects, itemName);
+        this.type=type;
+    }
+    public MiscItem(MiscItemType type, Effect effect, String itemName){
+        super(type.name(), effect, itemName);
         this.type=type;
     }
 }

@@ -1,46 +1,67 @@
 <item>
-	<EquippableItem>
+	<UsableItem>
 		<Weapon>
 			<path>Items/weapons.png</path>
 			<SWORD>
-				<value>0</value>
+				<TexturePosition>0</TexturePosition>
+				<Attack>2</Attack>
 			</SWORD>
 			<AXE>
-				<value>1</value>
+				<TexturePosition>1</TexturePosition>
+				<Attack>3</Attack>
+				<Speed>-1</Speed>
 			</AXE>
 			<DAGGER>
-				<value>2</value>
+				<TexturePosition>2</TexturePosition>
+				<Attack>1</Attack>
+				<Speed>2</Speed>
 			</DAGGER>
 			<PALETTE>
-				<value>3</value>
+				<TexturePosition>3</TexturePosition>
+				<Attack>-1</Attack>
+				<Speed>3</Speed>
 			</PALETTE>
 			<PICK>
-				<value>4</value>
+				<TexturePosition>4</TexturePosition>
+				<Attack>1</Attack>
+				<Speed>1</Speed>
 			</PICK>
 		</Weapon>
 		<Wearable>
 			<path>Items/wearable.png</path>
 			<ARMOR>
-				<value>0</value>
+				<TexturePosition>0</TexturePosition>
 			</ARMOR>
 			<BOOTS>
-				<value>1</value>
+				<TexturePosition>1</TexturePosition>
 			</BOOTS>
 			<HELM>
-				<value>2</value>
+				<TexturePosition>2</TexturePosition>
 			</HELM>
 			<SHIELD>
-				<value>3</value>
+				<TexturePosition>3</TexturePosition>
 			</SHIELD>
 			<ARMOR2>
-				<value>4</value>
+				<TexturePosition>4</TexturePosition>
 			</ARMOR2>
 		</Wearable>
-	</EquippableItem>
+		<MiscItem>
+			<path>Items/misc.png</path>
+			<INVINCIBILITY_POTION>
+				<TexturePosition>1</TexturePosition>
+			</INVINCIBILITY_POTION>
+			<HEALTH_POTION>
+				<TexturePosition>2</TexturePosition>
+			</HEALTH_POTION>
+			<RAW_MEAT>
+				<TexturePosition>4</TexturePosition>
+			</RAW_MEAT>
+		</MiscItem>
+	</UsableItem>
 	<ChestItem>
 		<path>Items/chest.png</path>
 		<ChestItem>
-			<value>0</value>
+			<TexturePosition>0</TexturePosition>
 		</ChestItem>
 	</ChestItem>
 </item>

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.creatures.Stats;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 
 /**
@@ -35,7 +36,8 @@ public class AttackAction implements IAction {
         }
 
         // - Effettuo l'attacco
-        int damage = this.getDamage(attacker.getAttackValue(), attacked.getDefenceValue());
+
+        int damage = this.getDamage(attacker.getCurrentStats().getAttack(), attacked.getCurrentStats().getDefence());
         this.attacked.setHPCurrent(this.attacked.getHPCurrent() - damage);
 
         if (attacker.equals(GameModel.get().getHero())) {
@@ -54,7 +56,7 @@ public class AttackAction implements IAction {
 
     private boolean canAttack(ICreature attacker, ICreature attacked) {
         GridPoint2 pos1 = attacker.getPosition().getPosition(),
-                pos2 = attacked.getPosition().getPosition();
+        pos2 = attacked.getPosition().getPosition();
 
         if (Math.abs(pos1.x - pos2.x) > 32 || Math.abs(pos1.y - pos2.y) > 32) {
             //Se le due creature sono distanti più di un quadretto non è possibile effettuare l'attacco.

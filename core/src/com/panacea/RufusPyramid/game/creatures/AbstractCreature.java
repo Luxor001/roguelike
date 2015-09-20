@@ -26,8 +26,7 @@ public abstract class AbstractCreature implements ICreature {
 
     private int idCreature;
     private String name, description;
-    private int maximumHP, currentHP;
-    private double attack, defence, speed;
+    private int currentHP;
     private Tile position;
     private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
     private int energy;
@@ -80,16 +79,6 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     @Override
-    public int getHPMaximum() {
-        return this.maximumHP;
-    }
-
-    @Override
-    public void setHPMaximum(int maxHP) {
-        this.maximumHP = maxHP;
-    }
-
-    @Override
     public String getName() {
         return this.name;
     }
@@ -107,26 +96,6 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public void setDescription(String description) {
         this.description = (description == null ? "" : description);
-    }
-
-    @Override
-    public double getAttackValue() {
-        return this.attack;
-    }
-
-    @Override
-    public void setAttackValue(double attackValue) {
-        this.attack = attackValue;
-    }
-
-    @Override
-    public double getDefenceValue() {
-        return this.defence;
-    }
-
-    @Override
-    public void setDefenceValue(double defenceValue) {
-        this.defence = defenceValue;
     }
 
     /**
@@ -173,16 +142,6 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public com.panacea.RufusPyramid.game.creatures.Backpack getEquipment() {
         return this.backpack;
-    }
-
-    @Override
-    public double getSpeed() {
-        return this.speed;
-    }
-
-    @Override
-    public void setSpeed(double currentSpeed) {
-        this.speed = currentSpeed;
     }
 
     public void addChangeListener(PositionChangeListener listener) {
@@ -273,6 +232,9 @@ public abstract class AbstractCreature implements ICreature {
         return !effects.isEmpty();
     }
 
+    public Stats getBaseStats(){
+        return baseStats;
+    }
     public Stats getCurrentStats(){ //current stats calculated by the effects of the creature
 
         Stats currStats = new Stats(baseStats);

@@ -2,6 +2,7 @@ package com.panacea.RufusPyramid.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
@@ -15,6 +16,7 @@ import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -142,5 +144,16 @@ public class GameModel {
 
     public Diary getDiary() {
         return this.diary;
+    }
+
+    public List<Item> generateChests(int quantity){
+
+        for(int i = 0; i < quantity; i++){
+            int seed = (int) System.nanoTime();
+            Item randomItem = Item.generateRandomItem(seed);
+            ChestItem chest = new ChestItem(randomItem);
+            items.add(chest);
+        }
+        return null;
     }
 }

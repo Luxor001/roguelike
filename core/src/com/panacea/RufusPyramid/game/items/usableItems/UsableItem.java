@@ -20,6 +20,13 @@ public abstract class UsableItem extends Item {
         this.effects = effects;
     }
 
+    public UsableItem(String type, Effect effect, String itemName){
+        super(type);
+        this.itemName = itemName;
+        this.effects = new ArrayList<Effect>();
+        this.effects.add(effect);
+    }
+
     public String getItemName(){
         return itemName;
     }

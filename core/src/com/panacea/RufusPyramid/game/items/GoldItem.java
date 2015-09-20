@@ -10,4 +10,8 @@ public class GoldItem extends Item {
         super("GoldItem");
         this.goldAmount=goldAmount;
     }
+
+    public int getGoldAmount(){
+        return goldAmount;
+    }
 }

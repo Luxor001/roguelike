@@ -11,6 +11,7 @@ public class Utilities {
 
     public static int DEFAULT_BLOCK_WIDTH = 32;
     public static int DEFAULT_BLOCK_HEIGHT = 32;
+    public static String ITEMS_XML_PATH = "data/items.xml";
 
     public static int randInt(int min, int max,int seed) {
         Random rand = new Random(seed);
