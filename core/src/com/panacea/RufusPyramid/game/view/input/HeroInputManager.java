@@ -69,13 +69,6 @@ public class HeroInputManager extends InputAdapter {
         }
 
 
-        GridPoint2 heroPosition=  GameModel.get().getHero().getPosition().getPosition();
-        GridPoint2 absolutePos= Utilities.convertToAbsolutePos(heroPosition);
-        GameCamera.get().position.set(absolutePos.x,absolutePos.y,0); /*Update the camera based on the hero position*/
-
-        /* TODO Vai alla posizione (x,y) sulla mappa, tramite un algoritmo di path*/
-        Vector3 gamePos = GameCamera.get().unproject(new Vector3(screenX, screenY, 0));
-        GridPoint2 mapPos = new GridPoint2(Math.round(gamePos.x/32), Math.round(gamePos.y/32));
 
         return true;
     }

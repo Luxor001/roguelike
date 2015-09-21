@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameBatch;
+import com.panacea.RufusPyramid.game.view.GameCamera;
 
 import java.util.ArrayList;
 
@@ -116,6 +118,7 @@ public class AnimWalk extends AbstractAnimation {
         /* Prova con i vector */
         deltaMovement.set(velocity).scl(delta);
 
+        GameModel.get().getHero().setAbsoluteTickPosition(currentPos);
         if (currentPos.dst2(endPos) > deltaMovement.len2()) { //Se la distanza tra la posiz. attuale e la posiz. finale è minore di deltaMovement
             currentPos.add(deltaMovement);
             stateTime += delta;

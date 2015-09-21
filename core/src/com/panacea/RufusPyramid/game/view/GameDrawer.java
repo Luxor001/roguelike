@@ -3,10 +3,13 @@ package com.panacea.RufusPyramid.game.view;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.rmi.CORBA.Util;
 
 /**
  * Contiene tutti gli oggetti da renderizzare a video durante una sessione di gioco.
@@ -69,14 +72,19 @@ public class GameDrawer extends ViewObject {
             view.resize(width, height);
         }
     }
-
+    int i=0;
     @Override
     public void render(float delta) {
         super.render(delta);
 
-        GridPoint2 heroPosition=  GameModel.get().getHero().getPosition().getPosition();
-        GridPoint2 absolutePos= Utilities.convertToAbsolutePos(heroPosition);
-        GameCamera.get().position.set(absolutePos.x,absolutePos.y,0); /*Update the camera based on the hero position*/
+        DefaultHero hero= GameModel.get().getHero();
+        if(hero.getAbsoluteTickPosition() != null)
+            GameCamera.get().position.set(GameModel.get().getHero().getAbsoluteTickPosition(),0); /*Update the camera based on the hero position*/
+        else{
+            GridPoint2 absolute= Utilities.convertToAbsolutePos(hero.getPosition().getPosition()); //TODO: da sistemare
+            GameCamera.get().position.set(absolute.x,absolute.y,0); /*Update the camera based on the hero position*/
+        }
+
 
         GameCamera.get().update();
         GameBatch.get().setProjectionMatrix(GameCamera.get().combined);

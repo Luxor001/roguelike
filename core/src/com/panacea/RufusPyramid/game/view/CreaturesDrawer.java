@@ -138,7 +138,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 60.0f);
+        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 80.0f);
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(creature.getID(), currentAnimation);

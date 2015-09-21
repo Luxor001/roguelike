@@ -17,7 +17,6 @@ public class HeroController {
 
     private DefaultHero hero;
 
-
     public HeroController(DefaultHero hero) {
         this.hero = hero;
     }
@@ -97,4 +96,6 @@ public class HeroController {
         GridPoint2 pos = Utilities.Directions.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
         return GameModel.get().getCurrentMap().getMapContainer().getTile(pos);
     }
+
+
 }
