@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.map.Tile;
 
@@ -15,6 +16,7 @@ public class DefaultHero extends AbstractCreature {
     private static final double DEFENCE = 5;
     private static final double SPEED = 5;
 
+    private Vector2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
 
 //    TODO aggiungere il livello con l'oggetto Level
     public DefaultHero(String name/*, LevelerConfig  */) {
@@ -29,5 +31,13 @@ public class DefaultHero extends AbstractCreature {
         //TODO il giocatore ora è libero di impartire ordini al proprio giocatore
         //TODO dal controller abilita l'input utente
         return;
+    }
+    public Vector2 getAbsoluteTickPosition(){
+        return absoluteTickPosition;
+    }
+    public void setAbsoluteTickPosition(Vector2 position){
+        if(absoluteTickPosition == null)
+            absoluteTickPosition = new Vector2();
+        absoluteTickPosition=position;
     }
 }
