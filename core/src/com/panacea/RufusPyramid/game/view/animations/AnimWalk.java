@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameBatch;
+import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
 import java.util.ArrayList;
 
@@ -71,19 +72,20 @@ public class AnimWalk extends AbstractAnimation {
             this.frameCols = 4;
             this.frameRows = 1;
             animationTexture = new Texture(Gdx.files.internal("data/spritesheet2_walk.png"));
+            walkFrames = SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, SpritesProvider.Azione.WALK);
         } else {
             this.frameCols = 2;
             this.frameRows = 1;
             animationTexture = new Texture(Gdx.files.internal("data/thf2_rt2_walk.png"));
-        }
 
-        TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/this.frameCols, animationTexture.getHeight()/this.frameRows);
-        walkFrames = new TextureRegion[this.frameCols * this.frameRows];
-        int index = 0;
-        for (int i = 0; i < this.frameRows; i++) {
-            for (int j = 0; j < this.frameCols; j++) {
-                TextureRegion tr = tmp[i][j];
-                walkFrames[index++] = tr;
+            TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/this.frameCols, animationTexture.getHeight()/this.frameRows);
+            walkFrames = new TextureRegion[this.frameCols * this.frameRows];
+            int index = 0;
+            for (int i = 0; i < this.frameRows; i++) {
+                for (int j = 0; j < this.frameCols; j++) {
+                    TextureRegion tr = tmp[i][j];
+                    walkFrames[index++] = tr;
+                }
             }
         }
         walkAnimation = new Animation(frameDuration, walkFrames);      // #11

@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.panacea.RufusPyramid.common.Utilities;
@@ -36,14 +37,14 @@ public class CreaturesDrawer extends ViewObject {
     ///////////////////////
 
     //TODO creare un oggetto che contenga Texture, creaturestate e animations in modo da usare una sola hashmap?
-    private HashMap<Integer, Texture> sprites;
+    private HashMap<Integer, TextureRegion> sprites;
     private HashMap<Integer, CreatureState> currentStates;
     private HashMap<Integer, AbstractAnimation> currentAnimations = null;
     private DelayedRemovalArray<AbstractAnimation> generalAnimations = null;
 
     public CreaturesDrawer(List creaturesList) {
         this.creaturesList = creaturesList;
-        this.sprites = new HashMap<Integer, Texture>();
+        this.sprites = new HashMap<Integer, TextureRegion>();
         this.currentStates = new HashMap<Integer, CreatureState>();
         this.currentAnimations = new HashMap<Integer, AbstractAnimation>();
         this.generalAnimations = new DelayedRemovalArray<AbstractAnimation>();
@@ -75,21 +76,21 @@ public class CreaturesDrawer extends ViewObject {
         }
     }
 
-    private static Texture getSprite(ICreature creature) {
+    private static TextureRegion getSprite(ICreature creature) {
         if (creature instanceof DefaultHero) {
             return getHeroSprite((DefaultHero)creature);
         }
         return getCreatureSprite(creature);
     }
 
-    private static Texture getCreatureSprite(ICreature creature) {
+    private static TextureRegion getCreatureSprite(ICreature creature) {
         //TODO ritornare la texture corretta a seconda del modello di "cattivo" scelto.
-        return new Texture(Gdx.files.internal("data/thf2_rt2.gif"));
+        return TextureRegion.split(new Texture(Gdx.files.internal("data/thf2_rt2.gif")), 1, 1)[0][0];
     }
 
-    private static Texture getHeroSprite(DefaultHero heroModel) {
+    private static TextureRegion getHeroSprite(DefaultHero heroModel) {
         //TODO ritornare la texture corretta a seconda del modello di eroe scelto.
-        return new Texture(Gdx.files.internal("data/spritesheet2_single.png"));
+        return SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, SpritesProvider.Azione.STAND)[0];
     }
 
     private void setStanding(int creatureID) {
