@@ -36,7 +36,7 @@ public class AttackAction implements IAction {
         }
 
         // - Effettuo l'attacco
-
+        GameDrawer.get().getCreaturesDrawer().startStrike(attacker);
         int damage = this.getDamage(attacker.getCurrentStats().getAttack(), attacked.getCurrentStats().getDefence());
         this.attacked.setHPCurrent(this.attacked.getHPCurrent() - damage);
 

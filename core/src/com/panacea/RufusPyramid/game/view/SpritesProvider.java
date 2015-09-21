@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Classe utilizzata per caricare staticamente tutti gli sprites e per richiedere i necessari
  * quando serve, a seconda dell'azione da effettuare.
@@ -11,8 +15,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Created by gio on 20/09/15.
  */
 public class SpritesProvider {
+    /*  TODO: alla chiusura del programma fare il dispose di tutte queste textures
+        Oppure per ogni TextureRegion[][] lanciare "region[0][0].getTexture().dispose()" */
+    private static List<Texture> allTextures = new LinkedList<Texture>();
 
-    private static Texture hero1 = new Texture(Gdx.files.internal("data/hero_spritesheetx32.png"));
+    private static final String BASE_PATH = "data/creatures/";
+    private static TextureRegion[][] hero1 = loadTexture("hero_spritesheetx32.png", 13, 21);
+    private static TextureRegion[][] orc_base = loadTexture("orc_spritesheetx32.png", 13, 21);
 
     /**
      *  Ritorna la corretta TextureRegion dato un oggetto da animare e l'azione da effettuare.
@@ -23,21 +32,24 @@ public class SpritesProvider {
      */
     public static TextureRegion[] getSprites(Oggetto oggettoDaAnimare, Azione azione) {
         TextureRegion[] animationFrames = null;
-        if (oggettoDaAnimare.equals(Oggetto.HERO1)) {
-            Texture animationTexture = hero1;
-            int frameCols = 13;
-            int frameRows = 21;
-            int animationCols, animationRow;
+        TextureRegion[][] allFrames = null;
 
-            TextureRegion[][] tmp = TextureRegion.split(animationTexture, animationTexture.getWidth()/frameCols, animationTexture.getHeight()/frameRows);
-//            animationFrames = new TextureRegion[frameCols * frameRows];
-//            int index = 0;
-//            for (int i = 0; i < frameRows; i++) {
-//                for (int j = 0; j < frameCols; j++) {
-//                    TextureRegion tr = tmp[i][j];
-//                    animationFrames[index++] = tr;
-//                }
-//            }
+        switch(oggettoDaAnimare) {
+            case HERO1:
+                allFrames = hero1;
+                break;
+            case ORC_BASE:
+                allFrames = orc_base;
+                break;
+            default:
+                throw new IllegalArgumentException("Nessuno sprite disponibile per l'oggetto " + oggettoDaAnimare);
+        }
+
+
+//        if (oggettoDaAnimare.equals(Oggetto.HERO1) || oggettoDaAnimare.equals(Oggetto.ORC_BASE)) {
+//            int frameCols = 13;
+//            int frameRows = 21;
+            int animationCols, animationRow;
 
             switch (azione) {
                 case STAND:
@@ -63,8 +75,8 @@ public class SpritesProvider {
                 default:
                     throw new NullPointerException("Impossibile trovare lo sprite corretto per l'animazione " + azione + " dell'oggetto " + oggettoDaAnimare + ".");
             }
-            animationFrames = tmp[animationRow - 1];
-        }
+            animationFrames = Arrays.copyOf(allFrames[animationRow - 1], animationCols);
+//        }
 
         if (animationFrames == null)
             throw new NullPointerException("Impossibile trovare lo sprite corretto per l'animazione " + azione + " dell'oggetto " + oggettoDaAnimare + ".");
@@ -72,10 +84,16 @@ public class SpritesProvider {
     }
 
     public enum Oggetto {
-        HERO1
+        HERO1, ORC_BASE
     }
 
     public enum Azione {
         STAND, WALK, STRIKE, CAST, DEATH
+    }
+
+    private static TextureRegion[][] loadTexture(String path, int cols, int rows) {
+        Texture animationTexture = new Texture(Gdx.files.internal(BASE_PATH + path));
+        allTextures.add(animationTexture);
+        return TextureRegion.split(animationTexture, animationTexture.getWidth()/cols, animationTexture.getHeight()/rows);
     }
 }
