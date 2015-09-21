@@ -1,8 +1,11 @@
 package com.panacea.RufusPyramid.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
@@ -13,6 +16,7 @@ import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.items.ChestItem;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
+import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
@@ -74,6 +78,8 @@ public class GameModel {
         this.hero = new DefaultHero("Rufus");
         GridPoint2 spawnpoint=newMap.getSpawnPoint().getPosition();
         this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
+        GridPoint2 absolute = Utilities.convertToAbsolutePos(spawnpoint);
+        this.hero.setAbsoluteTickPosition(new Vector2(absolute.x,absolute.y));
         this.addCreature(this.hero);
 
         Enemy newEnemy;
@@ -97,6 +103,14 @@ public class GameModel {
             this.addItem(newItem);
         }
         this.diary = new Diary();
+
+        SpriteDrawable foreGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-bar1.png"))));
+        SpriteDrawable background = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-frame.png"))));
+        hero.health =new com.panacea.RufusPyramid.game.view.ui.HealthBar(0,100,1,false, new HealthBar.ProgressBarStyle(background,foreGround));
+        Vector2 pos = hero.getAbsoluteTickPosition();
+        hero.health.setX(pos.x+50);
+        hero.health.setY(pos.y+50);
+        hero.health.setValue(50);
     }
 
     public ArrayList<Map> getMaps() {

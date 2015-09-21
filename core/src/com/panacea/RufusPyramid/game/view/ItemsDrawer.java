@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.XmlReader;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.items.Item;
 
 import java.util.HashMap;
@@ -43,6 +44,8 @@ public class ItemsDrawer extends ViewObject {
                 batch.draw(getTexture(item), absolutePos.x, absolutePos.y , 0, 0, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT, 0.7f, 0.7f, 0); //FIXME:reduce the with of the image by a 30%
             }
         }
+
+        GameModel.get().getHero().health.draw(batch,1);
         batch.end();
     }
 

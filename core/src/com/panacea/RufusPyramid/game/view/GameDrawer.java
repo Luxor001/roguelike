@@ -78,12 +78,7 @@ public class GameDrawer extends ViewObject {
         super.render(delta);
 
         DefaultHero hero= GameModel.get().getHero();
-        if(hero.getAbsoluteTickPosition() != null)
-            GameCamera.get().position.set(GameModel.get().getHero().getAbsoluteTickPosition(),0); /*Update the camera based on the hero position*/
-        else{
-            GridPoint2 absolute= Utilities.convertToAbsolutePos(hero.getPosition().getPosition()); //TODO: da sistemare
-            GameCamera.get().position.set(absolute.x,absolute.y,0); /*Update the camera based on the hero position*/
-        }
+        GameCamera.get().position.set(hero.getAbsoluteTickPosition(),0); /*Update the camera based on the hero position*/
 
 
         GameCamera.get().update();
@@ -92,6 +87,7 @@ public class GameDrawer extends ViewObject {
         for (com.panacea.RufusPyramid.game.view.ViewObject view : viewList) {
             view.render(delta);
         }
+
     }
 
     @Override
