@@ -62,7 +62,7 @@ public class AnimWalk extends AbstractAnimation {
 
     public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint, float speed){
         super();
-        this.frameDuration = 0.2f;  //TODO imposta frameDuration in base alla velocità! Circa speed/200, ma deve essere in proporzione inversa
+        this.frameDuration = 0.1f;  //TODO imposta frameDuration in base alla velocità! Circa speed/200, ma deve essere in proporzione inversa
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.speed = speed;
