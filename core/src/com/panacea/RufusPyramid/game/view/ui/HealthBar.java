@@ -29,6 +29,9 @@ public class HealthBar extends Table{
     protected float[] snapValues;
     protected float threshold;
 
+    public static int DEFAULT_HEALTHBAR_HEIGHT = 10;
+    public static int DEFAULT_HEALTHBAR_WIDTH = 20;
+
     public HealthBar(float min, float max, float stepSize, boolean vertical, Skin skin) {
         this(min, max, stepSize, vertical, skin.get("default-" + (vertical ? "vertical" : "horizontal"), ProgressBarStyle.class));
     }

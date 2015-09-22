@@ -103,14 +103,6 @@ public class GameModel {
             this.addItem(newItem);
         }
         this.diary = new Diary();
-
-        SpriteDrawable foreGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-bar1.png"))));
-        SpriteDrawable background = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-frame.png"))));
-        hero.health =new com.panacea.RufusPyramid.game.view.ui.HealthBar(0,100,1,false, new HealthBar.ProgressBarStyle(background,foreGround));
-        Vector2 pos = hero.getAbsoluteTickPosition();
-        hero.health.setX(pos.x+50);
-        hero.health.setY(pos.y+50);
-        hero.health.setValue(50);
     }
 
     public ArrayList<Map> getMaps() {

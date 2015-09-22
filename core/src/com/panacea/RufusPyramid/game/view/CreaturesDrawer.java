@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
@@ -75,6 +76,8 @@ public class CreaturesDrawer extends ViewObject {
                 InputManager.get().addProcessor(this.heroInput);
             }
         }
+
+
     }
 
     private static TextureRegion getSprite(ICreature creature) {
@@ -104,6 +107,7 @@ public class CreaturesDrawer extends ViewObject {
 
         for (ICreature creature : this.creaturesList) {
             switch (this.currentStates.get(creature.getID())) {
+
                 case WALKING:
                     //TODO fare l'animazione di camminata
                     AbstractAnimation currentAnimation = this.currentAnimations.get(creature.getID());
@@ -115,7 +119,6 @@ public class CreaturesDrawer extends ViewObject {
                     GridPoint2 pos = creature.getPosition().getPosition();
                     GridPoint2 spritePosition = creature.getPosition().getPosition();
                     SpriteBatch batch = GameBatch.get();
-
                     batch.begin();
                     GridPoint2 newPos=Utilities.convertToAbsolutePos(spritePosition);
                     batch.draw(this.sprites.get(creature.getID()),newPos.x,newPos.y,Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
@@ -125,6 +128,18 @@ public class CreaturesDrawer extends ViewObject {
                 default:
                     Gdx.app.error(CreaturesDrawer.class.toString(), "Non so che sprite disegnare! Stato corrente: " + this.currentStates.get(creature.getID()));
                     break;
+            }
+
+
+
+            Vector2 position = creature.getAbsoluteTickPosition();
+            if(position != null) {
+                SpriteBatch batch = GameBatch.get();
+                batch.begin();
+                creature.getHealthBar().setX(position.x + 5);
+                creature.getHealthBar().setY(position.y - 10);
+                creature.getHealthBar().draw(batch, 1);
+                batch.end();
             }
         }
 

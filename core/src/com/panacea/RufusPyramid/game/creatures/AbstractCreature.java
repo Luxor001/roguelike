@@ -1,6 +1,11 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
 import com.panacea.RufusPyramid.common.Utilities;
@@ -10,6 +15,7 @@ import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
+import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
@@ -35,6 +41,8 @@ public abstract class AbstractCreature implements ICreature {
 
     private ArrayList<Effect> effects;
     private Stats baseStats;
+    HealthBar healthBar;
+    private Vector2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -53,7 +61,14 @@ public abstract class AbstractCreature implements ICreature {
         this.actionChosenListeners = new ArrayList<ActionChosenListener>(1);
         this.creatureDeadListeners = new ArrayList<CreatureDeadListener>();
 
+
+        SpriteDrawable foreGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/health_bar.png"))));
+        SpriteDrawable background = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-frame.png"))));
         this.effects = new ArrayList<Effect>();
+        this.healthBar = new HealthBar((float)0,(float)getCurrentStats().getMaximumHP(),1,false,new HealthBar.ProgressBarStyle(background,foreGround));
+        this.healthBar.setValue(currentHP);
+        this.healthBar.setHeight(HealthBar.DEFAULT_HEALTHBAR_HEIGHT);
+        this.healthBar.setWidth(HealthBar.DEFAULT_HEALTHBAR_WIDTH );
     }
 
     private static int getUniqueCreatureId() {
@@ -261,4 +276,19 @@ public abstract class AbstractCreature implements ICreature {
         return currStats;
     }
 
+    public HealthBar getHealthBar(){
+        return this.healthBar;
+    }
+    public void setHealthBar(HealthBar bar){
+        this.healthBar = bar;
+    }
+
+    public Vector2 getAbsoluteTickPosition(){
+        return absoluteTickPosition;
+    }
+    public void setAbsoluteTickPosition(Vector2 position){
+        if(absoluteTickPosition == null)
+            absoluteTickPosition = new Vector2();
+        absoluteTickPosition=position;
+    }
 }
