@@ -2,6 +2,7 @@ package com.panacea.RufusPyramid.game.actions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.creatures.Stats;
@@ -36,6 +37,11 @@ public class AttackAction implements IAction {
         }
 
         // - Effettuo l'attacco
+        if (attacked.getPosition().getPosition().x < attacker.getPosition().getPosition().x) //mi sto muovendo a sinistra, l'animazione deve essere invertita..
+                attacker.setFlipX(true);
+            else
+                attacker.setFlipX(false);
+
         GameDrawer.get().getCreaturesDrawer().startStrike(attacker);
         int damage = this.getDamage(attacker.getCurrentStats().getAttack(), attacked.getCurrentStats().getDefence());
         this.attacked.setHPCurrent(this.attacked.getHPCurrent() - damage);

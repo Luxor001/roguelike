@@ -58,4 +58,7 @@ public interface ICreature extends IAgent {
     public Stats getBaseStats();
 
     public Stats getCurrentStats();
+
+    public boolean getFlipX();
+    public void setFlipX(boolean flipX);
 }

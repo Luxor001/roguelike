@@ -39,10 +39,14 @@ public abstract class AbstractCreature implements ICreature {
     private List<ActionChosenListener> actionChosenListeners;
     private List<CreatureDeadListener> creatureDeadListeners;
 
+    public static int DEFAULT_HEALTHBAR_HEIGHT = 7;
+    public static int DEFAULT_HEALTHBAR_WIDTH = 20;
     private ArrayList<Effect> effects;
     private Stats baseStats;
-    HealthBar healthBar;
+    private HealthBar healthBar;
     private Vector2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
+
+    private boolean flipX;
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -67,8 +71,9 @@ public abstract class AbstractCreature implements ICreature {
         this.effects = new ArrayList<Effect>();
         this.healthBar = new HealthBar((float)0,(float)getCurrentStats().getMaximumHP(),1,false,new HealthBar.ProgressBarStyle(background,foreGround));
         this.healthBar.setValue(currentHP);
-        this.healthBar.setHeight(HealthBar.DEFAULT_HEALTHBAR_HEIGHT);
-        this.healthBar.setWidth(HealthBar.DEFAULT_HEALTHBAR_WIDTH );
+        this.healthBar.setHeight(DEFAULT_HEALTHBAR_HEIGHT);
+        this.healthBar.setWidth(DEFAULT_HEALTHBAR_WIDTH );
+        this.flipX = false;
     }
 
     private static int getUniqueCreatureId() {
@@ -290,5 +295,12 @@ public abstract class AbstractCreature implements ICreature {
         if(absoluteTickPosition == null)
             absoluteTickPosition = new Vector2();
         absoluteTickPosition=position;
+    }
+
+    public boolean getFlipX(){
+        return flipX;
+    }
+    public void setFlipX(boolean flipX){
+        this.flipX = flipX;
     }
 }

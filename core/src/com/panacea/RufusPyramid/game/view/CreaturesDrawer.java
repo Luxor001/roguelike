@@ -121,7 +121,10 @@ public class CreaturesDrawer extends ViewObject {
                     SpriteBatch batch = GameBatch.get();
                     batch.begin();
                     GridPoint2 newPos=Utilities.convertToAbsolutePos(spritePosition);
-                    batch.draw(this.sprites.get(creature.getID()),newPos.x,newPos.y,Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
+                    TextureRegion currentFrame = this.sprites.get(creature.getID());
+                    if((!currentFrame.isFlipX() && creature.getFlipX()) || (currentFrame.isFlipX() && !creature.getFlipX()))
+                        currentFrame.flip(true, false);
+                    batch.draw(currentFrame,newPos.x,newPos.y,Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
                     batch.end();
 
                     break;
@@ -200,7 +203,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 80.0f);
+        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 80.0f, creature.getFlipX());
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(creature.getID(), currentAnimation);
@@ -209,7 +212,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void strikeAnimation(ICreature attacker, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimStrike(attacker.getClass(), attacker.getPosition().getPosition());
+        AbstractAnimation currentAnimation = new AnimStrike(attacker.getClass(), attacker.getPosition().getPosition(), attacker.getFlipX());
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(attacker.getID(), currentAnimation);

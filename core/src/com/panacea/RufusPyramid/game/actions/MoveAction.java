@@ -48,6 +48,14 @@ public class MoveAction implements IAction {
         if (isTileWalkable(arrivalTile)) {
             //TODO Animator.walk(this.hero, startingTile, arrivalTile);
             creature.setPosition(arrivalTile);
+
+            if(direction == Utilities.Directions.EAST || direction == Utilities.Directions.WEST) {
+                if (arrivalTile.getPosition().x < startingTile.getPosition().x) //mi sto muovendo a sinistra, l'animazione deve essere invertita..
+                    creature.setFlipX(true);
+                else
+                    creature.setFlipX(false);
+            }
+
             GameDrawer.get().getCreaturesDrawer().startWalk(creature, startingTile.getPosition(), arrivalTile.getPosition());
             return true;
         }

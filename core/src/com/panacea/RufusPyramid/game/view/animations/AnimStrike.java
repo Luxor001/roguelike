@@ -28,16 +28,18 @@ public class AnimStrike extends AbstractAnimation {
     private GridPoint2 absolutePosition;
 
     private Class modelClass;
+    private boolean flipX;//the texture should be mirrored?
 
     public AnimStrike() {
         this.frameDuration = 0.33f;
     }
 
-    public AnimStrike(Class modelClass, GridPoint2 position) {
+    public AnimStrike(Class modelClass, GridPoint2 position, boolean flipX) {
         super();
         this.frameDuration = 0.05f;
         this.modelClass = modelClass;
         this.absolutePosition = Utilities.convertToAbsolutePos(position);
+        this.flipX = flipX;
     }
 
     public void create() {
@@ -59,6 +61,8 @@ public class AnimStrike extends AbstractAnimation {
         currentFrame = animation.getKeyFrame(stateTime, false);
 
         spriteBatch.begin();
+        if((!currentFrame.isFlipX() && flipX) || (currentFrame.isFlipX() && !flipX))
+            currentFrame.flip(true, false);
         spriteBatch.draw(currentFrame, absolutePosition.x, absolutePosition.y, 32, 32);
         spriteBatch.end();
 

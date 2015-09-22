@@ -35,6 +35,7 @@ public class AnimWalk extends AbstractAnimation {
     private Vector2 deltaMovement;
     private Vector2 endPos;
     private Vector2 direction;
+    private boolean flipX;//the texture should be mirrored?
 
     private Class modelClass;
 
@@ -42,13 +43,14 @@ public class AnimWalk extends AbstractAnimation {
         this.frameDuration = 0.33f;
     }
 
-    public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint, float speed) {
+    public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint, float speed, boolean flipX) {
         super();
         this.frameDuration = 0.1f;  //TODO imposta frameDuration in base alla velocità! Circa speed/200, ma deve essere in proporzione inversa
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.speed = speed;
         this.modelClass = modelClass;
+        this.flipX = flipX;
     }
 
     public void create() {
@@ -96,6 +98,8 @@ public class AnimWalk extends AbstractAnimation {
         currentFrame = animation.getKeyFrame(stateTime, true);
 
         spriteBatch.begin();
+        if((!currentFrame.isFlipX() && flipX) || (currentFrame.isFlipX() && !flipX))
+            currentFrame.flip(true, false);
         spriteBatch.draw(currentFrame, currentPos.x, currentPos.y, 32, 32);
         spriteBatch.end();
 
