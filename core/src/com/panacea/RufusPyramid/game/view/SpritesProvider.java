@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import org.apache.commons.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class SpritesProvider {
     private static final String BASE_PATH = "data/creatures/";
     private static TextureRegion[][] hero1 = loadTexture("hero_spritesheetx32.png", 13, 21);
     private static TextureRegion[][] orc_base = loadTexture("orc_spritesheetx32.png", 13, 21);
+    private static TextureRegion[] staticFire;
 
     /**
      *  Ritorna la corretta TextureRegion dato un oggetto da animare e l'azione da effettuare.
@@ -83,8 +85,26 @@ public class SpritesProvider {
         return animationFrames;
     }
 
+    public static TextureRegion[] getStaticSprites(OggettoStatico obj) {
+        TextureRegion[] animationFrames = null;
+
+        switch(obj) {
+            case FIRE:
+                animationFrames = staticFire;
+                break;
+            default:
+                throw new IllegalArgumentException("Nessuno sprite disponibile per l'oggetto " + obj);
+        }
+
+        return animationFrames;
+    }
+
     public enum Oggetto {
-        HERO1, ORC_BASE
+        HERO1, ORC_BASE, STATICFIRE
+    }
+
+    public enum OggettoStatico {
+        FIRE
     }
 
     public enum Azione {

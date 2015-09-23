@@ -69,10 +69,13 @@ public abstract class AbstractCreature implements ICreature {
         SpriteDrawable foreGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/health_bar.png"))));
         SpriteDrawable background = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-frame.png"))));
         this.effects = new ArrayList<Effect>();
+
         this.healthBar = new HealthBar((float)0,(float)getCurrentStats().getMaximumHP(),1,false,new HealthBar.ProgressBarStyle(background,foreGround));
         this.healthBar.setValue(currentHP);
         this.healthBar.setHeight(DEFAULT_HEALTHBAR_HEIGHT);
         this.healthBar.setWidth(DEFAULT_HEALTHBAR_WIDTH );
+        this.healthBar.setVisible(false);
+
         this.flipX = false;
     }
 

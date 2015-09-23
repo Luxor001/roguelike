@@ -20,6 +20,7 @@ import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,12 +137,13 @@ public class CreaturesDrawer extends ViewObject {
 
 
             Vector2 position = creature.getAbsoluteTickPosition();
-            if(position != null) {
+            HealthBar health = creature.getHealthBar();
+            if(position != null && health.isVisible()) {
                 SpriteBatch batch = GameBatch.get();
                 batch.begin();
-                creature.getHealthBar().setX(position.x + 5);
-                creature.getHealthBar().setY(position.y - 10);
-                creature.getHealthBar().draw(batch, 1);
+                health.setX(position.x + 5);
+                health.setY(position.y - 10);
+                health.draw(batch, 1);
                 batch.end();
             }
         }

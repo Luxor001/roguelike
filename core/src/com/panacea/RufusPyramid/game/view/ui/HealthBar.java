@@ -28,6 +28,7 @@ public class HealthBar extends Table{
     protected Interpolation animateInterpolation = Interpolation.linear;
     protected float[] snapValues;
     protected float threshold;
+    private boolean isVisible;
 
     public HealthBar(float min, float max, float stepSize, boolean vertical, Skin skin) {
         this(min, max, stepSize, vertical, skin.get("default-" + (vertical ? "vertical" : "horizontal"), ProgressBarStyle.class));
@@ -276,5 +277,12 @@ public class HealthBar extends Table{
             this.background = style.background;
             this.progress = style.progress;
         }
+    }
+
+    public boolean isVisible(){
+        return isVisible;
+    }
+    public void isVisible(boolean visible){
+        this.isVisible = visible;
     }
 }

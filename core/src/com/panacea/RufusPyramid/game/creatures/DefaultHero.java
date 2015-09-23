@@ -31,6 +31,7 @@ public class DefaultHero extends AbstractCreature {
     public DefaultHero(String name) {
         super(name, DESCRIPTION, MAX_HP, ATTACK, DEFENCE, SPEED);
         //TODO la posizione di spawn va presa dalla mappa;
+        this.getHealthBar().setVisible(true);
     }
 
     @Override
