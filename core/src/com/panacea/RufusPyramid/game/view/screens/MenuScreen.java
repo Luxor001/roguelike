@@ -3,7 +3,8 @@ package com.panacea.RufusPyramid.game.view.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.GridPoint2;
@@ -45,10 +46,15 @@ public class MenuScreen implements Screen {
     private Image title;
     private ArrayList<ObjectAnimation> menuAnimations;
     private ObjectAnimation fireAnim;
-    private Sound introMusic = Gdx.audio.newSound(Gdx.files.internal("data/sfx/intro.mp3"));
+    private Music introMusic;
 
+    AssetManager manager;
     @Override
     public void show() {
+        manager = new AssetManager();
+        manager.load("data/sfx/intro.mp3", Music.class);
+
+        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/intro.mp3"));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         skin.getAtlas().getTextures().iterator().next().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         skin.getFont("default-font").getData().markupEnabled = true;
@@ -100,17 +106,17 @@ public class MenuScreen implements Screen {
             obj.create();
         }
 
-        introMusic.play();
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
+        introMusic.play();
+        introMusic.setLooping(true);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
-
         for (ObjectAnimation obj: menuAnimations) {
             obj.render(delta);
         }

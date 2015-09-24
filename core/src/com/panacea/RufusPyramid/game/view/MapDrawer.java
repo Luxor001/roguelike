@@ -15,9 +15,7 @@ import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.FileHandler;
 
 /**
  * Created by gio on 11/07/15.
@@ -55,9 +53,10 @@ public class MapDrawer extends ViewObject {
         int numColumns = mapCont.cLenght();
 
         initializeTextures(map.getType());
+
         //Imposto le immagini e i parametri per la visualizzazione
         spriteMap = new Sprite[numRows][numColumns];
-        spriteCache = new SpriteCache(numRows*numColumns,true);
+        spriteCache = new SpriteCache((numRows*numColumns)*2,true);
         spriteCache.beginCache();
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numColumns; col++) {
@@ -72,43 +71,21 @@ public class MapDrawer extends ViewObject {
                         tileSprite.setPosition(absolutePos.x, absolutePos.y);
                         spriteMap[row][col] = tileSprite;
                         spriteCache.add(tileSprite, tileSprite.getX(), tileSprite.getY());
+
+                        //se la tile attuale è "camminabile" allora aggiungi un possibile decal di pavimento, se supera la casualità
+                        if(tileToDraw.getType() == Tile.TileType.Walkable && Utilities.randInt(0,15) == 15){
+                            TextureRegion decalTexture = grounds_deco[Utilities.randInt(0,grounds_deco.length-1)];
+                            spriteCache.add(decalTexture, tileSprite.getX(), tileSprite.getY());
+                        }
                     }
                 else
                     {
                         dynamicMapTiles.add(tileToDraw);
                     }
-
             }
         }
+
         spriteCacheIndex = spriteCache.endCache();
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-
-
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        spriteCache.setProjectionMatrix(camera.combined);
-        spriteCache.begin();
-        spriteCache.draw(spriteCacheIndex);
-        spriteCache.end();
-
-        SpriteBatch batch = GameBatch.get();
-        batch.begin();
-        for (Tile tile:dynamicMapTiles) {
-            GridPoint2 absolutePos=Utilities.convertToAbsolutePos(tile.getPosition());
-            batch.draw(getTexture(map.getType(),tile),absolutePos.x,absolutePos.y);
-        }
-        batch.end();
-//        for (Sprite[] row : spriteMap) {
-//            for (Sprite tile : row) {
-//                tile.draw(spriteCache);
-//            }
-//        }
-
     }
 
     private void initializeTextures(Map.MapType mapType){ //load the texture regions based on current map type
@@ -145,6 +122,29 @@ public class MapDrawer extends ViewObject {
 /*        if(new File("data/grounds/"+path+"_deco.png").exists())
           grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));*/
         doors = loadTextureRegion(new Texture("data/mapObjects/doors_"+path+".png"));
+    }
+
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        spriteCache.setProjectionMatrix(camera.combined);
+        spriteCache.begin();
+        spriteCache.draw(spriteCacheIndex);
+        spriteCache.end();
+
+        SpriteBatch batch = GameBatch.get();
+        batch.begin();
+        for (Tile tile:dynamicMapTiles) {
+            GridPoint2 absolutePos=Utilities.convertToAbsolutePos(tile.getPosition());
+            batch.draw(getTexture(map.getType(),tile),absolutePos.x,absolutePos.y);
+        }
+        batch.end();
 
     }
 
@@ -160,20 +160,6 @@ public class MapDrawer extends ViewObject {
             }
         }
         return newTextRegion;
-    }
-
-    private TextureRegion[] loadDecals(String rootDirectory){
-
-        ArrayList<TextureRegion> allTextures = new ArrayList<TextureRegion>();
-        FileHandle files = Gdx.files.internal(rootDirectory);
-        Texture texture;
-        for (FileHandle file: files.list()) {
-            texture = new Texture(file);
-            TextureRegion[][] reg =  TextureRegion.split(texture, texture.getWidth(), texture.getHeight());
-            allTextures.add(reg[0][0]);
-        }
-        TextureRegion[] values = new TextureRegion[allTextures.size()];
-        return allTextures.toArray(values);
     }
 
     private static TextureRegion[] loadTextureRegion(Texture text){
@@ -199,9 +185,6 @@ public class MapDrawer extends ViewObject {
                 textRegion = walls[Utilities.randInt(0,walls.length-1,(int) System.nanoTime())];
                 break;
             case Walkable:
-                if(Utilities.randInt(0,3,(int)System.nanoTime()) == 3 && grounds_deco != null)
-                    textRegion = grounds_deco[Utilities.randInt(0,grounds_deco.length-1,(int) System.nanoTime())];
-                else
                    textRegion = grounds[Utilities.randInt(0,grounds.length-1,(int) System.nanoTime())];
                 break;
             case Door:{
@@ -213,5 +196,18 @@ public class MapDrawer extends ViewObject {
                 break;
         }
         return textRegion;
+    }
+
+    private TextureRegion[] loadDecals(String rootDirectory){
+        ArrayList<TextureRegion> allTextures = new ArrayList<TextureRegion>();
+        FileHandle files = Gdx.files.internal(rootDirectory);
+        Texture texture;
+        for (FileHandle file: files.list()) {
+            texture = new Texture(file);
+            TextureRegion[][] reg =  TextureRegion.split(texture, texture.getWidth(), texture.getHeight());
+            allTextures.add(reg[0][0]);
+        }
+        TextureRegion[] values = new TextureRegion[allTextures.size()];
+        return allTextures.toArray(values);
     }
 }
