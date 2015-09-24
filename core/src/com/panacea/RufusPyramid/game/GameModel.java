@@ -90,17 +90,20 @@ public class GameModel {
             // gm.addAgent(e2);*/
         }
 
-        Item newItem;
-        Tile randomPos;
-        ArrayList<Effect> itemEffects = new ArrayList<Effect>();
-        itemEffects.add(new Effect(Effect.EffectType.ATTACK,1f));
-        newItem=new ChestItem(new Weapon(Weapon.WeaponType.DAGGER, itemEffects, "Sharp ToothPick Dagger"));
-     //   randomPos = getCurrentMap().getRandomItemLocation();
-        randomPos = getCurrentMap().getSpawnPoint();
-     //   if(randomPos != null && randomPos.getPosition() != spawnpoint) {//DA RIMETTERE!!
-        if(randomPos != null) {
-            newItem.setPosition(randomPos.getPosition());
-            this.addItem(newItem);
+        for(int i=0; i < 5; i++) {
+            long seed = System.nanoTime();
+            Item newItem;
+            Tile randomPos;
+            ArrayList<Effect> itemEffects = new ArrayList<Effect>();
+            itemEffects.add(new Effect(Effect.EffectType.ATTACK, 1f));
+            newItem = new ChestItem(new Weapon(Weapon.WeaponType.DAGGER, itemEffects, "Sharp ToothPick Dagger"));
+            randomPos = getCurrentMap().getRandomItemLocation();
+            //   randomPos = getCurrentMap().getSpawnPoint();
+            //   if(randomPos != null && randomPos.getPosition() != spawnpoint) {//DA RIMETTERE!!
+            if (randomPos != null) {
+                newItem.setPosition(randomPos.getPosition());
+                this.addItem(newItem);
+            }
         }
         this.diary = new Diary();
     }

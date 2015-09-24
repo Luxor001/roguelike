@@ -78,7 +78,6 @@ public class CreaturesDrawer extends ViewObject {
             }
         }
 
-
     }
 
     private static TextureRegion getSprite(ICreature creature) {

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import org.apache.commons.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,10 +19,10 @@ public class SpritesProvider {
         Oppure per ogni TextureRegion[][] lanciare "region[0][0].getTexture().dispose()" */
     private static List<Texture> allTextures = new LinkedList<Texture>();
 
-    private static final String BASE_PATH = "data/creatures/";
-    private static TextureRegion[][] hero1 = loadTexture("hero_spritesheetx32.png", 13, 21);
-    private static TextureRegion[][] orc_base = loadTexture("orc_spritesheetx32.png", 13, 21);
-    private static TextureRegion[] staticFire;
+    private static final String BASE_PATH = "data/";
+    private static TextureRegion[][] hero1 = loadTexture("creatures/hero_spritesheetx32.png", 13, 21);
+    private static TextureRegion[][] orc_base = loadTexture("creatures/orc_spritesheetx32.png", 13, 21);
+    private static TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
 
     /**
      *  Ritorna la corretta TextureRegion dato un oggetto da animare e l'azione da effettuare.

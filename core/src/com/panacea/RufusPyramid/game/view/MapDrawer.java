@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ import com.panacea.RufusPyramid.map.Tile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
 
 /**
  * Created by gio on 11/07/15.
@@ -138,11 +140,14 @@ public class MapDrawer extends ViewObject {
 
         walls = loadTextureRegion(new Texture("data/walls/"+path+".png"));
         grounds = loadTextureRegion(new Texture("data/grounds/"+path+".png"));
-        if(new File("data/grounds/"+path+"_deco.png").exists())
-          grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));
+
+        grounds_deco = loadDecals("data/deco");
+/*        if(new File("data/grounds/"+path+"_deco.png").exists())
+          grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));*/
         doors = loadTextureRegion(new Texture("data/mapObjects/doors_"+path+".png"));
 
     }
+
     private TextureRegion[] loadTextureRegion(String path, int frameCols, int frameRows){ //questo metodo esegue lo splitting di una texture e restituisce un array di textureRegion monodimensionale (ricorda: le texture possono essere un INSIEME di immagini!, le textureRegion ne rappresentano solo una!)
         Texture base = new Texture(Gdx.files.internal(path));
         TextureRegion[][] tmp = TextureRegion.split(base, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
@@ -156,6 +161,21 @@ public class MapDrawer extends ViewObject {
         }
         return newTextRegion;
     }
+
+    private TextureRegion[] loadDecals(String rootDirectory){
+
+        ArrayList<TextureRegion> allTextures = new ArrayList<TextureRegion>();
+        FileHandle files = Gdx.files.internal(rootDirectory);
+        Texture texture;
+        for (FileHandle file: files.list()) {
+            texture = new Texture(file);
+            TextureRegion[][] reg =  TextureRegion.split(texture, texture.getWidth(), texture.getHeight());
+            allTextures.add(reg[0][0]);
+        }
+        TextureRegion[] values = new TextureRegion[allTextures.size()];
+        return allTextures.toArray(values);
+    }
+
     private static TextureRegion[] loadTextureRegion(Texture text){
         int frameRows = text.getHeight() / Utilities.DEFAULT_BLOCK_HEIGHT;
         int frameCols = text.getWidth() / Utilities.DEFAULT_BLOCK_WIDTH;

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameBatch {
     private static SpriteBatch batch = null;
 
-    private GameBatch() {};
+    private GameBatch() {}
 
     public static SpriteBatch get() {
         //TODO istanziare di default all'avvio del gioco

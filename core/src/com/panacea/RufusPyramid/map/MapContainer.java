@@ -93,13 +93,12 @@ public class MapContainer {
             Tile randomTile = null;
             int tries=0;
             do {
-                int seed = (int)System.nanoTime();
-                int randx = Utilities.randInt(0,cLenght()-1,seed);
-                int randy = Utilities.randInt(0,rLenght()-1,seed);
+                int randx = Utilities.randInt(0,cLenght()-1);
+                int randy = Utilities.randInt(0,rLenght()-1);
                 if(getTile(randy,randx).getType() == type)
                     randomTile=getTile(randy,randx);
                 tries++;
-            }while(randomTile == null || tries < 5000);
+            }while(randomTile == null || tries < 1000);
             return randomTile;
         }
         else

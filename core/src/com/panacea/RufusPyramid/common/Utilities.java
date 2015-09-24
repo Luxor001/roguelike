@@ -13,7 +13,12 @@ public class Utilities {
     public static int DEFAULT_BLOCK_HEIGHT = 32;
     public static String ITEMS_XML_PATH = "data/items.xml";
 
-    public static int randInt(int min, int max,int seed) {
+    public static int randInt(int min, int max) {
+        Random rand = new Random();
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+        return randomNum;
+    }
+    public static int randInt(int min, int max, long seed) {
         Random rand = new Random(seed);
         int randomNum = rand.nextInt((max - min) + 1) + min;
         return randomNum;

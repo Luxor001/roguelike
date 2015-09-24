@@ -4,50 +4,41 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
-import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
+import com.sun.org.apache.bcel.internal.generic.ObjectType;
 
 /**
- * Classe che permette di effettuare l'animazione di una camminata.
- * <p/>
- * Created by gio on 11/07/15.
+ * classe che indica tutti gli oggetti "statici" che devono essere animati (acqua, fuoco, oggetti della mappa ecc.)
+ * Created by Lux on 23/09/2015.
  */
-public class AnimStrike extends AbstractAnimation {
+public class ObjectAnimation extends AbstractAnimation {
 
-    private Animation animation;
+    private boolean flipX;//the texture should be mirrored?
+    private SpritesProvider.OggettoStatico type;
+    private GridPoint2 absolutePosition;
     private TextureRegion[] frames;
+    private Animation animation;
     private SpriteBatch spriteBatch;
+
     private TextureRegion currentFrame;
 
     private float stateTime;
     private float frameDuration = 0;
-    private GridPoint2 absolutePosition;
+    private int scaleX;
 
-    private Class modelClass;
-    private boolean flipX;//the texture should be mirrored?
-
-    public AnimStrike() {
-        this.frameDuration = 0.33f;
-    }
-
-    public AnimStrike(Class modelClass, GridPoint2 position, boolean flipX) {
+    public ObjectAnimation(SpritesProvider.OggettoStatico type, GridPoint2 position, boolean flipX){
         super();
         this.frameDuration = 0.05f;
-        this.modelClass = modelClass;
-        this.absolutePosition = Utilities.convertToAbsolutePos(position);
-        this.flipX = flipX;
+        this.type=type;
+        this.absolutePosition=position;
+        this.flipX=flipX;
     }
 
     public void create() {
-        if (this.modelClass == DefaultHero.class) {
-            frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, SpritesProvider.Azione.STRIKE);
-        } else {    //TODO gestire tutti i nemici
-            frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.ORC_BASE, SpritesProvider.Azione.STRIKE);
-        }
+        frames = SpritesProvider.getStaticSprites(type);
+
         animation = new Animation(frameDuration, frames);
         spriteBatch = GameBatch.get();
         stateTime = 0f;
@@ -63,19 +54,18 @@ public class AnimStrike extends AbstractAnimation {
         spriteBatch.begin();
         if((!currentFrame.isFlipX() && flipX) || (currentFrame.isFlipX() && !flipX))
             currentFrame.flip(true, false);
-        spriteBatch.draw(currentFrame, absolutePosition.x, absolutePosition.y, 32, 32);
+
+        spriteBatch.draw(currentFrame, absolutePosition.x, absolutePosition.y, 64, 64);
         spriteBatch.end();
 
         if (animation.isAnimationFinished(stateTime)) {
-            this.dispose();
+            stateTime = 0f;
         }
     }
 
     @Override
     public void dispose() {
         super.dispose();
-
-        //TODO libera tutte le risorse
-        this.fireAnimationEndedEvent();
     }
+
 }

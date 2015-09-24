@@ -3,8 +3,10 @@ package com.panacea.RufusPyramid.game.view.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -13,6 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.panacea.RufusPyramid.game.view.SpritesProvider;
+import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
+
+import java.util.ArrayList;
 
 /**
  * Created by gio on 30/07/15.
@@ -37,6 +43,9 @@ public class MenuScreen implements Screen {
 //    private Label title;
     private Texture texture;
     private Image title;
+    private ArrayList<ObjectAnimation> menuAnimations;
+    private ObjectAnimation fireAnim;
+    private Sound introMusic = Gdx.audio.newSound(Gdx.files.internal("data/sfx/intro.mp3"));
 
     @Override
     public void show() {
@@ -53,7 +62,7 @@ public class MenuScreen implements Screen {
         title = new Image(texture);
         stage.addActor(title);
 
-        buttonPlay.addListener(new ClickListener(){
+        buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //Same way we moved here from the Splash Screen
@@ -62,26 +71,36 @@ public class MenuScreen implements Screen {
 
                 //FIXME sembra che per poter cliccare il pulsante bisogna fare un doppioclick.... perchè?
 //                ((Game)Gdx.app.getApplicationListener()).setScreen(new SplashScreen());
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                dispose();
             }
         });
-        buttonExit.addListener(new ClickListener(){
+        buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
                 // or System.exit(0);
             }
         });
-
         //The elements are displayed in the order you add them.
         //The first appear on top, the last at the bottom.
         table.add(title).padBottom(40).row();
         table.add(buttonPlay).size(150, 60).padBottom(20).row();
-        table.add(buttonExit).size(150,60).padBottom(20).row();
+        table.add(buttonExit).size(150, 60).padBottom(20).row();
 
         table.setFillParent(true);
         stage.addActor(table);
 
+        this.menuAnimations = new ArrayList<ObjectAnimation>();
+        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(-115, 150), false));
+        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(65, 150), false));
+
+        for (ObjectAnimation obj: menuAnimations) {
+            obj.create();
+        }
+
+        introMusic.play();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -91,6 +110,10 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
+
+        for (ObjectAnimation obj: menuAnimations) {
+            obj.render(delta);
+        }
     }
 
     @Override
@@ -117,5 +140,9 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+        for (ObjectAnimation obj: menuAnimations) {
+            obj.dispose();
+        }
+        introMusic.dispose();
     }
 }
