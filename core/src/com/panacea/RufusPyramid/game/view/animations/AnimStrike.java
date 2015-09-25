@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.view.animations;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,7 +10,11 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameBatch;
+import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe che permette di effettuare l'animazione di una camminata.
@@ -30,10 +35,12 @@ public class AnimStrike extends AbstractAnimation {
     private Class modelClass;
     private boolean flipX;//the texture should be mirrored?
 
+    private Sound slashSound;
+    private int randSound;
+
     public AnimStrike() {
         this.frameDuration = 0.33f;
     }
-
     public AnimStrike(Class modelClass, GridPoint2 position, boolean flipX) {
         super();
         this.frameDuration = 0.05f;
@@ -43,8 +50,12 @@ public class AnimStrike extends AbstractAnimation {
     }
 
     public void create() {
+        randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_SLICE.getValue()-1);
+        SoundsProvider.get().loadSound(SoundsProvider.Sounds.COMBAT_SLICE);
+
         if (this.modelClass == DefaultHero.class) {
             frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, SpritesProvider.Azione.STRIKE);
+
         } else {    //TODO gestire tutti i nemici
             frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.ORC_BASE, SpritesProvider.Azione.STRIKE);
         }
@@ -55,8 +66,13 @@ public class AnimStrike extends AbstractAnimation {
 
     @Override
     public void render(float delta) {
+        if(SoundsProvider.get().isLoaded(SoundsProvider.Sounds.COMBAT_SLICE)) {
+            if(slashSound == null) {
+                slashSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_SLICE)[randSound];
+                slashSound.play();
+            }
+        }
         stateTime += delta;
-
         animation.getKeyFrameIndex(stateTime);
         currentFrame = animation.getKeyFrame(stateTime, false);
 

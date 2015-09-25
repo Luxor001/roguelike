@@ -1,5 +1,8 @@
 package com.panacea.RufusPyramid.game.view.animations;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +12,7 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameBatch;
+import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
 /**
@@ -36,8 +40,12 @@ public class AnimWalk extends AbstractAnimation {
     private Vector2 endPos;
     private Vector2 direction;
     private boolean flipX;//the texture should be mirrored?
+    private AssetManager soundsManager;
 
     private Class modelClass;
+
+    Sound footsteps;
+    int randSound;
 
     public AnimWalk() {
         this.frameDuration = 0.33f;
@@ -56,6 +64,9 @@ public class AnimWalk extends AbstractAnimation {
     public void create() {
         if (this.modelClass == DefaultHero.class) {
             frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, SpritesProvider.Azione.WALK);
+            randSound = Utilities.randInt(0, SoundsProvider.Sounds.FOOTSTEPS_INTERNAL.getValue() - 1);
+            SoundsProvider.get().loadSound(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL);
+
         } else {    //TODO gestire tutti i nemici
             frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.ORC_BASE, SpritesProvider.Azione.WALK);
         }
@@ -82,6 +93,12 @@ public class AnimWalk extends AbstractAnimation {
 
     @Override
     public void render(float delta) {
+        if(SoundsProvider.get().isLoaded(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL)) {
+            if(footsteps == null) {
+                footsteps = SoundsProvider.get().getSound(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL)[randSound];
+                footsteps.play(0.1f);
+            }
+        }
         boolean toDispose = false;
         deltaMovement.set(velocity).scl(delta);
 

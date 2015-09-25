@@ -81,7 +81,6 @@ public class GameDrawer extends ViewObject {
         DefaultHero hero= GameModel.get().getHero();
         GameCamera.get().position.set(hero.getAbsoluteTickPosition(), 0); /*Update the camera based on the hero position*/
 
-
         GameCamera.get().update();
         GameBatch.get().setProjectionMatrix(GameCamera.get().combined);
 
@@ -89,10 +88,9 @@ public class GameDrawer extends ViewObject {
             view.render(delta);
         }
 
-
         if(i == 100) {
-            System.out.println(Gdx.app.getJavaHeap());
-            System.out.println(Gdx.app.getNativeHeap());
+            System.out.println(Gdx.app.getJavaHeap() / 1024);
+            System.out.println(Gdx.app.getNativeHeap() / 1024);
             i=0;
         }i++;
 
