@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.common.Utilities.Directions;
 
+import org.xguzm.pathfinding.grid.GridCell;
+import org.xguzm.pathfinding.grid.NavigationGrid;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,6 +56,21 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
 
         newMap.setMapContainer(mapContainer);
         newMap.setSpawnPoint(spawnPoint);
+
+        GridCell[][] grid = new GridCell[mapContainer.cLenght()][ mapContainer.rLenght()];
+        for(int i=0; i < mapContainer.rLenght(); i++){ //y
+            for(int j=0; j < mapContainer.cLenght(); j++){ //x
+                GridCell newCell = new GridCell(j,i);
+                Tile currTile = mapContainer.getTile(i,j);
+                if(currTile.getType() == Tile.TileType.Walkable || currTile.getType() == Tile.TileType.Door )
+                    newCell.setWalkable(true);
+                else
+                    newCell.setWalkable(false);
+                grid[j][i] = newCell;
+            }
+        }
+        newMap.setPathGrid(grid);
+        newMap.navGrid = new NavigationGrid<GridCell>(grid);
         return newMap; //TODO: impostare logica livello (qui è 1, perchè? )
     }
 

@@ -2,6 +2,9 @@ package com.panacea.RufusPyramid.map;
 
 import com.panacea.RufusPyramid.game.items.Item;
 
+import org.xguzm.pathfinding.grid.GridCell;
+import org.xguzm.pathfinding.grid.NavigationGrid;
+
 import java.util.List;
 
 /**
@@ -14,7 +17,8 @@ public class Map {
     private Tile spawnPosition;
     private MapType type;
     private List<Item> itemsInMap;
-
+    private GridCell[][] pathGrid;
+   public NavigationGrid<GridCell> navGrid;
     public enum MapType{ //defines the "style" of the map, such the texture itself on the drawer
         DUNGEON_COBBLE,
         DUNGEON_SAND,
@@ -57,6 +61,12 @@ public class Map {
 
     public List<Item> getItems(){
         return itemsInMap;
+    }
+    public GridCell[][] getPathGrid(){
+        return pathGrid;
+    }
+    public void setPathGrid(GridCell[][] pathGrid){
+        this.pathGrid= pathGrid;
     }
 
 }

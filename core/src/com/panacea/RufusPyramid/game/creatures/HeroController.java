@@ -10,6 +10,12 @@ import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
 
+import org.xguzm.pathfinding.grid.GridCell;
+import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
+import org.xguzm.pathfinding.grid.finders.GridFinderOptions;
+
+import java.util.List;
+
 /**
  * Created by gio on 11/07/15.
  */
@@ -49,6 +55,15 @@ public class HeroController {
                 return;
             }
         }
+
+
+            GridFinderOptions opt = new GridFinderOptions();
+            opt.allowDiagonal = false;
+            AStarGridFinder<GridCell> finder = new AStarGridFinder(GridCell.class, opt);
+
+            List<GridCell> pathToEnd = finder.findPath(hero.getPosition().getPosition().x, hero.getPosition().getPosition().y, hero.getPosition().getPosition().x + 3, hero.getPosition().getPosition().y + 1, GameModel.get().getCurrentMap().navGrid);
+            if(pathToEnd == null)
+                System.out.println("FALLITO!");
 
         //Altrimenti semplicemente mi sposto lì
 

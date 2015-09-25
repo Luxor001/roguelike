@@ -18,6 +18,8 @@ import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Tile;
 
+import org.xguzm.pathfinding.grid.GridCell;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,7 @@ public abstract class AbstractCreature implements ICreature {
     private Vector2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
 
     private boolean flipX;
+    public int sigthLength = 6; //TODO : Da mettere da costruttore!
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
@@ -159,6 +162,7 @@ public abstract class AbstractCreature implements ICreature {
             this.fireActionChosenEvent(
                     new ActionChosenEvent(new MoveAction(this, Utilities.Directions.EAST)),
                     this);
+
         }
     }
 
