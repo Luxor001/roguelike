@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
@@ -8,6 +9,8 @@ import com.panacea.RufusPyramid.game.actions.PassAction;
  * Created by gio on 22/07/15.
  */
 public class Enemy extends AbstractCreature {
+    private CreatureAI creatureAI;
+
     public Enemy(String name, String description, int maximumHP, double attack, double defence, double speed) {
         super(name, description, maximumHP, attack, defence, speed);
     }
@@ -19,8 +22,10 @@ public class Enemy extends AbstractCreature {
      */
     @Override
     public void chooseNextAction(ActionResult resultPreviousAction) {
+        if(creatureAI == null)
+            creatureAI = new CreatureAI(this, GameModel.get().getHero());
+        creatureAI.chooseNextAction();
         IAction action = new PassAction();
-
         this.fireActionChosenEvent(action);
     }
 }

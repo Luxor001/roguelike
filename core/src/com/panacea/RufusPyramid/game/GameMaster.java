@@ -58,6 +58,8 @@ public class GameMaster {
         if (someoneIsPlaying)   return;
         someoneIsPlaying = true;
 
+
+
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
             //Al primo avvio this.currentAgent == -1, viene inizializzata dalla prima chiamata a turnToNextAgent
 

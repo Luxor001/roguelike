@@ -1,11 +1,8 @@
 package com.panacea.RufusPyramid.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
@@ -16,12 +13,10 @@ import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.items.ChestItem;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
-import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,8 +31,6 @@ public class GameModel {
     private ArrayList<ICreature> creatures;
     private Diary diary;
     private ArrayList<Item> items;
-
-
     /**
      * Ritorna l'unica istanza (singleton) di GameModel.
      * @return l'unica istanza di GameModel.
@@ -82,12 +75,17 @@ public class GameModel {
         this.hero.setAbsoluteTickPosition(new Vector2(absolute.x,absolute.y));
         this.addCreature(this.hero);
 
-        Enemy newEnemy;
+     /*   Enemy newEnemy;
         for(int i=0; i < 10; i++) {
             newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
             newEnemy.setPosition(newMap.getRandomEnemyPosition());
             this.addCreature(newEnemy);
-            // gm.addAgent(e2);*/
+        }*/
+        Enemy newEnemy;
+        for(int i=0; i < 1; i++) {
+            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
+            newEnemy.setPosition(getCurrentMap().getMapContainer().getTile(new GridPoint2(hero.getPosition().getPosition().x + 3, hero.getPosition().getPosition().y)));
+            this.addCreature(newEnemy);
         }
 
         for(int i=0; i < 5; i++) {
@@ -166,4 +164,5 @@ public class GameModel {
         }
         return null;
     }
+
 }

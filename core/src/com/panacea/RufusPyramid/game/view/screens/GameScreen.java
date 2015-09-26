@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.creatures.Enemy;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 
@@ -26,6 +28,10 @@ public class GameScreen implements Screen {
         gm.addAgent(e1);
         gm.addAgent(e2);*/
         gm.addAgent(GameModel.get().getHero());
+        for(ICreature creature : GameModel.get().getCreatures()){
+            if(creature instanceof Enemy)
+                gm.addAgent(creature);
+        }
 
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();

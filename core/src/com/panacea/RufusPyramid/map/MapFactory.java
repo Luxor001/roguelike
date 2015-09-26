@@ -7,7 +7,6 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.common.Utilities.Directions;
 
 import org.xguzm.pathfinding.grid.GridCell;
-import org.xguzm.pathfinding.grid.NavigationGrid;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,19 +57,19 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         newMap.setSpawnPoint(spawnPoint);
 
         GridCell[][] grid = new GridCell[mapContainer.cLenght()][ mapContainer.rLenght()];
-        for(int i=0; i < mapContainer.rLenght(); i++){ //y
-            for(int j=0; j < mapContainer.cLenght(); j++){ //x
-                GridCell newCell = new GridCell(j,i);
-                Tile currTile = mapContainer.getTile(i,j);
+        for(int i=0; i < mapContainer.cLenght(); i++){
+            for(int j=0; j < mapContainer.rLenght(); j++){
+                GridCell newCell = new GridCell(i,j);
+                Tile currTile = mapContainer.getTile(j,i);
                 if(currTile.getType() == Tile.TileType.Walkable || currTile.getType() == Tile.TileType.Door )
                     newCell.setWalkable(true);
                 else
                     newCell.setWalkable(false);
-                grid[j][i] = newCell;
+
+                grid[i][j] = newCell;
             }
         }
         newMap.setPathGrid(grid);
-        newMap.navGrid = new NavigationGrid<GridCell>(grid);
         return newMap; //TODO: impostare logica livello (qui è 1, perchè? )
     }
 

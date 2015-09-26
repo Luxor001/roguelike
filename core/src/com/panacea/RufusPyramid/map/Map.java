@@ -17,8 +17,10 @@ public class Map {
     private Tile spawnPosition;
     private MapType type;
     private List<Item> itemsInMap;
+
     private GridCell[][] pathGrid;
-   public NavigationGrid<GridCell> navGrid;
+    private NavigationGrid<GridCell> navGrid;
+
     public enum MapType{ //defines the "style" of the map, such the texture itself on the drawer
         DUNGEON_COBBLE,
         DUNGEON_SAND,
@@ -67,6 +69,10 @@ public class Map {
     }
     public void setPathGrid(GridCell[][] pathGrid){
         this.pathGrid= pathGrid;
+        this.navGrid = new NavigationGrid<GridCell>(pathGrid);
     }
+    public NavigationGrid<GridCell> getNavGrid(){
+        return this.navGrid;
 
+    }
 }
