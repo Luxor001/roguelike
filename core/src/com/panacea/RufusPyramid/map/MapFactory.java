@@ -65,7 +65,6 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
                     newCell.setWalkable(true);
                 else
                     newCell.setWalkable(false);
-
                 grid[i][j] = newCell;
             }
         }
