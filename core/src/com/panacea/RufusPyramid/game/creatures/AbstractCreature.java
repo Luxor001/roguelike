@@ -18,8 +18,6 @@ import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Tile;
 
-import org.xguzm.pathfinding.grid.GridCell;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +76,6 @@ public abstract class AbstractCreature implements ICreature {
         this.healthBar.setHeight(DEFAULT_HEALTHBAR_HEIGHT);
         this.healthBar.setWidth(DEFAULT_HEALTHBAR_WIDTH );
         this.healthBar.setVisible(false);
-
         this.flipX = false;
     }
 

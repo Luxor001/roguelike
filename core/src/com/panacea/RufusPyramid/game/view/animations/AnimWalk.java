@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.view.animations;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
@@ -43,6 +42,7 @@ public class AnimWalk extends AbstractAnimation {
     private AssetManager soundsManager;
 
     private Class modelClass;
+    private ICreature creature;
 
     Sound footsteps;
     int randSound;
@@ -51,7 +51,7 @@ public class AnimWalk extends AbstractAnimation {
         this.frameDuration = 0.33f;
     }
 
-    public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint, float speed, boolean flipX) {
+    public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint, float speed, boolean flipX, ICreature creature) {
         super();
         this.frameDuration = 0.1f;  //TODO imposta frameDuration in base alla velocità! Circa speed/200, ma deve essere in proporzione inversa
         this.startPoint = startPoint;
@@ -59,6 +59,7 @@ public class AnimWalk extends AbstractAnimation {
         this.speed = speed;
         this.modelClass = modelClass;
         this.flipX = flipX;
+        this.creature = creature;
     }
 
     public void create() {
@@ -93,7 +94,7 @@ public class AnimWalk extends AbstractAnimation {
 
     @Override
     public void render(float delta) {
-        if(SoundsProvider.get().isLoaded(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL)) {
+        if(SoundsProvider.get().isLoaded(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL) && creature instanceof DefaultHero) {
             if(footsteps == null) {
                 footsteps = SoundsProvider.get().getSound(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL)[randSound];
                 footsteps.play(0.1f);
@@ -102,8 +103,7 @@ public class AnimWalk extends AbstractAnimation {
         boolean toDispose = false;
         deltaMovement.set(velocity).scl(delta);
 
-        if(this.modelClass == DefaultHero.class)
-            GameModel.get().getHero().setAbsoluteTickPosition(currentPos);
+        creature.setAbsoluteTickPosition(currentPos);
         if (currentPos.dst2(endPos) > deltaMovement.len2()) { //Se la distanza tra la posiz. attuale e la posiz. finale è minore di deltaMovement
             currentPos.add(deltaMovement);
             stateTime += delta;

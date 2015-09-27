@@ -77,17 +77,10 @@ public class GameModel {
 
        Enemy newEnemy;
         for(int i=0; i < 10; i++) {
-            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
+            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 10, 5, 5, 5);
             newEnemy.setPosition(newMap.getRandomEnemyPosition());
             this.addCreature(newEnemy);
         }
-
-   /*     Enemy newEnemy;
-        for(int i=0; i < 1; i++) {
-            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
-            newEnemy.setPosition(getCurrentMap().getMapContainer().getTile(new GridPoint2(hero.getPosition().getPosition().x + 3, hero.getPosition().getPosition().y)));
-            this.addCreature(newEnemy);
-        }*/
 
         for(int i=0; i < 5; i++) {
             Item newItem;

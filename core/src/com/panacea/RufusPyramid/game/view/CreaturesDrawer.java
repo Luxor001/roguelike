@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
@@ -133,13 +132,12 @@ public class CreaturesDrawer extends ViewObject {
                     break;
             }
 
-
-
             Vector2 position = creature.getAbsoluteTickPosition();
             HealthBar health = creature.getHealthBar();
             if(position != null && health.isVisible()) {
                 SpriteBatch batch = GameBatch.get();
                 batch.begin();
+                health.setValue(creature.getHPCurrent());
                 health.setX(position.x + 5);
                 health.setY(position.y - 10);
                 health.draw(batch, 1);
@@ -204,7 +202,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 80.0f, creature.getFlipX());
+        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 80.0f, creature.getFlipX(), creature);
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(creature.getID(), currentAnimation);

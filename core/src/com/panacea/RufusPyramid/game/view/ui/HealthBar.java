@@ -278,11 +278,4 @@ public class HealthBar extends Table{
             this.progress = style.progress;
         }
     }
-
-    public boolean isVisible(){
-        return isVisible;
-    }
-    public void isVisible(boolean visible){
-        this.isVisible = visible;
-    }
 }

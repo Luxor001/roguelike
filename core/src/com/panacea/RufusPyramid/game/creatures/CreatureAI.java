@@ -8,7 +8,6 @@ import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 
-import org.xguzm.pathfinding.PathFinderOptions;
 import org.xguzm.pathfinding.grid.GridCell;
 import org.xguzm.pathfinding.grid.NavigationGrid;
 import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
@@ -65,7 +64,6 @@ public class CreatureAI {
                 }
             }
             else{
-
                 //currentState = State.LOSTSIGHT;
             }
         }
@@ -114,5 +112,9 @@ public class CreatureAI {
             GridCell neighbor = neighbors.get(j);
             grid.setCell(neighbor.getX(), neighbor.getY(),new GridCell(neighbor.getX(), neighbor.getY(), neighbor.isWalkable()));
         }
+    }
+
+    public State getCurrentState(){
+        return currentState;
     }
 }
