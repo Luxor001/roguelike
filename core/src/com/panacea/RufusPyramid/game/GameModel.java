@@ -75,21 +75,21 @@ public class GameModel {
         this.hero.setAbsoluteTickPosition(new Vector2(absolute.x,absolute.y));
         this.addCreature(this.hero);
 
-     /*   Enemy newEnemy;
+       Enemy newEnemy;
         for(int i=0; i < 10; i++) {
             newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
             newEnemy.setPosition(newMap.getRandomEnemyPosition());
             this.addCreature(newEnemy);
-        }*/
-        Enemy newEnemy;
+        }
+
+   /*     Enemy newEnemy;
         for(int i=0; i < 1; i++) {
             newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 100, 5, 5, 5);
             newEnemy.setPosition(getCurrentMap().getMapContainer().getTile(new GridPoint2(hero.getPosition().getPosition().x + 3, hero.getPosition().getPosition().y)));
             this.addCreature(newEnemy);
-        }
+        }*/
 
         for(int i=0; i < 5; i++) {
-            long seed = System.nanoTime();
             Item newItem;
             Tile randomPos;
             ArrayList<Effect> itemEffects = new ArrayList<Effect>();

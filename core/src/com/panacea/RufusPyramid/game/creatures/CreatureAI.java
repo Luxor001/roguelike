@@ -1,8 +1,14 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.actions.AttackAction;
+import com.panacea.RufusPyramid.game.actions.IAction;
+import com.panacea.RufusPyramid.game.actions.MoveAction;
+import com.panacea.RufusPyramid.game.actions.PassAction;
 
+import org.xguzm.pathfinding.PathFinderOptions;
 import org.xguzm.pathfinding.grid.GridCell;
 import org.xguzm.pathfinding.grid.NavigationGrid;
 import org.xguzm.pathfinding.grid.finders.AStarGridFinder;
@@ -24,7 +30,6 @@ public class CreatureAI {
     private State currentState;
     private AbstractCreature creature;
     private DefaultHero hero;
-    private ICreature currentTarget;
 
     GridFinderOptions pathFinderOptions;
     public CreatureAI(AbstractCreature creature, DefaultHero hero){
@@ -35,54 +40,79 @@ public class CreatureAI {
         pathFinderOptions = new GridFinderOptions();
         pathFinderOptions.allowDiagonal = false;
         pathFinderOptions.isYDown = false;
+        pathFinderOptions.orthogonalMovementCost = 0;
+        pathFinderOptions.diagonalMovementCost = 0;
+
     }
 
-    public void chooseNextAction(){
+    public IAction chooseNextAction(){
 
         List<GridCell> path = getPath(creature, hero);
-
+        IAction chosenAction = new PassAction();
         if(path != null) { //se il giocatore è raggiungibile..
             int distance = path.size();
-            if (path.size() < creature.sigthLength)
+            if (path.size() < creature.sigthLength) {
                 System.out.println("ti vedo!");
-            if (currentState == State.FOLLOWING || currentState == State.STANDING || currentState == State.ROAMING) {
-                if (distance <= 1) {
-                    currentState = State.ATTACKING;
-                    //doattack()
-                } else {
-                    currentState = State.FOLLOWING;
-                    //moveOneStep
+                if (currentState == State.FOLLOWING || currentState == State.STANDING || currentState == State.ROAMING || currentState == State.ATTACKING) {
+                    if (distance <= 1) {
+                        currentState = State.ATTACKING;
+                        chosenAction = new AttackAction(creature, hero);
+                    } else {
+                        currentState = State.FOLLOWING;
+                        Utilities.Directions directionToMove = Utilities.getDirectionFromCoords(creature.getPosition().getPosition(), new GridPoint2(path.get(0).getX(), path.get(0).getY()));
+                        chosenAction = new MoveAction(creature, directionToMove);
+                    }
                 }
             }
+            else{
+
+                //currentState = State.LOSTSIGHT;
+            }
         }
-        else{
-            //passturn
-        }
+        return  chosenAction;
     }
 
     private List<GridCell> getPath(ICreature startingCreature, ICreature arrivalCreature){
+        List<GridCell> pathToEnd = null;
+        try {
+            AStarGridFinder<GridCell> finder = new AStarGridFinder(GridCell.class, pathFinderOptions);
 
-        AStarGridFinder<GridCell> finder = new AStarGridFinder(GridCell.class, pathFinderOptions);
+            GridPoint2 startingCreaturePos = startingCreature.getPosition().getPosition();
+            GridPoint2 arrivalCreaturePos = arrivalCreature.getPosition().getPosition();
 
-        GridPoint2 startingCreaturePos = startingCreature.getPosition().getPosition();
-        GridPoint2 arrivalCreaturePos = arrivalCreature.getPosition().getPosition();
+            GridCell[][] gridcells = GameModel.get().getCurrentMap().getPathGrid();
+            NavigationGrid<GridCell> grid = new  NavigationGrid<GridCell>(gridcells, true);
+            pathToEnd = finder.findPath(startingCreaturePos.x, startingCreaturePos.y, arrivalCreaturePos.x, arrivalCreaturePos.y, grid);
 
-        GridCell[][] gridcells = GameModel.get().getCurrentMap().getPathGrid();
-        NavigationGrid<GridCell> grid = new NavigationGrid<GridCell>(gridcells);
-        List<GridCell> pathToEnd = finder.findPath( startingCreaturePos.x, startingCreaturePos.y, arrivalCreaturePos.x, arrivalCreaturePos.y, grid);
-        if(pathToEnd == null)
-            System.out.println("FALLITO!");
-        else
-            for(int i=0; i < pathToEnd.size(); i++){ /*rinizializzazione della grid! riporto tutto allo stato originario, sennò stà libreria mi scasina tutto secondo calcoli suoi!*/
-                GridCell currCell = pathToEnd.get(i);
-                List<GridCell> neighbors = grid.getNeighbors(currCell, pathFinderOptions );
-                for(int j = 0; j < neighbors.size();j++) { //riinizializzo anche i "vicini" dei nodi toccati, che a quanto pare vengono anch'essi scasinati
-                    GridCell neighbor = neighbors.get(j);
-                    gridcells[neighbor.getX()][neighbor.getY()] = new GridCell(neighbor.getX(),neighbor.getY(),neighbor.isWalkable());
-                }
-                gridcells[currCell.getX()][currCell.getY()] = new GridCell(currCell.getX(), currCell.getY(), currCell.isWalkable());
-            }
+             if (pathToEnd == null)
+                System.out.println("FALLITO!");
+            else {
+                 GridCell currCell;
+                 for (int i = 0; i < pathToEnd.size(); i++) { /*rinizializzazione della grid! riporto tutto allo stato originario, sennò stà libreria mi scasina tutto secondo calcoli suoi!*/
+                     currCell = pathToEnd.get(i);
+                     reinitializeNeighbors(currCell, grid);
+                     currCell = new GridCell(currCell.getX(), currCell.getY(), currCell.isWalkable());
+                 }
+                 currCell = grid.getCell(startingCreaturePos.x, startingCreaturePos.y);
+                 currCell = new GridCell(startingCreaturePos.x, startingCreaturePos.y, currCell.isWalkable());
+                 reinitializeNeighbors(currCell, grid);
 
+                 currCell = grid.getCell(arrivalCreaturePos.x, arrivalCreaturePos.y);
+                 currCell = new GridCell(arrivalCreaturePos.x, arrivalCreaturePos.y, currCell.isWalkable());
+                 reinitializeNeighbors(currCell, grid);
+             }
+        }
+        catch (Exception e){
+
+        }
         return pathToEnd;
+    }
+
+    private void reinitializeNeighbors(GridCell currCell, NavigationGrid<GridCell> grid){
+        List<GridCell> neighbors = grid.getNeighbors(currCell, pathFinderOptions);
+        for (int j = 0; j < neighbors.size(); j++) { //riinizializzo anche i "vicini" dei nodi toccati, che a quanto pare vengono anch'essi scasinati
+            GridCell neighbor = neighbors.get(j);
+            grid.setCell(neighbor.getX(), neighbor.getY(),new GridCell(neighbor.getX(), neighbor.getY(), neighbor.isWalkable()));
+        }
     }
 }

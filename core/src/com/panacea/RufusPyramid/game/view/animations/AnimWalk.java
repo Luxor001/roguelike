@@ -102,7 +102,8 @@ public class AnimWalk extends AbstractAnimation {
         boolean toDispose = false;
         deltaMovement.set(velocity).scl(delta);
 
-        GameModel.get().getHero().setAbsoluteTickPosition(currentPos);
+        if(this.modelClass == DefaultHero.class)
+            GameModel.get().getHero().setAbsoluteTickPosition(currentPos);
         if (currentPos.dst2(endPos) > deltaMovement.len2()) { //Se la distanza tra la posiz. attuale e la posiz. finale è minore di deltaMovement
             currentPos.add(deltaMovement);
             stateTime += delta;

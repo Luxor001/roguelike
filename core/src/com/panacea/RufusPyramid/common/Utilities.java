@@ -51,6 +51,23 @@ public class Utilities {
         }
     }
 
+    public static Directions getDirectionFromCoords(GridPoint2 startingPos, GridPoint2 arrivalPos){
+
+        Directions direction = null;
+        if(startingPos.x == arrivalPos.x){
+            if(startingPos.y > arrivalPos.y)
+                direction = Directions.SOUTH;
+            else
+                direction = Directions.NORTH;
+        }
+        else{
+            if(startingPos.x > arrivalPos.x)
+                direction = Directions.WEST;
+            else
+                direction = Directions.EAST;
+        }
+        return direction;
+    }
     public static GridPoint2 convertToAbsolutePos(GridPoint2 position){
         GridPoint2 newPosition= new GridPoint2(position.x * DEFAULT_BLOCK_WIDTH, position.y * DEFAULT_BLOCK_HEIGHT);
         return newPosition;
@@ -59,5 +76,4 @@ public class Utilities {
         GridPoint2 newPosition= new GridPoint2(position.x / DEFAULT_BLOCK_WIDTH, position.y / DEFAULT_BLOCK_HEIGHT);
         return newPosition;
     }
-
 }

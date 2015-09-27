@@ -24,8 +24,7 @@ public class Enemy extends AbstractCreature {
     public void chooseNextAction(ActionResult resultPreviousAction) {
         if(creatureAI == null)
             creatureAI = new CreatureAI(this, GameModel.get().getHero());
-        creatureAI.chooseNextAction();
-        IAction action = new PassAction();
+        IAction action = creatureAI.chooseNextAction();
         this.fireActionChosenEvent(action);
     }
 }
