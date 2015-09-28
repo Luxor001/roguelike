@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.view.GameBatch;
 
 /**
@@ -24,7 +25,10 @@ public class AnimDamage extends AbstractAnimation {
 
     public AnimDamage(GridPoint2 creaturePosition, int damage) {
         this.text = Integer.toString(damage);
-        this.creaturePosition = new Vector2(creaturePosition.x, creaturePosition.y);
+        GridPoint2 absolutePosition = Utilities.convertToAbsolutePos(creaturePosition);
+        this.creaturePosition = new Vector2(
+                absolutePosition.x + Utilities.DEFAULT_BLOCK_WIDTH/2,
+                absolutePosition.y + Utilities.DEFAULT_BLOCK_HEIGHT);
 
         this.font = new BitmapFont();
         this.fontColor = Color.WHITE;
