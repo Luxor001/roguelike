@@ -63,6 +63,7 @@ public class MenuScreen implements Screen {
 
         buttonPlay = new TextButton("Play", skin);
         buttonExit = new TextButton("Exit", skin);
+
 //        title = new Label("Game Title", skin);
         texture = new Texture(Gdx.files.internal("data/title.png"));
         title = new Image(texture);
