@@ -1,7 +1,9 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.InteractAction;
@@ -19,6 +21,13 @@ public class HeroController {
 
     public HeroController(DefaultHero hero) {
         this.hero = hero;
+        hero.addCreatureDeadListener(new CreatureDeadListener() {
+            @Override
+            public void changed(CreatureDeadEvent event, Object source) {
+                Gdx.app.log("BANANA", "IS REALLY DEAD");
+                HeroController.this.endGame();
+            }
+        });
     }
 
     public HeroController(DefaultHero hero, MapContainer spawnMap, Tile startingPosition) {
@@ -97,5 +106,8 @@ public class HeroController {
         return GameModel.get().getCurrentMap().getMapContainer().getTile(pos);
     }
 
-
+    private void endGame() {
+        //TODO gameOver
+        GameController.endGame();
+    }
 }

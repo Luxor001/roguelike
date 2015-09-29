@@ -9,6 +9,12 @@ import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.Enemy;
+import com.panacea.RufusPyramid.game.creatures.HeroController;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +39,9 @@ public class GameMaster {
     private int currentAgent;
     private boolean someoneIsPlaying;
 
+    private HeroController heroController;
+    private HeroInputManager heroInput;
+
     private ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
 
     public GameMaster() {
@@ -40,6 +49,22 @@ public class GameMaster {
         this.commonActionPerformedListener = getActionChosenListener();
         this.someoneIsPlaying = false;
         this.currentAgent = -1;
+
+        this.init();
+    }
+
+    private void init() {
+        for(ICreature creature : GameModel.get().getCreatures()){
+            if(creature instanceof Enemy)
+                this.addAgent(creature);
+        }
+
+        DefaultHero hero = GameModel.get().getHero();
+        this.addAgent(hero);
+
+        this.heroController = new HeroController(hero);
+        this.heroInput = new HeroInputManager(this.heroController);
+        InputManager.get().addProcessor(this.heroInput);
     }
 
     public void addAgent(IAgent newAgent) {
@@ -153,5 +178,11 @@ public class GameMaster {
                     tempEffect.setTurns(tempEffect.getTurns()-1);
              }
          }
+    }
+
+    public void disposeGame() {
+        //TODO
+        this.currentAgent = -1;
+        this.agentsPlaying.clear();
     }
 }

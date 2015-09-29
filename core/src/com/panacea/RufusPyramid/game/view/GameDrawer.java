@@ -78,7 +78,12 @@ public class GameDrawer extends ViewObject {
     public void render(float delta) {
         super.render(delta);
 
-        DefaultHero hero= GameModel.get().getHero();
+        if (GameModel.get() == null) {
+            this.dispose();
+            return;
+        }
+
+        DefaultHero hero = GameModel.get().getHero();
         GameCamera.get().position.set(hero.getAbsoluteTickPosition(), 0); /*Update the camera based on the hero position*/
 
         GameCamera.get().update();

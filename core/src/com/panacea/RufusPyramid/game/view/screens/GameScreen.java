@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.view.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
@@ -12,30 +13,13 @@ import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 public class GameScreen implements Screen {
     GameDrawer objectsDrawer;
-    GameMaster gm;
 
     public void show() {
+        GameController.initializeGame();
         Gdx.input.setInputProcessor(InputManager.get());
-        GameModel.createInstance();
-        this.gm = new GameMaster();
-/*
-        ICreature e1 = new Enemy("Enemy", "", 10, 1, 1, 1);
-        e1.setPosition(new Tile(new GridPoint2(64, 0), Tile.TileType.Solid));
-        GameModel.get().addCreature(e1);
-        ICreature e2 = new ThiefEnemy("Thief", "", 10, 1, 1, 1);
-        e2.setPosition(new Tile(new GridPoint2(0, 64), Tile.TileType.Solid));
-        GameModel.get().addCreature(e2);
-        gm.addAgent(e1);
-        gm.addAgent(e2);*/
-        gm.addAgent(GameModel.get().getHero());
-        for(ICreature creature : GameModel.get().getCreatures()){
-            if(creature instanceof Enemy)
-                gm.addAgent(creature);
-        }
 
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
-//        Gdx.app.log(GameScreen.class.toString(), "show() di GameScreen");
     }
 
     public void render(float delta) {
@@ -43,9 +27,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //richiama uno step della turnazione
-        this.gm.step();
+        GameController.step();
 
-//        objectsDrawer.render(Gdx.graphics.getDeltaTime());
         objectsDrawer.render(delta);
     }
 

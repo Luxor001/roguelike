@@ -158,4 +158,8 @@ public class GameModel {
         return null;
     }
 
+    public void disposeAll() {
+        //TODO per ora non fa niente, non credo sia necessario fare qualcosa
+        GameModel.SINGLETON = null;
+    }
 }

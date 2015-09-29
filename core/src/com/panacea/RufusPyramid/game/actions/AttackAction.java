@@ -44,7 +44,6 @@ public class AttackAction implements IAction {
 
         GameDrawer.get().getCreaturesDrawer().startStrike(attacker);
         int damage = this.getDamage(attacker.getCurrentStats().getAttack(), attacked.getCurrentStats().getDefence());
-        this.attacked.setHPCurrent(this.attacked.getHPCurrent() - damage);
 
         if (attacker.equals(GameModel.get().getHero())) {
             GameModel.get().getDiary().addLine("Hai attaccato " + attacked.getName() + "!");
@@ -52,6 +51,7 @@ public class AttackAction implements IAction {
             GameModel.get().getDiary().addLine(attacker.getName() + " ti ha attaccato!");
         }
         GameDrawer.get().getCreaturesDrawer().startDamage(this.attacked.getPosition().getPosition(), damage);
+        this.attacked.setHPCurrent(this.attacked.getHPCurrent() - damage);
         return true;
     }
 

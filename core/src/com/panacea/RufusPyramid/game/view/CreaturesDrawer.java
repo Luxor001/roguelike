@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
@@ -18,6 +19,7 @@ import com.panacea.RufusPyramid.game.view.animations.AnimStrike;
 import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
+import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 
@@ -68,15 +70,9 @@ public class CreaturesDrawer extends ViewObject {
         for (ICreature creature : this.creaturesList) {
             this.sprites.put(creature.getID(), getSprite(creature));
             this.setStanding(creature.getID());
-
-            if (creature instanceof DefaultHero) {
-                //TODO da spostare! Istanziarlo insieme agli altri, futuri, controllers
-                this.heroController = new HeroController(GameModel.get().getHero());
-                this.heroInput = new com.panacea.RufusPyramid.game.view.input.HeroInputManager(this.heroController);
-                InputManager.get().addProcessor(this.heroInput);
-            }
         }
 
+        this.heroInput = InputManager.get().getHeroProcessor();
     }
 
     private static TextureRegion getSprite(ICreature creature) {
