@@ -36,6 +36,7 @@ import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameScreen;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +58,12 @@ public class UIDrawer extends ViewObject {
     ArrayList<Label> labels;
 
     ImageButton quick;
+    ImageButton passButton;
+    ImageButton spellButton;
+    ImageButton inventoryButton;
+    ImageButton optionsButton;
+    com.badlogic.gdx.scenes.scene2d.ui.Image bar;
+    com.badlogic.gdx.scenes.scene2d.ui.Image background;
     TextButton button;
 
     public UIDrawer() {
@@ -102,6 +109,7 @@ public class UIDrawer extends ViewObject {
         table.add(this.labels.get(0)).minWidth(Gdx.graphics.getWidth() - 20).fill();
         table.pack();
 
+
         button = new TextButton("Menu", skin);
         button.setSize(60, 40);
         button.setPosition(0, stage.getHeight() - button.getHeight());
@@ -121,15 +129,44 @@ public class UIDrawer extends ViewObject {
         stage.addActor(button);
         stage.addActor(table);
 
-        quick = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/quick2.png")))));
-        quick.setPosition(0, 0);
-        quick.addListener(new ClickListener() {
+        Texture imageTexture = new Texture(Gdx.files.internal("data/ui/pass2.png"));
+        passButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        passButton.setPosition(20, 10);
+        passButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        passButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("quick", "quickClicked");
+                Gdx.app.log("pass", "Clicked");
             }
         });
-        stage.addActor(quick);
+
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/background.png"));
+        background = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
+        background.setPosition(0, 0);
+        background.setSize(600, 110);
+
+        int prevWidth=imageTexture.getWidth();
+        imageTexture = new Texture(Gdx.files.internal("data/ui/spell2.png"));
+        spellButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        spellButton.setPosition(prevWidth + 20 + 2, 10);
+        spellButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        spellButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("spell", "Clicked");
+            }
+        });
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/bar.png"));
+        bar = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
+        bar.setPosition(0, 110);
+        bar.setSize(600, imageTexture.getHeight());
+
+        stage.addActor(background);
+        stage.addActor(passButton);
+        stage.addActor(spellButton);
+        stage.addActor(bar);
     }
 
     @Override
