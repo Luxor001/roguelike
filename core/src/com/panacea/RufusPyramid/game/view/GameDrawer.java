@@ -18,7 +18,7 @@ import javax.rmi.CORBA.Util;
  * Created by gio on 11/07/15.
  */
 public class GameDrawer extends ViewObject {
-    private static final GameDrawer SINGLETON = new GameDrawer();
+    private static GameDrawer SINGLETON = new GameDrawer();
     private final UIDrawer uiDrawer;
 
     private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
@@ -29,6 +29,7 @@ public class GameDrawer extends ViewObject {
     public static GameDrawer get() {
         return GameDrawer.SINGLETON;
     }
+    public static void reset() { GameDrawer.SINGLETON = new GameDrawer(); }
 
     private GameDrawer() {
         this.mapDrawer = new MapDrawer(GameModel.get().getCurrentMap());  //map.create richiamato automaticamente da ViewObject

@@ -18,6 +18,7 @@ public class GameScreen implements Screen {
         GameController.initializeGame();
         Gdx.input.setInputProcessor(InputManager.get());
 
+        GameDrawer.reset();
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
     }

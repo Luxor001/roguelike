@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
 import com.panacea.RufusPyramid.game.view.screens.GameScreen;
 
@@ -16,9 +18,15 @@ public class GameController {
     private static GameMaster gm;
 
     public static void initializeGame() {
-        //TODO
+        GameController.resetAll();
+
         GameModel.createInstance();
         gm = new GameMaster();
+    }
+
+    private static void resetAll() {
+        //TODO
+        InputManager.reset();
     }
 
     public static void endGame() {

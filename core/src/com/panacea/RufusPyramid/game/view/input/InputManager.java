@@ -15,6 +15,7 @@ public class InputManager extends InputMultiplexer {
     public static InputManager get() {
         return InputManager.SINGLETON;
     }
+    public static void reset() { InputManager.SINGLETON = new InputManager(); }
 
     @Override
     public void addProcessor(InputProcessor processor) {
