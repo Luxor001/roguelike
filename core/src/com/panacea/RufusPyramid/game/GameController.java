@@ -2,12 +2,8 @@ package com.panacea.RufusPyramid.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.panacea.RufusPyramid.game.creatures.Enemy;
-import com.panacea.RufusPyramid.game.creatures.ICreature;
-import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
-import com.panacea.RufusPyramid.game.view.screens.GameScreen;
 
 /**
  * Permette dall'esterno di recuperare tutti i controller istanziati

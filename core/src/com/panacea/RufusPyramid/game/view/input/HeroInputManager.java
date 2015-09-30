@@ -1,11 +1,13 @@
 package com.panacea.RufusPyramid.game.view.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.view.GameCamera;
@@ -135,5 +137,29 @@ public class HeroInputManager extends InputAdapter {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        switch (keycode) {
+            case Input.Keys.LEFT:
+                this.hero.chooseTheRightAction(Utilities.Directions.WEST);
+                break;
+            case Input.Keys.RIGHT:
+                this.hero.chooseTheRightAction(Utilities.Directions.EAST);
+                break;
+            case Input.Keys.UP:
+                this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
+                break;
+            case Input.Keys.DOWN:
+                this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
+                break;
+            case Input.Keys.ESCAPE:
+                GameController.endGame();
+                break;
+            default:
+                return false;
+        }
+        return true && super.keyDown(keycode);
     }
 }
