@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -102,6 +103,7 @@ public class UIDrawer extends ViewObject {
         Table table = new Table();
         table.setPosition(10, 10);
 
+        float maxX = GameCamera.getMaxX();
         table.add(this.labels.get(2)).minWidth(Gdx.graphics.getWidth() - 20).fill();
         table.row();
         table.add(this.labels.get(1)).minWidth(Gdx.graphics.getWidth() - 20).fill();
@@ -129,43 +131,84 @@ public class UIDrawer extends ViewObject {
         stage.addActor(button);
         stage.addActor(table);
 
-        Texture imageTexture = new Texture(Gdx.files.internal("data/ui/pass2.png"));
+        Texture imageTexture = new Texture(Gdx.files.internal("data/ui/background.png"));
+        background = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
+        background.setPosition(maxX / 2 - 40, 0);
+        background.setSize(maxX/2  + 40, 100);
+
+        float currX = (maxX/2 - 40)+10;
+        imageTexture = new Texture(Gdx.files.internal("data/ui/pass2.png"));
         passButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        passButton.setPosition(20, 10);
+        passButton.setPosition(currX, 15);
         passButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-        passButton.addListener(new ClickListener() {
+
+        passButton.addListener(new InputListener()
+        {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+            {
                 Gdx.app.log("pass", "Clicked");
+                return true;
             }
         });
 
-
-        imageTexture = new Texture(Gdx.files.internal("data/ui/background.png"));
-        background = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
-        background.setPosition(0, 0);
-        background.setSize(600, 110);
-
-        int prevWidth=imageTexture.getWidth();
+        currX +=imageTexture.getWidth()+5;
         imageTexture = new Texture(Gdx.files.internal("data/ui/spell2.png"));
         spellButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        spellButton.setPosition(prevWidth + 20 + 2, 10);
+        spellButton.setPosition(currX, 15);
         spellButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-        spellButton.addListener(new ClickListener() {
+        spellButton.addListener(new InputListener()
+        {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+            {
                 Gdx.app.log("spell", "Clicked");
+                return true;
+            }
+        });
+
+        currX +=imageTexture.getWidth()+5;
+        imageTexture = new Texture(Gdx.files.internal("data/ui/inventory2.png"));
+        inventoryButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        inventoryButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        inventoryButton.setPosition(currX, 15);
+        inventoryButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        inventoryButton.addListener(new InputListener()
+        {
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+            {
+                Gdx.app.log("inventory", "Clicked");
+                return true;
+            }
+        });
+
+        currX +=imageTexture.getWidth() + 5;
+        imageTexture = new Texture(Gdx.files.internal("data/ui/options2.png"));
+        optionsButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        optionsButton= new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        optionsButton.setPosition(currX, 15);
+        optionsButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        optionsButton.addListener(new InputListener()
+        {
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+            {
+                Gdx.app.log("options", "Clicked");
+                return true;
             }
         });
 
         imageTexture = new Texture(Gdx.files.internal("data/ui/bar.png"));
         bar = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
-        bar.setPosition(0, 110);
-        bar.setSize(600, imageTexture.getHeight());
+        bar.setPosition(maxX/2  - 40, 100);
+        bar.setSize(maxX/2 + 40, imageTexture.getHeight());
 
         stage.addActor(background);
         stage.addActor(passButton);
         stage.addActor(spellButton);
+        stage.addActor(inventoryButton);
+        stage.addActor(optionsButton);
         stage.addActor(bar);
     }
 

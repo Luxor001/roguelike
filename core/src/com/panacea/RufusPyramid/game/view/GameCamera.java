@@ -42,4 +42,15 @@ public class GameCamera {
 
         return camera;
     }
+
+    public static float getMaxX(){
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        return (w / h) * 1024;
+    }
+
+    public static float getMaxY(){
+        return  1024;
+    }
+
 }

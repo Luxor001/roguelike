@@ -44,11 +44,11 @@ public class GameDrawer extends ViewObject {
         this.creaturesDrawer = new CreaturesDrawer(GameModel.get().getCreatures());
         this.viewList.add(this.creaturesDrawer);
 
-        this.uiDrawer = new UIDrawer();
-        this.viewList.add(this.uiDrawer);
-
         this.itemsDrawer = new ItemsDrawer(GameModel.get().getItems());
         this.viewList.add(this.itemsDrawer);
+
+        this.uiDrawer = new UIDrawer();
+        this.viewList.add(this.uiDrawer);
     }
 
     public void add(com.panacea.RufusPyramid.game.view.ViewObject toAdd) {
