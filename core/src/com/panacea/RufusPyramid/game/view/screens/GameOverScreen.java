@@ -65,7 +65,7 @@ public class GameOverScreen implements Screen {
         buttonMenu = new TextButton("Menu", skin);
 
 //        title = new Label("Game Title", skin);
-        texture = new Texture(Gdx.files.internal("data/title.png"));
+        texture = new Texture(Gdx.files.internal("data/gameover.png"));
         title = new Image(texture);
         stage.addActor(title);
 
