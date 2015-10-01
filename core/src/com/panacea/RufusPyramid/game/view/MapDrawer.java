@@ -118,7 +118,7 @@ public class MapDrawer extends ViewObject {
         walls = loadTextureRegion(new Texture("data/walls/"+path+".png"));
         grounds = loadTextureRegion(new Texture("data/grounds/"+path+".png"));
 
-        grounds_deco = loadDecals("data/deco");
+        grounds_deco = loadDecals("data/deco/map");
 /*        if(new File("data/grounds/"+path+"_deco.png").exists())
           grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));*/
         doors = loadTextureRegion(new Texture("data/mapObjects/doors_"+path+".png"));

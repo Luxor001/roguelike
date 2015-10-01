@@ -12,8 +12,10 @@ import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
 public class GameController {
 
     private static GameMaster gm;
+    private static boolean gameInPlay;
 
     public static void initializeGame() {
+        GameController.gameInPlay = true;
         GameController.resetAll();
 
         GameModel.createInstance();
@@ -26,6 +28,7 @@ public class GameController {
     }
 
     public static void endGame() {
+        GameController.gameInPlay = false;
         gm.disposeGame();
         GameModel.get().disposeAll();
         ((Game) Gdx.app.getApplicationListener()).setScreen(new GameOverScreen());
@@ -37,5 +40,9 @@ public class GameController {
 
     public static GameMaster getGm(){
         return gm;
+    }
+
+    public static boolean isGameEnded() {
+        return !GameController.gameInPlay;
     }
 }

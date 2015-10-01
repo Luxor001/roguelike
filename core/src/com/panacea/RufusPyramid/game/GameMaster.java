@@ -83,7 +83,7 @@ public class GameMaster {
     }
 
     public void step() {
-        if (someoneIsPlaying)   return;
+        if (someoneIsPlaying || GameController.isGameEnded())   return;
         someoneIsPlaying = true;
 
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
@@ -134,7 +134,12 @@ public class GameMaster {
                 //Fine del ciclo di controllo
                 GameMaster.this.lastResult = result;
                 GameMaster.this.someoneIsPlaying = false;
-                  checkEnemiesNearby();
+
+                if (!GameController.isGameEnded()) {
+                    //TODO questa funzione dovrebbe essere lanciata solo subito prima di passare il turno all'eroe
+                    //altrimenti viene lanciata ad ogni turno di una creatura!
+                    checkEnemiesNearby();
+                }
             }
         };
     }
@@ -219,7 +224,7 @@ public class GameMaster {
 
     public void disposeGame() {
         //TODO
-        this.currentAgent = -1;
+        this.currentAgent = -100;
         this.agentsPlaying.clear();
     }
 }
