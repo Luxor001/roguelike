@@ -10,17 +10,20 @@ import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
 
 public class GameScreen implements Screen {
     GameDrawer objectsDrawer;
 
     public void show() {
         GameController.initializeGame();
-        Gdx.input.setInputProcessor(InputManager.get());
-
         GameDrawer.reset();
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
+        InputManager.get().addProcessor(objectsDrawer.getUIDrawer().getStage());
+        InputManager.get().addProcessor(GameController.getGm().heroInput);
+
+        Gdx.input.setInputProcessor(InputManager.get());
     }
 
     public void render(float delta) {

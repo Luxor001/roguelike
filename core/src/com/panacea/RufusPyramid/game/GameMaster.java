@@ -40,7 +40,7 @@ public class GameMaster {
     private boolean someoneIsPlaying;
 
     private HeroController heroController;
-    private HeroInputManager heroInput;
+    public HeroInputManager heroInput;
 
     private ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
 
@@ -64,7 +64,7 @@ public class GameMaster {
 
         this.heroController = new HeroController(hero);
         this.heroInput = new HeroInputManager(this.heroController);
-        InputManager.get().addProcessor(this.heroInput);
+
     }
 
     public void addAgent(IAgent newAgent) {

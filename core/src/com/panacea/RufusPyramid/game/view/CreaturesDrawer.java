@@ -153,6 +153,8 @@ public class CreaturesDrawer extends ViewObject {
 
     public void startWalk(final ICreature creature, GridPoint2 startPoint, GridPoint2 endPoint) {
         //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
+        if(heroInput == null)
+            this.heroInput = InputManager.get().getHeroProcessor();
         CreaturesDrawer.this.heroInput.setPaused(true);
         ArrayList<GridPoint2> path = new ArrayList<GridPoint2>(2);
         path.add(startPoint);
@@ -170,6 +172,8 @@ public class CreaturesDrawer extends ViewObject {
 
     public void startStrike(final ICreature attacker) {
         //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
+        if(heroInput == null)
+            this.heroInput = InputManager.get().getHeroProcessor();
         CreaturesDrawer.this.heroInput.setPaused(true);
         AnimationEndedListener listener = new AnimationEndedListener() {
             @Override

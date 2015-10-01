@@ -97,7 +97,7 @@ public class GameModel {
             }
         }
         this.diary = new Diary();
-    }
+      }
 
     public ArrayList<Map> getMaps() {
         return this.maps;

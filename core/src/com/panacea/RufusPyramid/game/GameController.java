@@ -34,4 +34,8 @@ public class GameController {
     public static void step() {
         gm.step();
     }
+
+    public static GameMaster getGm(){
+        return gm;
+    }
 }

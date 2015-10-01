@@ -136,4 +136,6 @@ public class GameDrawer extends ViewObject {
     public CreaturesDrawer getCreaturesDrawer() {
         return this.creaturesDrawer;
     }
+
+    public UIDrawer getUIDrawer(){ return this.uiDrawer;}
 }
