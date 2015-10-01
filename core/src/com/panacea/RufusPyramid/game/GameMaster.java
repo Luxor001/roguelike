@@ -1,6 +1,9 @@
 package com.panacea.RufusPyramid.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
@@ -83,8 +86,6 @@ public class GameMaster {
         if (someoneIsPlaying)   return;
         someoneIsPlaying = true;
 
-
-
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
             //Al primo avvio this.currentAgent == -1, viene inizializzata dalla prima chiamata a turnToNextAgent
 
@@ -133,6 +134,7 @@ public class GameMaster {
                 //Fine del ciclo di controllo
                 GameMaster.this.lastResult = result;
                 GameMaster.this.someoneIsPlaying = false;
+                  checkEnemiesNearby();
             }
         };
     }
@@ -178,6 +180,41 @@ public class GameMaster {
                     tempEffect.setTurns(tempEffect.getTurns()-1);
              }
          }
+    }
+
+    public void checkEnemiesNearby(ICreature currCreature, DefaultHero hero){ //check if there is an enemy near hte player bounds, so we can active the quick attack button
+
+        ICreature firstTarget = null;
+            GridPoint2 absoluteDist = Utilities.absoluteDistance(currCreature.getPosition().getPosition(),  hero.getPosition().getPosition());
+            if(absoluteDist.x == 1 || absoluteDist.y == 1) {
+                Utilities.Directions[] directions = {Utilities.Directions.NORTH, Utilities.Directions.EAST, Utilities.Directions.SOUTH, Utilities.Directions.WEST};
+                for (Utilities.Directions dir : directions) {
+                    GridPoint2 currPos = Utilities.Directions.adjCoords(hero.getPosition().getPosition(), dir);
+                    if (currCreature.getPosition().getPosition().x == currPos.x && currCreature.getPosition().getPosition().y == currPos.y) {
+                        firstTarget = currCreature;
+                        break;
+                    }
+                }
+        }
+        hero.setFirstTarget(firstTarget);
+    }
+    public void checkEnemiesNearby(){ //check if there is an enemy near hte player bounds, so we can active the quick attack button
+        ICreature firstTarget = null;
+        DefaultHero hero = GameModel.get().getHero();
+        for (ICreature currCreature : GameModel.get().getCreatures()) {
+            GridPoint2 absoluteDist = Utilities.absoluteDistance(currCreature.getPosition().getPosition(),  hero.getPosition().getPosition());
+            if(absoluteDist.x == 1 || absoluteDist.y == 1) {
+                Utilities.Directions[] directions = {Utilities.Directions.NORTH, Utilities.Directions.EAST, Utilities.Directions.SOUTH, Utilities.Directions.WEST};
+                for (Utilities.Directions dir : directions) {
+                    GridPoint2 currPos = Utilities.Directions.adjCoords(hero.getPosition().getPosition(), dir);
+                    if (currCreature.getPosition().getPosition().x == currPos.x && currCreature.getPosition().getPosition().y == currPos.y) {
+                        firstTarget = currCreature;
+                        break;
+                    }
+                }
+            }
+        }
+        hero.setFirstTarget(firstTarget);
     }
 
     public void disposeGame() {

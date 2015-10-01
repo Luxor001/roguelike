@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.view;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -151,7 +152,7 @@ public class CreaturesDrawer extends ViewObject {
         this.generalAnimations.end();
     }
 
-    public void startWalk(final ICreature creature, GridPoint2 startPoint, GridPoint2 endPoint) {
+    public void startWalk(final ICreature creature, GridPoint2 startPoint, final GridPoint2 endPoint) {
         //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
         if(heroInput == null)
             this.heroInput = InputManager.get().getHeroProcessor();
@@ -179,6 +180,7 @@ public class CreaturesDrawer extends ViewObject {
             @Override
             public void ended(AnimationEndedEvent event, Object source) {
                 //Poi renderizzo l'eroe in setStanding e riabilito l'input
+
                 CreaturesDrawer.this.setStanding(attacker.getID());
                 CreaturesDrawer.this.heroInput.setPaused(false);
             }

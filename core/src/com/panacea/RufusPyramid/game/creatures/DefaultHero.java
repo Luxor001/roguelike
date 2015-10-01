@@ -1,18 +1,7 @@
 package com.panacea.RufusPyramid.game.creatures;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
-import com.panacea.RufusPyramid.map.Tile;
 
 
 /**
@@ -25,6 +14,7 @@ public class DefaultHero extends AbstractCreature {
     private static final double ATTACK = 5;
     private static final double DEFENCE = 5;
     private static final double SPEED = 5;
+    private ICreature firstTarget;
     public HealthBar health;
 
 //    TODO aggiungere il livello con l'oggetto Level
@@ -39,5 +29,12 @@ public class DefaultHero extends AbstractCreature {
         //TODO il giocatore ora è libero di impartire ordini al proprio giocatore
         //TODO dal controller abilita l'input utente
         return;
+    }
+
+    public void setFirstTarget(ICreature target){
+        this.firstTarget = target;
+    }
+    public ICreature getFirstTarget(){
+        return this.firstTarget;
     }
 }

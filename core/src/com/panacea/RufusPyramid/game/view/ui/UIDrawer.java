@@ -23,7 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
@@ -51,7 +53,7 @@ public class UIDrawer extends ViewObject {
     ImageButton spellButton;
     ImageButton inventoryButton;
     ImageButton optionsButton;
-    ImageButton attackButton;
+    public ImageButton attackButton;
     com.badlogic.gdx.scenes.scene2d.ui.Image background;
     com.badlogic.gdx.scenes.scene2d.ui.Image attackBackground;
     TextButton button;
@@ -123,7 +125,9 @@ public class UIDrawer extends ViewObject {
         attackButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                attackButton.setDisabled(false);
+                DefaultHero hero = GameModel.get().getHero();
+                if(hero.getFirstTarget() != null)
+                    hero.fireActionChosenEvent(new AttackAction(hero,hero.getFirstTarget()));
                 return true;
             }
         });

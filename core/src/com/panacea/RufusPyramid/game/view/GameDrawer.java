@@ -100,6 +100,10 @@ public class GameDrawer extends ViewObject {
             i=0;
         }i++;
 
+        if(GameModel.get().getHero().getFirstTarget() != null)
+           this.uiDrawer.attackButton.setDisabled(false);
+        else
+            this.uiDrawer.attackButton.setDisabled(true);
     }
 
     @Override

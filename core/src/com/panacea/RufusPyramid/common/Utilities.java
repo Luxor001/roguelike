@@ -76,4 +76,9 @@ public class Utilities {
         GridPoint2 newPosition= new GridPoint2(position.x / DEFAULT_BLOCK_WIDTH, position.y / DEFAULT_BLOCK_HEIGHT);
         return newPosition;
     }
+    public static GridPoint2 absoluteDistance(GridPoint2 first, GridPoint2 second){
+        int x = Math.abs(first.x - second.x);
+        int y = Math.abs(first.y - second.y);
+        return new GridPoint2(x,y);
+    }
 }
