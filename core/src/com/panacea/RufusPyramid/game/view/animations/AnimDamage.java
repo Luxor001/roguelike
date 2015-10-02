@@ -15,7 +15,7 @@ import com.panacea.RufusPyramid.game.view.GameBatch;
  * Created by gio on 25/07/15.
  */
 public class AnimDamage extends AbstractAnimation {
-    private final static float DURATION = 3f; // in secondi;
+    private final static float DURATION = 1.0f; // in secondi;
     private float elapsedTime;
 
     String text;
@@ -23,17 +23,19 @@ public class AnimDamage extends AbstractAnimation {
     BitmapFont font;
     Color fontColor;
 
+
     public AnimDamage(GridPoint2 creaturePosition, int damage) {
         this.text = Integer.toString(damage);
         GridPoint2 absolutePosition = Utilities.convertToAbsolutePos(creaturePosition);
         this.creaturePosition = new Vector2(
                 absolutePosition.x + Utilities.DEFAULT_BLOCK_WIDTH/2,
-                absolutePosition.y + Utilities.DEFAULT_BLOCK_HEIGHT);
+                absolutePosition.y + Utilities.DEFAULT_BLOCK_HEIGHT+2);
 
         this.font = new BitmapFont();
-        this.fontColor = Color.WHITE;
+        this.fontColor = Color.RED;
         this.font.setColor(this.fontColor);
-        this.fontColor.set(1f, 1f, 1f, 1f);   //l'ultimo parametro è la trasparenza, ma fa "trasparire" tutti gli sprites! xD
+        this.font.getData().setScale(1.2f);
+        this.fontColor.set(1f, 0, 0, 0.7f);   //l'ultimo parametro è la trasparenza, ma fa "trasparire" tutti gli sprites! xD
         this.elapsedTime = 0;
     }
 
@@ -49,7 +51,7 @@ public class AnimDamage extends AbstractAnimation {
         font.draw(GameBatch.get(), text, creaturePosition.x, creaturePosition.y);
         GameBatch.get().end();
 
-        Vector2 velocity = new Vector2(0,10); // Get the font velocity
+        Vector2 velocity = new Vector2(Utilities.randInt(0,5),Utilities.randInt(8,10)); // Get the font velocity
         creaturePosition.x += velocity.x*delta; // Delta from the render loop
         creaturePosition.y += velocity.y*delta;
         this.elapsedTime += delta;

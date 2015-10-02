@@ -189,6 +189,7 @@ public class CreaturesDrawer extends ViewObject {
     }
 
     public void startDamage(GridPoint2 position, int damage) {
+
         final AbstractAnimation currentAnimation = new AnimDamage(position, damage);
         currentAnimation.create();
         this.generalAnimations.add(currentAnimation);
