@@ -72,7 +72,7 @@ public abstract class AbstractCreature implements ICreature {
         this.effects = new ArrayList<Effect>();
 
         this.healthBar = new HealthBar((float)0,(float)getCurrentStats().getMaximumHP(),1,false,new HealthBar.ProgressBarStyle(background,foreGround));
-        this.healthBar.setValue(currentHP);
+        this.healthBar.setValue((getHPCurrent() * 100)  / getBaseStats().getMaximumHP());
         this.healthBar.setHeight(DEFAULT_HEALTHBAR_HEIGHT);
         this.healthBar.setWidth(DEFAULT_HEALTHBAR_WIDTH );
         this.healthBar.setVisible(false);

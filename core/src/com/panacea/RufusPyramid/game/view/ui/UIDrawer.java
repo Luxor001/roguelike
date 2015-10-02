@@ -53,11 +53,13 @@ public class UIDrawer extends ViewObject {
     ImageButton spellButton;
     ImageButton inventoryButton;
     ImageButton optionsButton;
-    public ImageButton attackButton;
+    ImageButton attackButton;
     com.badlogic.gdx.scenes.scene2d.ui.Image background;
     com.badlogic.gdx.scenes.scene2d.ui.Image attackBackground;
+    com.badlogic.gdx.scenes.scene2d.ui.Image lifeStats;
     TextButton button;
-
+    HealthBar healthBar;
+    HealthBar manaBar;
 
     public UIDrawer() {
         this.labels = new ArrayList<Label>(3);
@@ -92,6 +94,7 @@ public class UIDrawer extends ViewObject {
         this.labels.add(2, this.getNewLabel(""));
 
         float maxX = GameCamera.get().viewportWidth;
+        float maxY = GameCamera.get().viewportHeight;
         Table table = new Table();
         table.setPosition(maxX / 2 - 50, 105);
 
@@ -110,6 +113,28 @@ public class UIDrawer extends ViewObject {
         background.setPosition(maxX / 2 - 50, 0);
         background.setSize(maxX / 2 + 50, background.getHeight());
 
+        imageTexture = new Texture(Gdx.files.internal("data/ui/life3.png"));
+        lifeStats = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
+        lifeStats.setPosition(0, maxY - imageTexture.getHeight());
+        lifeStats.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+
+        SpriteDrawable healthForeGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/health.png"))));
+        SpriteDrawable healthBackgroundd = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/healthBack.png"))));
+        healthBar = new HealthBar(0,100,1,false,new HealthBar.ProgressBarStyle(healthBackgroundd,healthForeGround));
+        healthBar.setValue(100);
+        healthBar.setHeight(healthForeGround.getSprite().getHeight());
+        healthBar.setWidth(healthForeGround.getSprite().getWidth());
+        healthBar.setPosition(113, maxY - imageTexture.getHeight() + 64);
+
+        SpriteDrawable manaForeGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/mana.png"))));
+        manaBar = new HealthBar(0,100,1,false,new HealthBar.ProgressBarStyle(healthBackgroundd,manaForeGround));
+        manaBar.setValue(100);
+        manaBar.setHeight(manaForeGround.getSprite().getHeight());
+        manaBar.setWidth(manaForeGround.getSprite().getWidth());
+        manaBar.setPosition(113, maxY - imageTexture.getHeight()+37);
+
+
+
         imageTexture = new Texture(Gdx.files.internal("data/ui/backAttack.png"));
         attackBackground= new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
         attackBackground.setPosition(0, 0);
@@ -118,7 +143,7 @@ public class UIDrawer extends ViewObject {
         imageTexture = new Texture(Gdx.files.internal("data/ui/attackButton.png"));
         Texture selectedTexture= new Texture(Gdx.files.internal("data/ui/attackButton_deact.png"));
         attackButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        attackButton.setPosition(8,8);
+        attackButton.setPosition(8, 8);
         attackButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         attackButton.getStyle().imageDisabled = new SpriteDrawable(new Sprite(selectedTexture));
         attackButton.setDisabled(true);
@@ -142,7 +167,7 @@ public class UIDrawer extends ViewObject {
         passButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                GameModel.get().getHero().fireActionChosenEvent(new PassAction());
+                GameModel.get().getHero().fireActionChosenEvent(new PassAction(GameModel.get().getHero()));
                 return true;
             }
         });
@@ -198,6 +223,9 @@ public class UIDrawer extends ViewObject {
             }
         });
 
+        stage.addActor(lifeStats);
+        stage.addActor(healthBar);
+        stage.addActor(manaBar);
         stage.addActor(attackBackground);
         stage.addActor(attackButton);
         stage.addActor(background);
@@ -252,5 +280,15 @@ public class UIDrawer extends ViewObject {
 
     public Stage getStage(){
         return stage;
+    }
+
+    public ImageButton getAttackButton(){
+        return this.attackButton;
+    }
+    public void setHealthBarValue(float value){
+        this.healthBar.setValue(value);
+    }
+    public void setManaBarValue(float value){
+        this.manaBar.setValue(value);
     }
 }

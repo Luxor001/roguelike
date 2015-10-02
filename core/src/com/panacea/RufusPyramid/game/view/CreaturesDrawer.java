@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.view;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
@@ -16,6 +17,7 @@ import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
 import com.panacea.RufusPyramid.game.view.animations.AnimDamage;
+import com.panacea.RufusPyramid.game.view.animations.AnimInfo;
 import com.panacea.RufusPyramid.game.view.animations.AnimStrike;
 import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
@@ -201,6 +203,21 @@ public class CreaturesDrawer extends ViewObject {
             }
         };
         currentAnimation.addListener(listener);
+    }
+
+    public void displayInfo(GridPoint2 position, String info, Color color){
+        final AbstractAnimation currentAnimation = new AnimInfo(position, info, color);
+        currentAnimation.create();
+        this.generalAnimations.add(currentAnimation);
+
+        AnimationEndedListener listener = new AnimationEndedListener() {
+            @Override
+            public void ended(AnimationEndedEvent event, Object source) {
+                generalAnimations.removeValue(currentAnimation, false);
+            }
+        };
+        currentAnimation.addListener(listener);
+
     }
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {

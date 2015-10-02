@@ -100,10 +100,13 @@ public class GameDrawer extends ViewObject {
             i=0;
         }i++;
 
-        if(GameModel.get().getHero().getFirstTarget() != null)
-           this.uiDrawer.attackButton.setDisabled(false);
+        if(hero.getFirstTarget() != null)
+           this.uiDrawer.getAttackButton().setDisabled(false);
         else
-            this.uiDrawer.attackButton.setDisabled(true);
+            this.uiDrawer.getAttackButton().setDisabled(true);
+
+        float valuePercentage = (hero.getHPCurrent() * 100)  / hero.getBaseStats().getMaximumHP();
+        uiDrawer.setHealthBarValue(valuePercentage);
     }
 
     @Override

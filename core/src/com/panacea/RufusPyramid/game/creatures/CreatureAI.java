@@ -46,25 +46,28 @@ public class CreatureAI {
 
     public IAction chooseNextAction(){
 
-        List<GridCell> path = getPath(creature, hero);
-        IAction chosenAction = new PassAction();
-        if(path != null) { //se il giocatore è raggiungibile..
-            int distance = path.size();
-            if (path.size() < creature.sigthLength) {
-                System.out.println("ti vedo!");
-                if (currentState == State.FOLLOWING || currentState == State.STANDING || currentState == State.ROAMING || currentState == State.ATTACKING) {
-                    if (distance <= 1) {
-                        currentState = State.ATTACKING;
-                        chosenAction = new AttackAction(creature, hero);
-                    } else {
-                        currentState = State.FOLLOWING;
-                        Utilities.Directions directionToMove = Utilities.getDirectionFromCoords(creature.getPosition().getPosition(), new GridPoint2(path.get(0).getX(), path.get(0).getY()));
-                        chosenAction = new MoveAction(creature, directionToMove);
+        GridPoint2 absoluteDistance = Utilities.absoluteDistance(creature.getPosition().getPosition(),hero.getPosition().getPosition());
+
+        IAction chosenAction = new PassAction(creature);
+        if(absoluteDistance.y <= creature.sigthLength || absoluteDistance.x <= creature.sigthLength) {
+            List<GridCell> path = getPath(creature, hero);
+            if (path != null) { //se il giocatore è raggiungibile..
+                int distance = path.size();
+                if (path.size() < creature.sigthLength) {
+                    System.out.println("ti vedo!");
+                    if (currentState == State.FOLLOWING || currentState == State.STANDING || currentState == State.ROAMING || currentState == State.ATTACKING) {
+                        if (distance <= 1) {
+                            currentState = State.ATTACKING;
+                            chosenAction = new AttackAction(creature, hero);
+                        } else {
+                            currentState = State.FOLLOWING;
+                            Utilities.Directions directionToMove = Utilities.getDirectionFromCoords(creature.getPosition().getPosition(), new GridPoint2(path.get(0).getX(), path.get(0).getY()));
+                            chosenAction = new MoveAction(creature, directionToMove);
+                        }
                     }
+                } else {
+                    //currentState = State.LOSTSIGHT;
                 }
-            }
-            else{
-                //currentState = State.LOSTSIGHT;
             }
         }
         return  chosenAction;
