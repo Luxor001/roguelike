@@ -16,5 +16,4 @@ public class Main extends Game {
 	public void render () {
         super.render();
     }
-
 }
