@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
@@ -41,7 +42,6 @@ public class AnimWalk extends AbstractAnimation {
     private boolean flipX;//the texture should be mirrored?
     private AssetManager soundsManager;
 
-    private Class modelClass;
     private ICreature creature;
 
     Sound footsteps;
@@ -51,25 +51,27 @@ public class AnimWalk extends AbstractAnimation {
         this.frameDuration = 0.33f;
     }
 
-    public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint, float speed, boolean flipX, ICreature creature) {
+    public AnimWalk(GridPoint2 startPoint, GridPoint2 endPoint, float speed, boolean flipX, ICreature creature) {
         super();
         this.frameDuration = 0.1f;  //TODO imposta frameDuration in base alla velocità! Circa speed/200, ma deve essere in proporzione inversa
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.speed = speed;
-        this.modelClass = modelClass;
         this.flipX = flipX;
         this.creature = creature;
     }
 
     public void create() {
-        if (this.modelClass == DefaultHero.class) {
-            frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, SpritesProvider.Azione.WALK);
+        if (creature instanceof DefaultHero) {
+            frames = SpritesProvider.getSprites(creature.getCreatureType(), SpritesProvider.Azione.WALK);
             randSound = Utilities.randInt(0, SoundsProvider.Sounds.FOOTSTEPS_INTERNAL.getValue() - 1);
             SoundsProvider.get().loadSound(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL);
 
-        } else {    //TODO gestire tutti i nemici
-            frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.ORC_BASE, SpritesProvider.Azione.WALK);
+        } else {
+          //TODO gestire tutti i nemici
+            Enemy enemy = ((Enemy)creature);
+
+            frames = SpritesProvider.getSprites(creature.getCreatureType(), SpritesProvider.Azione.WALK);
         }
         animation = new Animation(frameDuration, frames);      // #11
         spriteBatch = GameBatch.get();                // #12

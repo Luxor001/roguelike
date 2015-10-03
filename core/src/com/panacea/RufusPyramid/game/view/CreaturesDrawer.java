@@ -13,6 +13,7 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
@@ -87,12 +88,12 @@ public class CreaturesDrawer extends ViewObject {
 
     private static TextureRegion getCreatureSprite(ICreature creature) {
         //TODO ritornare la texture corretta a seconda del modello di "cattivo" scelto.
-        return SpritesProvider.getSprites(SpritesProvider.Oggetto.ORC_BASE, SpritesProvider.Azione.STAND)[0];
+        return SpritesProvider.getSprites(creature.getCreatureType(), SpritesProvider.Azione.STAND)[0];
     }
 
     private static TextureRegion getHeroSprite(DefaultHero heroModel) {
         //TODO ritornare la texture corretta a seconda del modello di eroe scelto.
-        return SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, SpritesProvider.Azione.STAND)[0];
+        return SpritesProvider.getSprites(heroModel.getCreatureType() ,SpritesProvider.Azione.STAND)[0];
     }
 
     private void setStanding(int creatureID) {
@@ -222,7 +223,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 80.0f, creature.getFlipX(), creature);
+        AbstractAnimation currentAnimation = new AnimWalk(path.get(0), path.get(1), 80.0f, creature.getFlipX(), creature);
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(creature.getID(), currentAnimation);
@@ -231,7 +232,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void strikeAnimation(ICreature attacker, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimStrike(attacker.getClass(), attacker.getPosition().getPosition(), attacker.getFlipX());
+        AbstractAnimation currentAnimation = new AnimStrike(attacker, attacker.getPosition().getPosition(), attacker.getFlipX());
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(attacker.getID(), currentAnimation);

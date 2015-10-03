@@ -10,7 +10,7 @@ import com.panacea.RufusPyramid.game.actions.MoveAction;
  */
 public class ThiefEnemy extends Enemy {
     public ThiefEnemy(String name, String description, int maximumHP, double attack, double defence, double speed) {
-        super(name, description, maximumHP, attack, defence, speed);
+        super(name, description, maximumHP, attack, defence, speed,  CreatureType.SKELETON); //FIXME: da sistemare! non è sempre skeleton!
     }
 
     @Override

@@ -77,11 +77,16 @@ public class GameModel {
 
        Enemy newEnemy;
         for(int i=0; i < 10; i++) {
-            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 10, 5, 5, 5);
+            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 10, 5, 5, 5, ICreature.CreatureType.ORC);
             newEnemy.setPosition(newMap.getRandomEnemyPosition());
             this.addCreature(newEnemy);
         }
 
+        for(int i=0; i < 5; i++) {
+            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 10, 5, 5, 5, ICreature.CreatureType.SKELETON);
+            newEnemy.setPosition(newMap.getRandomEnemyPosition());
+            this.addCreature(newEnemy);
+        }
         for(int i=0; i < 5; i++) {
             Item newItem;
             Tile randomPos;
