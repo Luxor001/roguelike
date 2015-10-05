@@ -17,4 +17,15 @@ public class CreatureDeadEvent extends AttributeChangeEvent<Integer> {
             Gdx.app.error(this.getClass().toString(), "Una creatura ha lanciato l'evento con ancora " + hp + " hp!! So bad!");
         }
     }
+
+    /**
+     * Ritorna il numero di hp rimanenti alla creatura.
+     * (In futuro una creatura potrebbe morire perchè le è stata mozzata la testa
+     * nonostante non abbia ancora perso tutti gli hp)
+     * @return Gli hp rimanenti alla creatura morta.
+     */
+    @Override
+    public Integer getValue() {
+        return super.getValue();
+    }
 }
