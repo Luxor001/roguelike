@@ -113,7 +113,7 @@ public class GameOverScreen implements Screen {
         for (int i = 0; i < numBloodDecals; i++) {
             int rand = MathUtils.random(this.bloodDecals.length - 1);
             TextureRegion chosenDecal = this.bloodDecals[rand];
-            GridPoint2 randomCoords = new GridPoint2(MathUtils.random(Math.round(this.w)), MathUtils.random(Math.round(this.h)));
+            GridPoint2 randomCoords = new GridPoint2(MathUtils.random(Math.round(this.stage.getWidth())), MathUtils.random(Math.round(this.stage.getHeight())));
 
             Image blood1 = new Image(chosenDecal);
             blood1.setX(randomCoords.x - blood1.getWidth()/2);
