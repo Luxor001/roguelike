@@ -7,6 +7,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
+import com.panacea.RufusPyramid.game.view.animations.AnimatedImage;
 import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
 
 import java.util.ArrayList;
@@ -35,8 +38,8 @@ public class MenuScreen implements Screen {
     private float w = (float)Gdx.graphics.getWidth();
     private float h = (float)Gdx.graphics.getHeight();
 
-    private Stage stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT));
-    private Table table = new Table();
+    private Stage stage;
+    private Table table;
 
     Skin skin;
     private TextButton buttonPlay;
@@ -44,13 +47,15 @@ public class MenuScreen implements Screen {
 //    private Label title;
     private Texture texture;
     private Image title;
-    private ArrayList<ObjectAnimation> menuAnimations;
-    private ObjectAnimation fireAnim;
+//    private ArrayList<ObjectAnimation> menuAnimations;
+//    private ObjectAnimation fireAnim;
     private Music introMusic;
 
     AssetManager manager;
     @Override
     public void show() {
+        stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT));
+        table = new Table();
         manager = new AssetManager();
         manager.load("data/sfx/intro.mp3", Music.class);
 
@@ -99,13 +104,19 @@ public class MenuScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        this.menuAnimations = new ArrayList<ObjectAnimation>();
-        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(-115, 150), false));
-        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(65, 150), false));
+        /* Aggiungo i fuochi animati */
+        TextureRegion[] frames = SpritesProvider.getStaticSprites(SpritesProvider.OggettoStatico.FIRE);
 
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.create();
-        }
+        Animation animation = new Animation(0.05f, frames);
+        AnimatedImage animImg = new AnimatedImage(animation);
+        animImg.setPosition(20, VIEWPORT_HEIGHT - 140);
+        stage.addActor(animImg);
+
+        Animation animation2 = new Animation(0.05f, frames);
+        AnimatedImage animImg2 = new AnimatedImage(animation);
+        animImg2.setPosition(stage.getWidth() - 80, VIEWPORT_HEIGHT - 140);
+        stage.addActor(animImg2);
+
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -118,9 +129,6 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.render(delta);
-        }
     }
 
     @Override
@@ -147,9 +155,9 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.dispose();
-        }
+//        for (ObjectAnimation obj: menuAnimations) {
+//            obj.dispose();
+//        }
         introMusic.dispose();
     }
 }
