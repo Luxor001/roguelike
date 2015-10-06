@@ -8,6 +8,7 @@ import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.InteractAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
+import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
@@ -45,6 +46,10 @@ public class HeroController {
 
     public void chooseTheRightAction(Utilities.Directions direction) {
         Tile nextPos = getNextTile(this.hero.getPosition(), direction);
+
+        if(nextPos == null){ //TODO: sarebbe da costruire i muri esterni..
+            return;
+        }
 
         //Controllo se c'è una creatura attaccabile nella direzione dove voglio andare
         for(ICreature creature : GameModel.get().getCreatures()) {

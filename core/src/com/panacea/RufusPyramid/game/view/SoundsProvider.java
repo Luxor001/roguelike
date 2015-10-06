@@ -21,7 +21,9 @@ public class SoundsProvider {
     public enum Sounds {
         COMBAT_SLICE(3), //the number into the parenthesis indicates the size of the array returned
         COIN(1),
-        FOOTSTEPS_INTERNAL(2);
+        FOOTSTEPS_INTERNAL(2),
+        INVENTORY_OPEN(1),
+        CLICK(1);
 
         private final int id;
         Sounds(int id) { this.id = id; }
@@ -70,6 +72,14 @@ public class SoundsProvider {
             case FOOTSTEPS_INTERNAL:{
                 files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/misc/footsteps1.ogg")));
                 files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/misc/footsteps2.ogg")));
+                break;
+            }
+            case INVENTORY_OPEN:{
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/misc/inventory.ogg")));
+                break;
+            }
+            case CLICK:{
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/misc/pick.ogg")));
                 break;
             }
         }

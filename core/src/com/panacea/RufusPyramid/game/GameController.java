@@ -13,6 +13,7 @@ public class GameController {
 
     private static GameMaster gm;
     private static boolean gameInPlay;
+    public static boolean gameInUI;
 
     public static void initializeGame() {
         GameController.gameInPlay = true;
@@ -45,4 +46,6 @@ public class GameController {
     public static boolean isGameEnded() {
         return !GameController.gameInPlay;
     }
+
+
 }

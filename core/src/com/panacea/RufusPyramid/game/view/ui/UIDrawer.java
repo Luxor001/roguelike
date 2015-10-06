@@ -2,31 +2,30 @@ package com.panacea.RufusPyramid.game.view.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameCamera;
+import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
@@ -39,28 +38,27 @@ import java.util.List;
  */
 public class UIDrawer extends ViewObject {
 
-//    private Stage stage;
-//    private Skin skin;
+    private Skin skin;
+    private Stage stage;
+    private SpriteBatch batch;
+    private ShapeRenderer renderer;
 
-    Skin skin;
-    Stage stage;
-    SpriteBatch batch;
-    ShapeRenderer renderer;
+    private ArrayList<Label> labels;
 
-    ArrayList<Label> labels;
-
-    ImageButton passButton;
-    ImageButton spellButton;
-    ImageButton inventoryButton;
-    ImageButton optionsButton;
-    ImageButton attackButton;
-    com.badlogic.gdx.scenes.scene2d.ui.Image background;
-    com.badlogic.gdx.scenes.scene2d.ui.Image attackBackground;
-    com.badlogic.gdx.scenes.scene2d.ui.Image lifeStats;
-    TextButton button;
-    HealthBar healthBar;
-    HealthBar manaBar;
-
+    private ImageButton passButton;
+    private ImageButton spellButton;
+    private ImageButton inventoryButton;
+    private ImageButton optionsButton;
+    private ImageButton attackButton;
+    private com.badlogic.gdx.scenes.scene2d.ui.Image background;
+    private com.badlogic.gdx.scenes.scene2d.ui.Image attackBackground;
+    private com.badlogic.gdx.scenes.scene2d.ui.Image lifeStats;
+    private com.badlogic.gdx.scenes.scene2d.ui.Image inventory;
+    private TextButton button;
+    private HealthBar healthBar;
+    private HealthBar manaBar;
+    private Sound inventoryOpenSound;
+    private Sound pickSound;
     public UIDrawer() {
         this.labels = new ArrayList<Label>(3);
     }
@@ -79,6 +77,9 @@ public class UIDrawer extends ViewObject {
 //        camera.update();
         OrthographicCamera camera = new OrthographicCamera();
 
+
+        SoundsProvider.get().loadSound(SoundsProvider.Sounds.INVENTORY_OPEN);
+        SoundsProvider.get().loadSound(SoundsProvider.Sounds.CLICK);
         //VEDI https://github.com/libgdx/libgdx/wiki/Viewports
         //Se si vuole rendere utilizzabile (e ridimensionabile) il gioco bisogna sicuramente cambiare Viewport
         stage = new Stage(new StretchViewport(GameCamera.get().viewportWidth, GameCamera.get().viewportHeight));
@@ -133,8 +134,6 @@ public class UIDrawer extends ViewObject {
         manaBar.setWidth(manaForeGround.getSprite().getWidth());
         manaBar.setPosition(113, maxY - imageTexture.getHeight()+37);
 
-
-
         imageTexture = new Texture(Gdx.files.internal("data/ui/backAttack.png"));
         attackBackground= new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
         attackBackground.setPosition(0, 0);
@@ -151,8 +150,8 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 DefaultHero hero = GameModel.get().getHero();
-                if(hero.getFirstTarget() != null)
-                    hero.fireActionChosenEvent(new AttackAction(hero,hero.getFirstTarget()));
+                if (hero.getFirstTarget() != null)
+                    hero.fireActionChosenEvent(new AttackAction(hero, hero.getFirstTarget()));
                 return true;
             }
         });
@@ -168,6 +167,9 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 GameModel.get().getHero().fireActionChosenEvent(new PassAction(GameModel.get().getHero()));
+                if (pickSound == null)
+                    pickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.CLICK)[0];
+                pickSound.play(0.6f);
                 return true;
             }
         });
@@ -201,7 +203,18 @@ public class UIDrawer extends ViewObject {
         inventoryButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("inventory", "Clicked");
+                if(!GameController.gameInUI) {
+                    GameController.gameInUI=true;
+                    inventory.setVisible(true);
+                    if (inventoryOpenSound == null)
+                        inventoryOpenSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY_OPEN)[0];
+                    InputManager.get().getHeroProcessor().setPaused(true);
+                    inventoryOpenSound.play(1f);
+                }else{
+                    GameController.gameInUI = false;
+                    inventory.setVisible(false);
+                    InputManager.get().getHeroProcessor().setPaused(false);
+                }
                 return true;
             }
         });
@@ -218,12 +231,23 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("options", "Clicked");
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());
+
+                ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
+                GameModel.get().disposeAll();
+                        ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: Fare dispose!
                 return true;
             }
         });
 
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/inventory.png"));
+        inventory = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
+        inventory.setPosition((maxX/2)-(imageTexture.getWidth()/2), (maxY/2 )- (imageTexture.getHeight()/2)+200);
+        inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        inventory.setVisible(false);
+
         stage.addActor(lifeStats);
+        stage.addActor(inventory);
         stage.addActor(healthBar);
         stage.addActor(manaBar);
         stage.addActor(attackBackground);

@@ -34,6 +34,7 @@ public class ObjectAnimation extends AbstractAnimation {
         this.type=type;
         this.absolutePosition=position;
         this.flipX=flipX;
+        this.stateTime = 0;
     }
 
     public void create() {
@@ -41,7 +42,7 @@ public class ObjectAnimation extends AbstractAnimation {
 
         animation = new Animation(frameDuration, frames);
         spriteBatch = GameBatch.get();
-        stateTime = 0f;
+        animation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ObjectAnimation extends AbstractAnimation {
         stateTime += delta;
 
         animation.getKeyFrameIndex(stateTime);
-        currentFrame = animation.getKeyFrame(stateTime, false);
+        currentFrame = animation.getKeyFrame(stateTime,true);
 
         spriteBatch.begin();
         if((!currentFrame.isFlipX() && flipX) || (currentFrame.isFlipX() && !flipX))
@@ -58,9 +59,6 @@ public class ObjectAnimation extends AbstractAnimation {
         spriteBatch.draw(currentFrame, absolutePosition.x, absolutePosition.y, 64, 64);
         spriteBatch.end();
 
-        if (animation.isAnimationFinished(stateTime)) {
-            stateTime = 0f;
-        }
     }
 
     @Override

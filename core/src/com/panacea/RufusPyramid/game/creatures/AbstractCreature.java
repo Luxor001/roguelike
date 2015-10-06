@@ -51,6 +51,8 @@ public abstract class AbstractCreature implements ICreature {
     private boolean flipX;
     public int sigthLength = 6; //TODO : Da mettere da costruttore!
 
+    private CreatureType creatureType;
+
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this.idCreature = getUniqueCreatureId();
         this.setName(name);
@@ -312,5 +314,12 @@ public abstract class AbstractCreature implements ICreature {
     }
     public void setFlipX(boolean flipX){
         this.flipX = flipX;
+    }
+
+    public CreatureType getCreatureType(){
+        return creatureType;
+    }
+    public void setCreatureType(CreatureType param){
+        this.creatureType =  param;
     }
 }

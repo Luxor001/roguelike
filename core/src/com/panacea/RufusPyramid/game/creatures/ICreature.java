@@ -14,6 +14,12 @@ import java.util.List;
  */
 public interface ICreature extends IAgent {
 
+    public enum CreatureType{
+        HERO,
+        ORC,
+        SKELETON
+    }
+
     public int getID();
 
     public int getHPCurrent();
@@ -61,4 +67,7 @@ public interface ICreature extends IAgent {
 
     public boolean getFlipX();
     public void setFlipX(boolean flipX);
+
+    public CreatureType getCreatureType();
+    public void setCreatureType(CreatureType type);
 }

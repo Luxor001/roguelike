@@ -7,8 +7,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
-import com.panacea.RufusPyramid.game.view.animations.AnimatedImage;
 import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
 
 import java.util.ArrayList;
@@ -38,8 +35,8 @@ public class MenuScreen implements Screen {
     private float w = (float)Gdx.graphics.getWidth();
     private float h = (float)Gdx.graphics.getHeight();
 
-    private Stage stage;
-    private Table table;
+    private Stage stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT));
+    private Table table = new Table();
 
     Skin skin;
     private TextButton buttonPlay;
@@ -129,6 +126,9 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
+        for (ObjectAnimation obj: menuAnimations) {
+            obj.render(delta);
+        }
     }
 
     @Override

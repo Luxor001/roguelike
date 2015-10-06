@@ -37,10 +37,6 @@ public class GameDrawer extends ViewObject {
         this.viewList.add(this.mapDrawer);
         this.viewList.add(new Animator());
 
-//        List<ICreature> allCreatures = new ArrayList<ICreature>();
-//        allCreatures.addAll(GameModel.get().getCreatures());
-//        allCreatures.add(GameModel.get().getHero());
-
         this.creaturesDrawer = new CreaturesDrawer(GameModel.get().getCreatures());
         this.viewList.add(this.creaturesDrawer);
 

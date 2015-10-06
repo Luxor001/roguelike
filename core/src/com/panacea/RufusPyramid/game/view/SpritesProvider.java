@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -22,6 +23,7 @@ public class SpritesProvider {
     private static final String BASE_PATH = "data/";
     private static TextureRegion[][] hero1 = loadTexture("creatures/hero_spritesheetx32.png", 13, 21);
     private static TextureRegion[][] orc_base = loadTexture("creatures/orc_spritesheetx32.png", 13, 21);
+    private static TextureRegion[][] skeleton_base = loadTexture("creatures/skeleton_spritesheetx32.png", 13, 21);
     private static TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
 
     /**
@@ -31,16 +33,19 @@ public class SpritesProvider {
      * @param azione
      * @return la texture region dell'oggetto necessaria ad effettuare l'animazione dell'azione richiesta.
      */
-    public static TextureRegion[] getSprites(Oggetto oggettoDaAnimare, Azione azione) {
+    public static TextureRegion[] getSprites(ICreature.CreatureType oggettoDaAnimare, Azione azione) {
         TextureRegion[] animationFrames = null;
         TextureRegion[][] allFrames = null;
 
         switch(oggettoDaAnimare) {
-            case HERO1:
+            case HERO:
                 allFrames = hero1;
                 break;
-            case ORC_BASE:
+            case ORC:
                 allFrames = orc_base;
+                break;
+            case SKELETON:
+                allFrames = skeleton_base;
                 break;
             default:
                 throw new IllegalArgumentException("Nessuno sprite disponibile per l'oggetto " + oggettoDaAnimare);
@@ -50,28 +55,29 @@ public class SpritesProvider {
 //        if (oggettoDaAnimare.equals(Oggetto.HERO1) || oggettoDaAnimare.equals(Oggetto.ORC_BASE)) {
 //            int frameCols = 13;
 //            int frameRows = 21;
-            int animationCols, animationRow;
+            int animationCols = 1, animationRow = 1;
 
             switch (azione) {
                 case STAND:
-                    animationCols = 1;                    // Colonne 1
-                    animationRow = 12;                    // Righe 9-12
+                        animationCols = 1;                    // Colonne 1
+                        animationRow = 12;                    // Righe 9-12
                     break;
                 case WALK:
-                    animationCols = 9;                    // Colonne 9
-                    animationRow = 12;                    // Righe 9-12
+                        animationCols = 9;                    // Colonne 9
+                        animationRow = 12;                    // Righe 9-12
                     break;
                 case STRIKE:
-                    animationCols = 6;                    // Colonne 6
-                    animationRow = 16;                    // Righe 13-16
+                        animationCols = 6;                    // Colonne 6
+                        animationRow = 16;                    // Righe 13-16
                     break;
                 case CAST:
-                    animationCols = 4;                    // Colonne 7
-                    animationRow = 7;                     // Righe 1-4
+                        animationCols = 4;                    // Colonne 7
+                        animationRow = 7;                     // Righe 1-4
                     break;
                 case DEATH:
-                    animationCols = 6;                    // Colonne 6
-                    animationRow = 21;                    // Righe 21
+                        animationCols = 6;                    // Colonne 6
+                        animationRow = 21;                    // Righe 21
+
                     break;
                 default:
                     throw new NullPointerException("Impossibile trovare lo sprite corretto per l'animazione " + azione + " dell'oggetto " + oggettoDaAnimare + ".");
@@ -99,7 +105,7 @@ public class SpritesProvider {
     }
 
     public enum Oggetto {
-        HERO1, ORC_BASE, STATICFIRE
+        HERO1, ORC_BASE, SKELETON
     }
 
     public enum OggettoStatico {

@@ -13,10 +13,10 @@ import java.util.Set;
  */
 public class Enemy extends AbstractCreature {
     private CreatureAI creatureAI;
-
     private static final Set<CreatureAI.State> displayHealthBarStates = new HashSet<CreatureAI.State>(Arrays.asList(CreatureAI.State.ATTACKING, CreatureAI.State.FOLLOWING));
-    public Enemy(String name, String description, int maximumHP, double attack, double defence, double speed) {
+    public Enemy(String name, String description, int maximumHP, double attack, double defence, double speed, CreatureType type) {
         super(name, description, maximumHP, attack, defence, speed);
+        this.setCreatureType(type);
     }
 
     /**
@@ -35,4 +35,5 @@ public class Enemy extends AbstractCreature {
             this.getHealthBar().setVisible(false);
         this.fireActionChosenEvent(action);
     }
+
 }
