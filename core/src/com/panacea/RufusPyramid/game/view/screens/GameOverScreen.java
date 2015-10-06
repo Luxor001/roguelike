@@ -5,9 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -16,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.panacea.RufusPyramid.game.view.GameBatch;
+import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
 
@@ -49,6 +55,9 @@ public class GameOverScreen implements Screen {
     private Music introMusic;
 
     AssetManager manager;
+    private final static String decalsDirectory = "data/deco/gameover";
+    private TextureRegion[] bloodDecals;
+
     @Override
     public void show() {
         manager = new AssetManager();
@@ -76,7 +85,6 @@ public class GameOverScreen implements Screen {
                 //We set it to new Splash because we got no other screens
                 //otherwise you put the screen there where you want to go
 
-                //FIXME sembra che per poter cliccare il pulsante bisogna fare un doppioclick.... perchè?
 //                ((Game)Gdx.app.getApplicationListener()).setScreen(new SplashScreen());
 
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
@@ -97,15 +105,24 @@ public class GameOverScreen implements Screen {
         table.add(buttonMenu).size(150, 60).padBottom(20).row();
 
         table.setFillParent(true);
-        stage.addActor(table);
 
-        this.menuAnimations = new ArrayList<ObjectAnimation>();
-        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(-115, 150), false));
-        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(65, 150), false));
+        // Settaggio delle texture con le macchie di sangue
+        int numBloodDecals = 2;
 
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.create();
+        this.bloodDecals = this.loadDecals();
+        for (int i = 0; i < numBloodDecals; i++) {
+            int rand = MathUtils.random(this.bloodDecals.length - 1);
+            TextureRegion chosenDecal = this.bloodDecals[rand];
+            GridPoint2 randomCoords = new GridPoint2(MathUtils.random(Math.round(this.stage.getWidth())), MathUtils.random(Math.round(this.stage.getHeight())));
+
+            Image blood1 = new Image(chosenDecal);
+            blood1.setX(randomCoords.x - blood1.getWidth()/2);
+            blood1.setY(randomCoords.y - blood1.getHeight()/2);
+            stage.addActor(blood1);
         }
+
+        //Aggiunta della table con titolo e pulsanti allo stage
+        stage.addActor(table);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -116,11 +133,9 @@ public class GameOverScreen implements Screen {
         introMusic.setLooping(true);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         stage.act();
         stage.draw();
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.render(delta);
-        }
     }
 
     @Override
@@ -147,10 +162,23 @@ public class GameOverScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.dispose();
-        }
         introMusic.dispose();
         texture.dispose();
+
+        this.bloodDecals[0].getTexture().dispose();
+    }
+
+    private TextureRegion[] loadDecals() {
+        String rootDirectory = this.decalsDirectory;
+        ArrayList<TextureRegion> allTextures = new ArrayList<TextureRegion>();
+        FileHandle files = Gdx.files.internal(rootDirectory);
+        Texture texture;
+        for (FileHandle file: files.list()) {
+            texture = new Texture(file);
+            TextureRegion[][] reg =  TextureRegion.split(texture, texture.getWidth(), texture.getHeight());
+            allTextures.add(reg[0][0]);
+        }
+        TextureRegion[] values = new TextureRegion[allTextures.size()];
+        return allTextures.toArray(values);
     }
 }

@@ -12,6 +12,8 @@ import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
+import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
+import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
@@ -34,6 +36,8 @@ public class GameMaster {
     private static final int BASE_ENERGY_AT_EVERY_TURN = 200;
     private static final int MIN_ENERGY_TO_ACT = 1000;
     private final ActionChosenListener commonActionPerformedListener;
+    private final CreatureDeadListener removeFromTurnWhenDeadListener;
+    ;
     public static final int DEFAULT_ACTION_COST = 200;
     /**
      * Lista ordinata delle agent che prendono parte alla turnazione.
@@ -50,6 +54,7 @@ public class GameMaster {
     public GameMaster() {
         this.agentsPlaying = new ArrayList<IAgent>();
         this.commonActionPerformedListener = getActionChosenListener();
+        this.removeFromTurnWhenDeadListener = getDeadListener();
         this.someoneIsPlaying = false;
         this.currentAgent = -1;
 
@@ -58,8 +63,10 @@ public class GameMaster {
 
     private void init() {
         for(ICreature creature : GameModel.get().getCreatures()){
-            if(creature instanceof Enemy)
+            if(creature instanceof Enemy) {
                 this.addAgent(creature);
+                creature.addCreatureDeadListener(this.removeFromTurnWhenDeadListener);
+            }
         }
 
         DefaultHero hero = GameModel.get().getHero();
@@ -73,7 +80,7 @@ public class GameMaster {
     public void addAgent(IAgent newAgent) {
         this.agentsPlaying.add(newAgent);
         newAgent.addActionChosenListener(this.commonActionPerformedListener);
-        Gdx.app.log("GM", "Aggiunto agente: " + newAgent);
+        Gdx.app.log(GameMaster.class.toString(), "Aggiunto agente alla turnazione: " + newAgent);
     }
 
     public void addAllAgents(Collection<IAgent> agents) {
@@ -81,6 +88,12 @@ public class GameMaster {
             this.addAgent(agent);
         }
     }
+
+    private void removeAgent(IAgent agent) {
+        this.agentsPlaying.remove(agent);
+        Gdx.app.log(GameMaster.class.toString(), "Rimosso agente dalla turnazione: " + agent);
+    }
+
 
     public void step() {
         if (someoneIsPlaying || GameController.isGameEnded())   return;
@@ -145,6 +158,22 @@ public class GameMaster {
     }
 
     /**
+     * Restituisce un listener da aggiungere alle creature
+     * che le rimuove dalla turnazione al momento della morte.
+     * @return il listener
+     */
+    private CreatureDeadListener getDeadListener() {
+        return new CreatureDeadListener() {
+            @Override
+            public void changed(CreatureDeadEvent event, Object source) {
+                if (source instanceof IAgent) {
+                    GameMaster.this.removeAgent((IAgent) source);
+                }
+            }
+        };
+    }
+
+    /**
      * Sposta il turno alla nuova creatura.
      * Le fornisce anche l'energia bonus di inizio turno.
      * @return la nuova creatura di turno
@@ -154,6 +183,12 @@ public class GameMaster {
         //Mi sposto alla creatura successiva, in ordine
         this.currentAgent = (this.currentAgent+1) % this.agentsPlaying.size();
         IAgent agentOnTurn = agentsPlaying.get(currentAgent);
+
+        //Controllo che la nuova creatura dei turno non dovrebbe essere già morta (e quindi rimmossa dalla turnazione)
+        if (agentOnTurn instanceof ICreature && ((ICreature)agentOnTurn).getHPCurrent() <= 0) {
+            Gdx.app.error(GameMaster.class.toString(), "ERRORE: passato il turno ad una creatura con hp <= 0: " + agentOnTurn);
+        }
+
 
         //Alla nuova creatura viene assegnata l'energia di inizio turno
         this.addBonusEnergy(agentOnTurn);

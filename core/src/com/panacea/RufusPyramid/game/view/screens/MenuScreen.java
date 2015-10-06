@@ -41,15 +41,18 @@ public class MenuScreen implements Screen {
     Skin skin;
     private TextButton buttonPlay;
     private TextButton buttonExit;
-    //    private Label title;
+//    private Label title;
     private Texture texture;
     private Image title;
-    private ArrayList<ObjectAnimation> menuAnimations;
+//    private ArrayList<ObjectAnimation> menuAnimations;
+//    private ObjectAnimation fireAnim;
     private Music introMusic;
 
     AssetManager manager;
     @Override
     public void show() {
+        stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT));
+        table = new Table();
         manager = new AssetManager();
         manager.load("data/sfx/intro.mp3", Music.class);
 
@@ -63,6 +66,7 @@ public class MenuScreen implements Screen {
         buttonPlay = new TextButton("Play", skin);
         buttonExit = new TextButton("Exit", skin);
 
+//        title = new Label("Game Title", skin);
         texture = new Texture(Gdx.files.internal("data/title.png"));
         title = new Image(texture);
         stage.addActor(title);
@@ -97,13 +101,19 @@ public class MenuScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        this.menuAnimations = new ArrayList<ObjectAnimation>();
-        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(-115, 150), false));
-        this.menuAnimations.add(new ObjectAnimation(SpritesProvider.OggettoStatico.FIRE, new GridPoint2(65, 150), false));
+        /* Aggiungo i fuochi animati */
+        TextureRegion[] frames = SpritesProvider.getStaticSprites(SpritesProvider.OggettoStatico.FIRE);
 
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.create();
-        }
+        Animation animation = new Animation(0.05f, frames);
+        AnimatedImage animImg = new AnimatedImage(animation);
+        animImg.setPosition(20, VIEWPORT_HEIGHT - 140);
+        stage.addActor(animImg);
+
+        Animation animation2 = new Animation(0.05f, frames);
+        AnimatedImage animImg2 = new AnimatedImage(animation);
+        animImg2.setPosition(stage.getWidth() - 80, VIEWPORT_HEIGHT - 140);
+        stage.addActor(animImg2);
+
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -145,9 +155,9 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.dispose();
-        }
+//        for (ObjectAnimation obj: menuAnimations) {
+//            obj.dispose();
+//        }
         introMusic.dispose();
     }
 }

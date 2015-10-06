@@ -98,7 +98,7 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public void setHPCurrent(int currentHP) {
         this.currentHP = currentHP;
-        if (this.currentHP < 0) {
+        if (this.currentHP <= 0) {
             this.fireCreatureDeadEvent();
         }
     }
