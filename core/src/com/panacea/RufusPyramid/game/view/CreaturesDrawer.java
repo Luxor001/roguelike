@@ -17,6 +17,7 @@ import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
 import com.panacea.RufusPyramid.game.view.animations.AnimDamage;
+import com.panacea.RufusPyramid.game.view.animations.AnimDeath;
 import com.panacea.RufusPyramid.game.view.animations.AnimInfo;
 import com.panacea.RufusPyramid.game.view.animations.AnimStrike;
 import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
@@ -106,6 +107,8 @@ public class CreaturesDrawer extends ViewObject {
         for (ICreature creature : this.creaturesList) {
             switch (this.currentStates.get(creature.getID())) {
 
+                case STRIKING:
+                case DYING:
                 case WALKING:
                     //TODO fare l'animazione di camminata
                     AbstractAnimation currentAnimation = this.currentAnimations.get(creature.getID());
@@ -173,6 +176,23 @@ public class CreaturesDrawer extends ViewObject {
         this.walkAnimation(creature, path, listener);
     }
 
+    public void startDeath(final ICreature dying) {
+        //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
+        if(heroInput == null)
+            this.heroInput = InputManager.get().getHeroProcessor();
+        CreaturesDrawer.this.heroInput.setPaused(true);
+        AnimationEndedListener listener = new AnimationEndedListener() {
+            @Override
+            public void ended(AnimationEndedEvent event, Object source) {
+                //Poi renderizzo l'eroe in setStanding e riabilito l'input
+
+                CreaturesDrawer.this.setStanding(dying.getID());
+                CreaturesDrawer.this.heroInput.setPaused(false);
+            }
+        };
+        this.deathAnimation(dying, listener);
+    }
+
     public void startStrike(final ICreature attacker) {
         //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
         if(heroInput == null)
@@ -222,7 +242,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1), 80.0f, creature.getFlipX(), creature);
+        AbstractAnimation currentAnimation = new AnimWalk(creature.getClass(), path.get(0), path.get(1)/*, 80.0f*/, creature.getFlipX(), creature);
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(creature.getID(), currentAnimation);
@@ -238,8 +258,19 @@ public class CreaturesDrawer extends ViewObject {
         this.currentStates.put(attacker.getID(), CreatureState.WALKING);
     }
 
+    private void deathAnimation(ICreature dying, AnimationEndedListener listener) {
+//        this.startWalk(creature, path.get(0), path.get(1));
+        AbstractAnimation currentAnimation = new AnimDeath(dying.getClass(), dying.getPosition().getPosition(), dying.getFlipX());
+        currentAnimation.create();
+        currentAnimation.addListener(listener);
+        this.currentAnimations.put(dying.getID(), currentAnimation);
+        this.currentStates.put(dying.getID(), CreatureState.WALKING);
+    }
+
     private enum CreatureState {
         STANDING,
-        WALKING
+        WALKING,
+        DYING,
+        STRIKING
     }
 }

@@ -15,6 +15,8 @@ import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
+import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Tile;
 
@@ -242,7 +244,11 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     public void fireCreatureDeadEvent() {
-        CreatureDeadEvent event = new CreatureDeadEvent(this.getHPCurrent());
+        // TODO: andrebbe messo nel controller... Ma come?
+        GameDrawer.get().getCreaturesDrawer().startDeath(this);
+        // TODO: DA SISTEMARE LE ANIMAZIONI
+
+        CreatureDeadEvent event = new CreatureDeadEvent(this.getHPCurrent(), null);
         for (CreatureDeadListener listener : this.creatureDeadListeners) {
             listener.changed(event, this);
         }
