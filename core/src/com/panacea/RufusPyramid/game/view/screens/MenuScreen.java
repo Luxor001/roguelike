@@ -7,6 +7,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
+import com.panacea.RufusPyramid.game.view.animations.AnimatedImage;
 import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
 
 import java.util.ArrayList;
@@ -41,11 +44,8 @@ public class MenuScreen implements Screen {
     Skin skin;
     private TextButton buttonPlay;
     private TextButton buttonExit;
-//    private Label title;
     private Texture texture;
     private Image title;
-//    private ArrayList<ObjectAnimation> menuAnimations;
-//    private ObjectAnimation fireAnim;
     private Music introMusic;
 
     AssetManager manager;
@@ -126,9 +126,6 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
-        for (ObjectAnimation obj: menuAnimations) {
-            obj.render(delta);
-        }
     }
 
     @Override
@@ -155,9 +152,6 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-//        for (ObjectAnimation obj: menuAnimations) {
-//            obj.dispose();
-//        }
         introMusic.dispose();
     }
 }

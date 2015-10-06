@@ -243,7 +243,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimWalk(path.get(0), path.get(1)/*, 80.0f,*/ creature.getFlipX(), creature);
+        AbstractAnimation currentAnimation = new AnimWalk(creature, path.get(0), path.get(1), creature.getFlipX());
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(creature.getID(), currentAnimation);
@@ -261,7 +261,7 @@ public class CreaturesDrawer extends ViewObject {
 
     private void deathAnimation(ICreature dying, AnimationEndedListener listener) {
 //        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimDeath(dying.getClass(), dying.getPosition().getPosition(), dying.getFlipX());
+        AbstractAnimation currentAnimation = new AnimDeath(dying, dying.getPosition().getPosition(), dying.getFlipX());
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(dying.getID(), currentAnimation);

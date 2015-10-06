@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
@@ -18,19 +19,7 @@ import com.panacea.RufusPyramid.game.view.SpritesProvider;
  */
 public class AnimDeath extends AbstractCreatureAnimation {
 
-    private Class modelClass;
-
-    public AnimDeath(Class modelClass, GridPoint2 position, boolean flipX) {
-        super(modelClass, position, flipX, SpritesProvider.Azione.DEATH);
-        this.modelClass = modelClass;
+    public AnimDeath(ICreature creature, GridPoint2 position, boolean flipX) {
+        super(creature, position, flipX, SpritesProvider.Azione.DEATH);
     }
-
-//    public void create() {
-//        super.create();
-//        if (this.modelClass == DefaultHero.class) {
-//            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_SLICE.getValue() - 1);
-//            SoundsProvider.get().loadSound(SoundsProvider.Sounds.COMBAT_SLICE);
-//            this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_SLICE)[randSound]);
-//        }
-//    }
 }

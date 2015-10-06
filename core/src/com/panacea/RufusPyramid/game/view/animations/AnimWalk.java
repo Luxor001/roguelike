@@ -29,11 +29,8 @@ public class AnimWalk extends AbstractCreatureAnimation {
 
     private ICreature creature;
 
-    Sound footsteps;
-
-
-    public AnimWalk(Class modelClass, GridPoint2 startPoint, GridPoint2 endPoint/*, float speed*/, boolean flipX, ICreature creature) {
-        super(modelClass, startPoint, flipX, SpritesProvider.Azione.WALK);
+    public AnimWalk(ICreature creature, GridPoint2 startPoint, GridPoint2 endPoint/*, float speed*/, boolean flipX) {
+        super(creature, startPoint, flipX, SpritesProvider.Azione.WALK);
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.speed = 140f;

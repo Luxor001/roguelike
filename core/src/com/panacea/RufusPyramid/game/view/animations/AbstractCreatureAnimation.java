@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameBatch;
-import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
 /**
@@ -27,28 +27,23 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
     private float frameDuration = 0;
     private GridPoint2 absolutePosition;
 
-    private Class modelClass;
+    private ICreature model;
     private boolean flipX;//the texture should be mirrored?
 
     private Sound sound;
     private float soundVolume = 1f;
     private Long soundId;
 
-    public AbstractCreatureAnimation(Class modelClass, GridPoint2 relativePosition, boolean flipX, SpritesProvider.Azione actionType) {
+    public AbstractCreatureAnimation(ICreature creature, GridPoint2 relativePosition, boolean flipX, SpritesProvider.Azione actionType) {
         this.frameDuration = 0.05f;
-        this.modelClass = modelClass;
+        this.model = creature;
         this.setAbsolutePosition(Utilities.convertToAbsolutePos(relativePosition));
         this.flipX = flipX;
         this.actionType = actionType;
     }
 
     public void create() {
-        if (this.modelClass == DefaultHero.class) {
-            frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.HERO1, this.actionType);
-
-        } else {    //TODO gestire tutti i nemici
-            frames = SpritesProvider.getSprites(SpritesProvider.Oggetto.ORC_BASE, this.actionType);
-        }
+        frames = SpritesProvider.getSprites(this.model.getCreatureType(), this.actionType);
         animation = new Animation(frameDuration, frames);
         spriteBatch = GameBatch.get();
         stateTime = 0f;

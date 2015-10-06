@@ -4,6 +4,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
@@ -14,16 +15,16 @@ import com.panacea.RufusPyramid.game.view.SpritesProvider;
  */
 public class AnimStrike extends AbstractCreatureAnimation {
 
-    private Class modelClass;
+    private final ICreature.CreatureType modelType;
 
-    public AnimStrike(Class modelClass, GridPoint2 position, boolean flipX) {
-        super(modelClass, position, flipX, SpritesProvider.Azione.STRIKE);
-        this.modelClass = modelClass;
+    public AnimStrike(ICreature creature, GridPoint2 position, boolean flipX) {
+        super(creature, position, flipX, SpritesProvider.Azione.STRIKE);
+        this.modelType = creature.getCreatureType();
     }
 
     public void create() {
         super.create();
-        if (this.modelClass == DefaultHero.class) {
+        if (this.modelType.equals(ICreature.CreatureType.HERO)) {
             int randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_SLICE.getValue() - 1);
             SoundsProvider.get().loadSound(SoundsProvider.Sounds.COMBAT_SLICE);
             this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_SLICE)[randSound]);
