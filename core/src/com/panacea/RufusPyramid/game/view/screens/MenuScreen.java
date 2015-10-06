@@ -41,7 +41,7 @@ public class MenuScreen implements Screen {
     Skin skin;
     private TextButton buttonPlay;
     private TextButton buttonExit;
-//    private Label title;
+    //    private Label title;
     private Texture texture;
     private Image title;
     private ArrayList<ObjectAnimation> menuAnimations;
