@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
 
@@ -47,7 +46,6 @@ public class MenuScreen implements Screen {
     private Image title;
     private ArrayList<ObjectAnimation> menuAnimations;
     private Music introMusic;
-
 
     AssetManager manager;
     @Override
