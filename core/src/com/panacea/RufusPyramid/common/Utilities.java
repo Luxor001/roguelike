@@ -1,6 +1,8 @@
 package com.panacea.RufusPyramid.common;
 
 import com.badlogic.gdx.math.GridPoint2;
+import org.apache.commons.math3.*;
+import org.apache.commons.math3.distribution.*;
 
 import java.util.Random;
 
@@ -22,6 +24,11 @@ public class Utilities {
         Random rand = new Random(seed);
         int randomNum = rand.nextInt((max - min) + 1) + min;
         return randomNum;
+    }
+    public static double randWithProb(double[] numsToGenerate, double[] prob){
+        EnumeratedRealDistribution distribution =
+                new EnumeratedRealDistribution(numsToGenerate, prob);
+        return distribution.sample();
     }
 
     public enum Directions{
@@ -81,4 +88,5 @@ public class Utilities {
         int y = Math.abs(first.y - second.y);
         return new GridPoint2(x,y);
     }
+
 }

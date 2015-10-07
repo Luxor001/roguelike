@@ -17,6 +17,8 @@ public class AttackAction implements IAction {
     private final ICreature attacked;
     private final ICreature attacker;
 
+    public static final double[] attackMultipliers = new double[]      { 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f}; //probabilità
+    public static final double[] attackMultipliersProb = new double[] { 0.5, 0.1, 0.5, 0.2, 0.1, 0.5 };
     public AttackAction(ICreature attacker, ICreature attacked) {
         this.attacker = attacker;
         this.attacked = attacked;
@@ -68,11 +70,14 @@ public class AttackAction implements IAction {
             //Se le due creature sono distanti più di un quadretto non è possibile effettuare l'attacco.
             return false;
         }
+
         return true;
     }
 
     private int getDamage(double attackerAttack, double attackedDefence) {
-        int dmg = Math.round(Math.round(attackerAttack - attackedDefence));
-        return dmg < 1 ? 1 : dmg;
+        double dmg = (attackerAttack - attackedDefence);
+        double multiplier = Utilities.randWithProb(AttackAction.attackMultipliers,AttackAction.attackMultipliersProb);
+        dmg *=multiplier;
+        return (int)( dmg < 1 ? 1 : Math.round(dmg));
     }
 }

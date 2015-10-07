@@ -10,6 +10,7 @@ import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.creatures.Stats;
 import com.panacea.RufusPyramid.game.items.ChestItem;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
@@ -72,21 +73,28 @@ public class GameModel {
         GridPoint2 spawnpoint=newMap.getSpawnPoint().getPosition();
         this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
         GridPoint2 absolute = Utilities.convertToAbsolutePos(spawnpoint);
-        this.hero.setAbsoluteTickPosition(new Vector2(absolute.x,absolute.y));
+        this.hero.setAbsoluteTickPosition(new Vector2(absolute.x, absolute.y));
         this.addCreature(this.hero);
 
+
        Enemy newEnemy;
-        for(int i=0; i < 10; i++) {
-            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 10, 5, 5, 5, ICreature.CreatureType.ORC);
-            newEnemy.setPosition(newMap.getRandomEnemyPosition());
-            this.addCreature(newEnemy);
+        for(int i=0; i < Utilities.randInt(7,13); i++) { //numero casuale di nemici da 7 a 13..
+            int randType = Utilities.randInt(0,10);
+            Stats randStat;
+            if(randType <= 3){
+                randStat = new Stats(Utilities.randInt(6,10),Utilities.randInt(3,5), Utilities.randInt(5,7), Utilities.randInt(5,7));
+                newEnemy = new Enemy("Crypt Skeleton", "Crypt Skeleton", randStat, ICreature.CreatureType.SKELETON);
+                newEnemy.setPosition(newMap.getRandomEnemyPosition());
+                this.addCreature(newEnemy);
+            }
+            if(randType <=7){
+                randStat = new Stats(Utilities.randInt(8,12),Utilities.randInt(4,6), Utilities.randInt(4,6), Utilities.randInt(3,5));
+                newEnemy = new Enemy("Cave Orc", "It's ugly as hell!!",randStat, ICreature.CreatureType.ORC);
+                newEnemy.setPosition(newMap.getRandomEnemyPosition());
+                this.addCreature(newEnemy);
+            }
         }
 
-        for(int i=0; i < 5; i++) {
-            newEnemy = new Enemy("PooPoo the smelly", "it Smells!", 10, 5, 5, 5, ICreature.CreatureType.SKELETON);
-            newEnemy.setPosition(newMap.getRandomEnemyPosition());
-            this.addCreature(newEnemy);
-        }
         for(int i=0; i < 5; i++) {
             Item newItem;
             Tile randomPos;

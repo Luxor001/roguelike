@@ -11,9 +11,9 @@ public class DefaultHero extends AbstractCreature {
 
     private static final String DESCRIPTION = "The hero of the game.";
     private static final int MAX_HP = 25;
-    private static final double ATTACK = 5;
-    private static final double DEFENCE = 5;
-    private static final double SPEED = 5;
+    private static final double ATTACK = 7;
+    private static final double DEFENCE = 7;
+    private static final double SPEED = 7;
     private ICreature firstTarget;
     public HealthBar health;
 
