@@ -19,7 +19,7 @@ import com.panacea.RufusPyramid.game.view.SpritesProvider;
  */
 public class AnimDeath extends AbstractCreatureAnimation {
 
-    public AnimDeath(ICreature creature, GridPoint2 position, boolean flipX) {
-        super(creature, position, flipX, SpritesProvider.Azione.DEATH);
+    public AnimDeath(ICreature creature, AnimationData data) {
+        super(creature, data, SpritesProvider.Azione.DEATH);
     }
 }

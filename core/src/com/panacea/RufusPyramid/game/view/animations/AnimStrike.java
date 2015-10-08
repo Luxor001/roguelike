@@ -17,8 +17,8 @@ public class AnimStrike extends AbstractCreatureAnimation {
 
     private final ICreature.CreatureType modelType;
 
-    public AnimStrike(ICreature creature, GridPoint2 position, boolean flipX) {
-        super(creature, position, flipX, SpritesProvider.Azione.STRIKE);
+    public AnimStrike(ICreature creature, AnimationData data) {
+        super(creature, data, SpritesProvider.Azione.STRIKE);
         this.modelType = creature.getCreatureType();
     }
 

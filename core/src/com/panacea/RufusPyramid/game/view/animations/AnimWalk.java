@@ -29,10 +29,10 @@ public class AnimWalk extends AbstractCreatureAnimation {
 
     private ICreature creature;
 
-    public AnimWalk(ICreature creature, GridPoint2 startPoint, GridPoint2 endPoint/*, float speed*/, boolean flipX) {
-        super(creature, startPoint, flipX, SpritesProvider.Azione.WALK);
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
+    public AnimWalk(ICreature creature, AnimWalkData data) {
+        super(creature, data, SpritesProvider.Azione.WALK);
+        this.startPoint = data.position;
+        this.endPoint = data.endPosition;
         this.speed = 140f;
         this.creature = creature;
         this.setAbsolutePosition(Utilities.convertToAbsolutePos(startPoint));
@@ -83,6 +83,15 @@ public class AnimWalk extends AbstractCreatureAnimation {
 
         if (toDispose) {
             this.dispose();
+        }
+    }
+
+    public static class AnimWalkData extends AnimationData {
+        public final GridPoint2 endPosition;
+
+        public AnimWalkData(GridPoint2 startPosition, GridPoint2 endPosition, boolean flipX) {
+            super(startPosition, flipX);
+            this.endPosition = endPosition;
         }
     }
 }

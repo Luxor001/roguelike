@@ -22,6 +22,7 @@ import com.panacea.RufusPyramid.game.view.animations.AnimDeath;
 import com.panacea.RufusPyramid.game.view.animations.AnimInfo;
 import com.panacea.RufusPyramid.game.view.animations.AnimStrike;
 import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
+import com.panacea.RufusPyramid.game.view.animations.AnimationData;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
@@ -31,6 +32,8 @@ import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javafx.animation.Animation;
 
 /**
  * Created by gio on 16/07/15.
@@ -88,13 +91,12 @@ public class CreaturesDrawer extends ViewObject {
     }
 
     private static TextureRegion getCreatureSprite(ICreature creature) {
-        //TODO ritornare la texture corretta a seconda del modello di "cattivo" scelto.
         return SpritesProvider.getSprites(creature.getCreatureType(), SpritesProvider.Azione.STAND)[0];
     }
 
     private static TextureRegion getHeroSprite(DefaultHero heroModel) {
-        //TODO ritornare la texture corretta a seconda del modello di eroe scelto.
-        return SpritesProvider.getSprites(heroModel.getCreatureType() ,SpritesProvider.Azione.STAND)[0];
+//        return SpritesProvider.getSprites(heroModel.getCreatureType() ,SpritesProvider.Azione.STAND)[0];
+        return getCreatureSprite(heroModel);
     }
 
     private void setStanding(int creatureID) {
@@ -111,7 +113,6 @@ public class CreaturesDrawer extends ViewObject {
                 case STRIKING:
                 case DYING:
                 case WALKING:
-                    //TODO fare l'animazione di camminata
                     AbstractAnimation currentAnimation = this.currentAnimations.get(creature.getID());
                     if (currentAnimation != null) {
                         currentAnimation.render(delta);
@@ -160,55 +161,22 @@ public class CreaturesDrawer extends ViewObject {
 
     public void startWalk(final ICreature creature, GridPoint2 startPoint, final GridPoint2 endPoint) {
         //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
-        if(heroInput == null)
-            this.heroInput = InputManager.get().getHeroProcessor();
-        CreaturesDrawer.this.heroInput.setPaused(true);
-        ArrayList<GridPoint2> path = new ArrayList<GridPoint2>(2);
-        path.add(startPoint);
-        path.add(endPoint);
-        AnimationEndedListener listener = new AnimationEndedListener() {
-            @Override
-            public void ended(AnimationEndedEvent event, Object source) {
-                //Poi renderizzo l'eroe in setStanding e riabilito l'input
-                CreaturesDrawer.this.setStanding(creature.getID());
-                CreaturesDrawer.this.heroInput.setPaused(false);
-            }
-        };
-        this.walkAnimation(creature, path, listener);
+
+//        ArrayList<GridPoint2> path = new ArrayList<GridPoint2>(2);
+//        path.add(startPoint);
+//        path.add(endPoint);
+        AnimWalk.AnimWalkData data = new AnimWalk.AnimWalkData(startPoint, endPoint, creature.getFlipX());
+        this.startCreatureAnimation(creature, data, CreatureState.WALKING);
     }
 
     public void startDeath(final ICreature dying) {
-        //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
-        if(heroInput == null)
-            this.heroInput = InputManager.get().getHeroProcessor();
-        CreaturesDrawer.this.heroInput.setPaused(true);
-        AnimationEndedListener listener = new AnimationEndedListener() {
-            @Override
-            public void ended(AnimationEndedEvent event, Object source) {
-                //Poi renderizzo l'eroe in setStanding e riabilito l'input
-
-                CreaturesDrawer.this.setStanding(dying.getID());
-                CreaturesDrawer.this.heroInput.setPaused(false);
-            }
-        };
-        this.deathAnimation(dying, listener);
+        AnimationData data = new AnimationData(dying.getPosition().getPosition(), dying.getFlipX());
+        this.startCreatureAnimation(dying, data, CreatureState.DYING);
     }
 
     public void startStrike(final ICreature attacker) {
-        //Faccio l'animazione di camminata in base ai dati dell'evento e metto in pausa l'input utente
-        if(heroInput == null)
-            this.heroInput = InputManager.get().getHeroProcessor();
-        CreaturesDrawer.this.heroInput.setPaused(true);
-        AnimationEndedListener listener = new AnimationEndedListener() {
-            @Override
-            public void ended(AnimationEndedEvent event, Object source) {
-                //Poi renderizzo l'eroe in setStanding e riabilito l'input
-
-                CreaturesDrawer.this.setStanding(attacker.getID());
-                CreaturesDrawer.this.heroInput.setPaused(false);
-            }
-        };
-        this.strikeAnimation(attacker, listener);
+        AnimationData data = new AnimationData(attacker.getPosition().getPosition(), attacker.getFlipX());
+        this.startCreatureAnimation(attacker, data, CreatureState.STRIKING);
     }
 
     public void startDamage(GridPoint2 position, int damage) {
@@ -241,31 +209,88 @@ public class CreaturesDrawer extends ViewObject {
 
     }
 
-    private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
-//        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimWalk(creature, path.get(0), path.get(1), creature.getFlipX());
-        currentAnimation.create();
-        currentAnimation.addListener(listener);
-        this.currentAnimations.put(creature.getID(), currentAnimation);
-        this.currentStates.put(creature.getID(), CreatureState.WALKING);
+//    private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
+////        this.startWalk(creature, path.get(0), path.get(1));
+//        AbstractAnimation currentAnimation = new AnimWalk(creature, path.get(0), path.get(1), creature.getFlipX());
+//        currentAnimation.create();
+//        currentAnimation.addListener(listener);
+//        this.currentAnimations.put(creature.getID(), currentAnimation);
+//        this.currentStates.put(creature.getID(), CreatureState.WALKING);
+//    }
+//
+//    private void strikeAnimation(ICreature attacker, AnimationEndedListener listener) {
+////        this.startWalk(creature, path.get(0), path.get(1));
+//        AbstractAnimation currentAnimation = new AnimStrike(attacker, attacker.getPosition().getPosition(), attacker.getFlipX());
+//        currentAnimation.create();
+//        currentAnimation.addListener(listener);
+//        this.currentAnimations.put(attacker.getID(), currentAnimation);
+//        this.currentStates.put(attacker.getID(), CreatureState.WALKING);
+//    }
+//
+//    private void deathAnimation(ICreature dying, AnimationEndedListener listener) {
+////        this.startWalk(creature, path.get(0), path.get(1));
+//        AbstractAnimation currentAnimation = new AnimDeath(dying, dying.getPosition().getPosition(), dying.getFlipX());
+//        currentAnimation.create();
+//        currentAnimation.addListener(listener);
+//        this.currentAnimations.put(dying.getID(), currentAnimation);
+//        this.currentStates.put(dying.getID(), CreatureState.WALKING);
+//    }
+    private void startCreatureAnimation(final ICreature toAnimate, AnimationData data, CreatureState state) {
+        this.startCreatureAnimation(toAnimate, data, state, null);
     }
 
-    private void strikeAnimation(ICreature attacker, AnimationEndedListener listener) {
-//        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimStrike(attacker, attacker.getPosition().getPosition(), attacker.getFlipX());
-        currentAnimation.create();
-        currentAnimation.addListener(listener);
-        this.currentAnimations.put(attacker.getID(), currentAnimation);
-        this.currentStates.put(attacker.getID(), CreatureState.WALKING);
-    }
+    /**
+     * Avvia l'animazione di una creatura mettendo in pausa l'input utente, aggiungendo un listener di tipo
+     * AnimationEndedListener all'animazione e impostando lo stato in input alla creatura da animare.
+     * L'animazione viene scelta in base allo stato di input.
+     *
+     * @param toAnimate La creatura da animare
+     * @param data I dati necessari all'animazione
+     * @param state Lo stato in cui la creatura deve essere impostata
+     * @param listener Il listener da settare con le operazioni da effettuare alla fine dell'animazione (opzionale). Se null viene usato il listener di default.
+     */
+    private void startCreatureAnimation(final ICreature toAnimate, AnimationData data, CreatureState state, AnimationEndedListener listener) {
+        //Preparo il gioco per iniziare l'animazione
+        if(heroInput == null)
+            this.heroInput = InputManager.get().getHeroProcessor();
+        CreaturesDrawer.this.heroInput.setPaused(true);
 
-    private void deathAnimation(ICreature dying, AnimationEndedListener listener) {
-//        this.startWalk(creature, path.get(0), path.get(1));
-        AbstractAnimation currentAnimation = new AnimDeath(dying, dying.getPosition().getPosition(), dying.getFlipX());
+        if (listener == null) { //Utilizzo il listener di default, che semplicemente reimposta lo stato della creatura a STANDING
+            listener = new AnimationEndedListener() {
+                @Override
+                public void ended(AnimationEndedEvent event, Object source) {
+                    //Poi renderizzo l'eroe in setStanding e riabilito l'input
+                    CreaturesDrawer.this.setStanding(toAnimate.getID());
+                    CreaturesDrawer.this.heroInput.setPaused(false);
+                }
+            };
+        }
+
+        //Avvio l'animazione
+        AbstractAnimation currentAnimation;
+        switch (state) {
+            case WALKING:
+                if (data instanceof AnimWalk.AnimWalkData) {
+                    currentAnimation = new AnimWalk(toAnimate, (AnimWalk.AnimWalkData)data);
+                } else {
+                    Gdx.app.error(CreaturesDrawer.class.toString(), "I dati in input per l'animazione di camminata non sono di tipo AnimWalkData ma " + data.getClass().toString());
+                }
+                break;
+            case STRIKING:
+                currentAnimation = new AnimStrike(toAnimate, data);
+                break;
+            case DYING:
+                currentAnimation = new AnimDeath(toAnimate, data);
+                break;
+            default:
+                return;
+        }
+
+        currentAnimation = new AnimDeath(toAnimate, data);
         currentAnimation.create();
         currentAnimation.addListener(listener);
-        this.currentAnimations.put(dying.getID(), currentAnimation);
-        this.currentStates.put(dying.getID(), CreatureState.WALKING);
+        this.currentAnimations.put(toAnimate.getID(), currentAnimation);
+        this.currentStates.put(toAnimate.getID(), state);
     }
 
     private enum CreatureState {

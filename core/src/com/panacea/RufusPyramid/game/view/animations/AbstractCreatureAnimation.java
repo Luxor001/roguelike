@@ -34,11 +34,11 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
     private float soundVolume = 1f;
     private Long soundId;
 
-    public AbstractCreatureAnimation(ICreature creature, GridPoint2 relativePosition, boolean flipX, SpritesProvider.Azione actionType) {
+    public AbstractCreatureAnimation(ICreature creature, AnimationData data, SpritesProvider.Azione actionType) {
         this.frameDuration = 0.05f;
         this.model = creature;
-        this.setAbsolutePosition(Utilities.convertToAbsolutePos(relativePosition));
-        this.flipX = flipX;
+        this.setAbsolutePosition(Utilities.convertToAbsolutePos(data.position));
+        this.flipX = data.flipX;
         this.actionType = actionType;
     }
 
