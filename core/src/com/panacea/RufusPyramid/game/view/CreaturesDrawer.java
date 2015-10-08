@@ -95,7 +95,7 @@ public class CreaturesDrawer extends ViewObject {
     }
 
     private static TextureRegion getHeroSprite(DefaultHero heroModel) {
-//        return SpritesProvider.getSprites(heroModel.getCreatureType() ,SpritesProvider.Azione.STAND)[0];
+//        return SpritesProvider.getSprites(heroModel.getCreatureType(), SpritesProvider.Azione.STAND)[0];
         return getCreatureSprite(heroModel);
     }
 
@@ -267,7 +267,7 @@ public class CreaturesDrawer extends ViewObject {
         }
 
         //Avvio l'animazione
-        AbstractAnimation currentAnimation;
+        AbstractAnimation currentAnimation = null;
         switch (state) {
             case WALKING:
                 if (data instanceof AnimWalk.AnimWalkData) {
@@ -286,7 +286,6 @@ public class CreaturesDrawer extends ViewObject {
                 return;
         }
 
-        currentAnimation = new AnimDeath(toAnimate, data);
         currentAnimation.create();
         currentAnimation.addListener(listener);
         this.currentAnimations.put(toAnimate.getID(), currentAnimation);
