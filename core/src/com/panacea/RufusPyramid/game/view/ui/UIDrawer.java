@@ -58,6 +58,7 @@ public class UIDrawer extends ViewObject {
     private HealthBar healthBar;
     private HealthBar manaBar;
     private Sound inventoryOpenSound;
+    private Sound inventoryCloseSound;
     private Sound pickSound;
     public UIDrawer() {
         this.labels = new ArrayList<Label>(3);
@@ -78,7 +79,7 @@ public class UIDrawer extends ViewObject {
         OrthographicCamera camera = new OrthographicCamera();
 
 
-        SoundsProvider.get().loadSound(SoundsProvider.Sounds.INVENTORY_OPEN);
+        SoundsProvider.get().loadSound(SoundsProvider.Sounds.INVENTORY);
         SoundsProvider.get().loadSound(SoundsProvider.Sounds.CLICK);
         //VEDI https://github.com/libgdx/libgdx/wiki/Viewports
         //Se si vuole rendere utilizzabile (e ridimensionabile) il gioco bisogna sicuramente cambiare Viewport
@@ -207,13 +208,16 @@ public class UIDrawer extends ViewObject {
                     GameController.gameInUI=true;
                     inventory.setVisible(true);
                     if (inventoryOpenSound == null)
-                        inventoryOpenSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY_OPEN)[0];
+                        inventoryOpenSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[0];
                     InputManager.get().getHeroProcessor().setPaused(true);
                     inventoryOpenSound.play(1f);
                 }else{
                     GameController.gameInUI = false;
                     inventory.setVisible(false);
+                    if (inventoryCloseSound == null)
+                        inventoryCloseSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[1];
                     InputManager.get().getHeroProcessor().setPaused(false);
+                    inventoryCloseSound.play(1f);
                 }
                 return true;
             }

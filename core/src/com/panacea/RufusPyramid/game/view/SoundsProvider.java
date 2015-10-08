@@ -20,9 +20,11 @@ public class SoundsProvider {
 
     public enum Sounds {
         COMBAT_SLICE(3), //the number into the parenthesis indicates the size of the array returned
+        COMBAT_WRATH(3),
+        COMBAT_MNSTR(2),
         COIN(1),
         FOOTSTEPS_INTERNAL(2),
-        INVENTORY_OPEN(1),
+        INVENTORY(2),
         CLICK(1);
 
         private final int id;
@@ -65,6 +67,17 @@ public class SoundsProvider {
                 files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/combat/swing3.ogg")));
                 break;
             }
+            case COMBAT_MNSTR:{
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/combat/mnstr1.ogg")));
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/combat/mnstr2.ogg")));
+                break;
+            }
+            case COMBAT_WRATH:{
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/combat/shade1.ogg")));
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/combat/shade2.ogg")));
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/combat/shade3.ogg")));
+                break;
+            }
             case COIN:{
                 files.add(Gdx.audio.newSound((Gdx.files.internal("data/sfx/misc/coins.ogg"))));
                 break;
@@ -74,8 +87,9 @@ public class SoundsProvider {
                 files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/misc/footsteps2.ogg")));
                 break;
             }
-            case INVENTORY_OPEN:{
+            case INVENTORY:{
                 files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/misc/inventory.ogg")));
+                files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/misc/inventory_close.ogg")));
                 break;
             }
             case CLICK:{

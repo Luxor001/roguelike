@@ -14,10 +14,12 @@ import java.util.List;
  */
 public interface ICreature extends IAgent {
 
-    public enum CreatureType{
+    enum CreatureType{
         HERO,
         ORC,
-        SKELETON
+        SKELETON,
+        UGLYYETI,
+        WRAITH
     }
 
     public int getID();

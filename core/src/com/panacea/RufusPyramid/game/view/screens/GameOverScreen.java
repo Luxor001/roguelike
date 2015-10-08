@@ -54,16 +54,13 @@ public class GameOverScreen implements Screen {
     private ObjectAnimation fireAnim;
     private Music introMusic;
 
-    AssetManager manager;
     private final static String decalsDirectory = "data/deco/gameover";
     private TextureRegion[] bloodDecals;
 
     @Override
     public void show() {
-        manager = new AssetManager();
-        manager.load("data/sfx/intro.mp3", Music.class);
 
-        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/intro.mp3"));
+        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/death_music.ogg"));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         skin.getAtlas().getTextures().iterator().next().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         skin.getFont("default-font").getData().markupEnabled = true;

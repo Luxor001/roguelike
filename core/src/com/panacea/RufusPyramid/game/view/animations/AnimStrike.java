@@ -29,5 +29,17 @@ public class AnimStrike extends AbstractCreatureAnimation {
             SoundsProvider.get().loadSound(SoundsProvider.Sounds.COMBAT_SLICE);
             this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_SLICE)[randSound]);
         }
+        if (this.modelType.equals(ICreature.CreatureType.WRAITH)) {
+            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_WRATH.getValue() - 1);
+            SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_WRATH);
+            this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_WRATH)[randSound]);
+            this.setSoundVolume(0.5f);
+        }
+        if (this.modelType.equals(ICreature.CreatureType.UGLYYETI)) {
+            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_MNSTR.getValue() - 1);
+            SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_MNSTR);
+            this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_MNSTR)[randSound]);
+            this.setSoundVolume(0.5f);
+        }
     }
 }

@@ -79,20 +79,37 @@ public class GameModel {
 
        Enemy newEnemy;
         for(int i=0; i < Utilities.randInt(7,13); i++) { //numero casuale di nemici da 7 a 13..
-            int randType = Utilities.randInt(0,10);
+            int randType = Utilities.randInt(0,30);
             Stats randStat;
             if(randType <= 3){
                 randStat = new Stats(Utilities.randInt(6,10),Utilities.randInt(3,5), Utilities.randInt(5,7), Utilities.randInt(5,7));
                 newEnemy = new Enemy("Crypt Skeleton", "Crypt Skeleton", randStat, ICreature.CreatureType.SKELETON);
+                newEnemy.sigthLength = Utilities.randInt(4,7);
                 newEnemy.setPosition(newMap.getRandomEnemyPosition());
                 this.addCreature(newEnemy);
             }
-            if(randType <=7){
-                randStat = new Stats(Utilities.randInt(8,12),Utilities.randInt(4,6), Utilities.randInt(4,6), Utilities.randInt(3,5));
-                newEnemy = new Enemy("Cave Orc", "It's ugly as hell!!",randStat, ICreature.CreatureType.ORC);
+                if (randType > 3 && randType <= 7) {
+                    randStat = new Stats(Utilities.randInt(8, 12), Utilities.randInt(4, 6), Utilities.randInt(4, 6), Utilities.randInt(3, 5));
+                    newEnemy = new Enemy("Cave Orc", "It's ugly as hell!!", randStat, ICreature.CreatureType.ORC);
+                    newEnemy.sigthLength = Utilities.randInt(4,7);
+                    newEnemy.setPosition(newMap.getRandomEnemyPosition());
+                    this.addCreature(newEnemy);
+                }
+            if (randType > 7 && randType <= 15) {
+                randStat = new Stats(Utilities.randInt(8, 12), Utilities.randInt(4, 6), Utilities.randInt(4, 6), Utilities.randInt(3, 5));
+                newEnemy = new Enemy("Ugly Beast", "His parents aren't proud", randStat, ICreature.CreatureType.UGLYYETI);
+                newEnemy.sigthLength = Utilities.randInt(4,7);
                 newEnemy.setPosition(newMap.getRandomEnemyPosition());
                 this.addCreature(newEnemy);
             }
+            if (randType > 15 && randType <= 30) {
+                randStat = new Stats(Utilities.randInt(8, 12), Utilities.randInt(4, 6), Utilities.randInt(4, 6), Utilities.randInt(3, 5));
+                newEnemy = new Enemy("Dark Shade", "Dark as barman.", randStat, ICreature.CreatureType.WRAITH);
+                newEnemy.sigthLength = Utilities.randInt(4,7);
+                newEnemy.setPosition(newMap.getRandomEnemyPosition());
+                this.addCreature(newEnemy);
+            }
+
         }
 
         for(int i=0; i < 5; i++) {

@@ -24,6 +24,8 @@ public class SpritesProvider {
     private static TextureRegion[][] hero1 = loadTexture("creatures/hero_spritesheetx32.png", 13, 21);
     private static TextureRegion[][] orc_base = loadTexture("creatures/orc_spritesheetx32.png", 13, 21);
     private static TextureRegion[][] skeleton_base = loadTexture("creatures/skeleton_spritesheetx32.png", 13, 21);
+    private static TextureRegion[][] wtfcreature_base = loadTexture("creatures/wtfCreature2.png", 7, 5);
+    private static TextureRegion[][] wraith_base = loadTexture("creatures/wraith2.png", 8, 6);
     private static TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
 
     /**
@@ -47,6 +49,12 @@ public class SpritesProvider {
             case SKELETON:
                 allFrames = skeleton_base;
                 break;
+            case UGLYYETI:
+                allFrames = wtfcreature_base;
+                break;
+            case WRAITH:
+                allFrames = wraith_base;
+                break;
             default:
                 throw new IllegalArgumentException("Nessuno sprite disponibile per l'oggetto " + oggettoDaAnimare);
         }
@@ -61,14 +69,38 @@ public class SpritesProvider {
                 case STAND:
                         animationCols = 1;                    // Colonne 1
                         animationRow = 12;                    // Righe 9-12
+                    if(oggettoDaAnimare == ICreature.CreatureType.UGLYYETI){
+                        animationCols = 1;
+                        animationRow = 1;
+                    }
+                    if(oggettoDaAnimare == ICreature.CreatureType.WRAITH){
+                        animationCols = 8;
+                        animationRow = 5;
+                    }
                     break;
                 case WALK:
                         animationCols = 9;                    // Colonne 9
                         animationRow = 12;                    // Righe 9-12
+                    if(oggettoDaAnimare == ICreature.CreatureType.UGLYYETI){
+                        animationCols = 4;
+                        animationRow = 1;
+                    }
+                    if(oggettoDaAnimare == ICreature.CreatureType.WRAITH){
+                        animationCols = 8;
+                        animationRow = 5;
+                    }
                     break;
                 case STRIKE:
                         animationCols = 6;                    // Colonne 6
                         animationRow = 16;                    // Righe 13-16
+                    if(oggettoDaAnimare == ICreature.CreatureType.UGLYYETI){
+                        animationCols = 7;
+                        animationRow = 5;
+                    }
+                    if(oggettoDaAnimare == ICreature.CreatureType.WRAITH){
+                        animationCols = 8;
+                        animationRow = 6;
+                    }
                     break;
                 case CAST:
                         animationCols = 4;                    // Colonne 7
@@ -76,8 +108,7 @@ public class SpritesProvider {
                     break;
                 case DEATH:
                         animationCols = 6;                    // Colonne 6
-                        animationRow = 21;                    // Righe 21
-
+                        animationRow = 1;                    // Righe 21
                     break;
                 default:
                     throw new NullPointerException("Impossibile trovare lo sprite corretto per l'animazione " + azione + " dell'oggetto " + oggettoDaAnimare + ".");
@@ -102,10 +133,6 @@ public class SpritesProvider {
         }
 
         return animationFrames;
-    }
-
-    public enum Oggetto {
-        HERO1, ORC_BASE, SKELETON
     }
 
     public enum OggettoStatico {
