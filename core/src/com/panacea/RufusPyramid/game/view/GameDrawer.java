@@ -1,16 +1,12 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.GridPoint2;
-import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.rmi.CORBA.Util;
 
 /**
  * Contiene tutti gli oggetti da renderizzare a video durante una sessione di gioco.

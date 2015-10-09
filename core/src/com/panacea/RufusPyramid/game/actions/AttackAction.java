@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
-import com.panacea.RufusPyramid.game.creatures.Stats;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 
 /**

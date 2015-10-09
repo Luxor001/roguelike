@@ -1,9 +1,6 @@
 package com.panacea.RufusPyramid.common;
 
-import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
-
-import java.awt.Event;
 
 /**
  * Interfaccia da implementare quando una classe renderizza direttamente o indirettamente

@@ -1,8 +1,8 @@
 package com.panacea.RufusPyramid.common;
 
 import com.badlogic.gdx.math.GridPoint2;
-import org.apache.commons.math3.*;
-import org.apache.commons.math3.distribution.*;
+
+import org.apache.commons.math3.distribution.EnumeratedRealDistribution;
 
 import java.util.Random;
 

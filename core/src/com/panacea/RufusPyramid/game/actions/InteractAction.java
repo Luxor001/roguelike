@@ -58,7 +58,6 @@ public class InteractAction implements IAction {
             DefaultHero hero = GameModel.get().getHero();
             ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
             if (result.hasSuccess()) {
-//                hero.setPosition(GameModel.get().getCurrentMap().getMapContainer().getTile(convItem.getPosition()));
                 hero.addEffects(((UsableItem) itemToInteract).getEffects());
 
                 diario.addLine("Hai raccolto " + convItem.getItemName() + "!");
