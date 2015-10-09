@@ -1,5 +1,7 @@
 package com.panacea.RufusPyramid.common;
 
+import com.panacea.RufusPyramid.game.creatures.ICreature;
+
 /**
  * Created by gioele.masini on 09/10/2015.
  */
@@ -21,13 +23,14 @@ public abstract class Database {
 
     public void onCreate(){
         //Example of Highscore table code (You should change this for your own DB code creation)
-        execute("CREATE TABLE 'highscores' ('_id' INTEGER PRIMARY KEY  NOT NULL , 'name' VARCHAR NOT NULL , 'score' INTEGER NOT NULL );");
-        execute("INSERT INTO 'highscores'(name,score) values ('Cris',1234)");
+//        execute("CREATE  TABLE \"main\".\"Enemies\" (\"Id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , \"Name\" TEXT NOT NULL , \"Description\" TEXT, \"HpMax\" INTEGER NOT NULL , \"HpMin\" FLOAT NOT NULL , \"AttackMax\" FLOAT NOT NULL , \"AttackMin\" FLOAT NOT NULL , \"DefenceMax\" FLOAT NOT NULL , \"DefenceMin\" FLOAT NOT NULL , \"SpeedMax\" FLOAT NOT NULL , \"SpeedMin\" FLOAT NOT NULL , \"SightMax\" FLOAT NOT NULL , \"SightMin\" FLOAT NOT NULL , \"SpritesheetPath\" TEXT NOT NULL )");
+//        execute("INSERT INTO 'highscores'(name,score) values ('Cris',1234)");
         //Example of query to get DB data of Highscore table
-        Result q=query("SELECT * FROM 'highscores'");
+        System.out.println("Enemies loaded from db: ");
+        Result q=query("SELECT * FROM 'Enemies'");
         if (!q.isEmpty()){
-            q.moveToNext();
-            System.out.println("Highscore of "+q.getString(q.getColumnIndex("name"))+": "+q.getString(q.getColumnIndex("score")));
+            while (q.moveToNext())
+                System.out.println("Creature "+q.getString(q.getColumnIndex("Type"))+": "+q.getString(q.getColumnIndex("Name")));
         }
     }
 

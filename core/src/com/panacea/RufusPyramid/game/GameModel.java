@@ -88,7 +88,7 @@ public class GameModel {
             Stats randStat;
             if(randType <= 3){
                 randStat = new Stats(Utilities.randInt(6,10),Utilities.randInt(3,5), Utilities.randInt(5,7), Utilities.randInt(5,7));
-                newEnemy = new Enemy("Crypt Skeleton", "Crypt Skeleton", randStat, ICreature.CreatureType.SKELETON);
+                newEnemy = new Enemy("Crypt Skeleton", "A pile of bones.", randStat, ICreature.CreatureType.SKELETON);
                 newEnemy.sigthLength = Utilities.randInt(4,7);
                 newEnemy.setPosition(newMap.getRandomEnemyPosition());
                 this.addCreature(newEnemy);

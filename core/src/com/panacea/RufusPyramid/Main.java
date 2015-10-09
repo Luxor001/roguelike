@@ -8,7 +8,7 @@ import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 public class Main extends Game {
 
     public Main(Database gameDb) {
-
+        gameDb.onCreate();
     }
 
 	@Override
