@@ -59,25 +59,28 @@ public class InteractAction implements IAction {
 
         Diary diario= GameModel.get().getDiary();
         DefaultHero hero = GameModel.get().getHero();
-        if(UsableItem.class.isAssignableFrom(itemToInteract.getClass())){
+        if (UsableItem.class.isAssignableFrom(itemToInteract.getClass())) {
             UsableItem convItem = (UsableItem)itemToInteract;
-            items.remove(convItem);
-            hero.fireActionChosenEvent(new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())));
-   //         hero.setPosition(GameModel.get().getCurrentMap().getMapContainer().getTile(convItem.getPosition()));
-            hero.addEffects(((UsableItem) itemToInteract).getEffects());
+            items.remove(convItem);         
+            ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
+            if(result.hasSuccess()){
+                hero.addEffects(((UsableItem) itemToInteract).getEffects());
 
-            diario.addLine("Hai raccolto " + convItem.getItemName() + "!");
-     //       diario.addLine("+"+attackBonus+" Attack!");
+                diario.addLine("Hai raccolto " + convItem.getItemName() + "!");
+            }
         }
         if(itemToInteract instanceof GoldItem){
             GoldItem convItem = (GoldItem)itemToInteract;
-            hero.fireActionChosenEvent(new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())));
-            int goldAmount = convItem.getGoldAmount();
-            hero.addGold(goldAmount);
-            GameDrawer.get().getCreaturesDrawer().displayInfo(hero.getPosition().getPosition(), "+" + goldAmount, Color.YELLOW);
-            int randSound = Utilities.randInt(0,SoundsProvider.Sounds.GOLD_PICKUP.getValue()-1);
-            goldPickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.GOLD_PICKUP)[randSound];
-            goldPickSound.play(1f);
+            ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
+            if(result.hasSuccess()){
+                hero.addEffects(((UsableItem) itemToInteract).getEffects());
+                int goldAmount = convItem.getGoldAmount();
+                hero.addGold(goldAmount);
+                GameDrawer.get().getCreaturesDrawer().displayInfo(hero.getPosition().getPosition(), "+" + goldAmount, Color.YELLOW);
+                int randSound = Utilities.randInt(0, SoundsProvider.Sounds.GOLD_PICKUP.getValue() - 1);
+                goldPickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.GOLD_PICKUP)[randSound];
+                goldPickSound.play(1f);
+            }        
             items.remove(convItem);
         }
 
@@ -87,7 +90,7 @@ public class InteractAction implements IAction {
     public boolean canInteract(Item itemToInteract, ICreature creature){
 
         GridPoint2 pos1 = itemToInteract.getPosition(),
-        pos2 = creature.getPosition().getPosition();
+                pos2 = creature.getPosition().getPosition();
 
         if(Math.abs(pos1.x - pos2.x) > 1 || Math.abs(pos1.y - pos2.y) > 1)
             return false;

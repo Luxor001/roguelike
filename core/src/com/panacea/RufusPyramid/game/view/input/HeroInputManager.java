@@ -5,14 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
-import com.panacea.RufusPyramid.game.view.GameCamera;
-
-import javax.rmi.CORBA.Util;
 
 public class HeroInputManager extends InputAdapter {
     //TODO estendere GestureDetector?

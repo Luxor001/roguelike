@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.animation.Animation;
 
 /**
  * Created by gio on 16/07/15.
@@ -208,32 +209,6 @@ public class CreaturesDrawer extends ViewObject {
 
     }
 
-//    private void walkAnimation(ICreature creature, ArrayList<GridPoint2> path, AnimationEndedListener listener) {
-////        this.startWalk(creature, path.get(0), path.get(1));
-//        AbstractAnimation currentAnimation = new AnimWalk(creature, path.get(0), path.get(1), creature.getFlipX());
-//        currentAnimation.create();
-//        currentAnimation.addListener(listener);
-//        this.currentAnimations.put(creature.getID(), currentAnimation);
-//        this.currentStates.put(creature.getID(), CreatureState.WALKING);
-//    }
-//
-//    private void strikeAnimation(ICreature attacker, AnimationEndedListener listener) {
-////        this.startWalk(creature, path.get(0), path.get(1));
-//        AbstractAnimation currentAnimation = new AnimStrike(attacker, attacker.getPosition().getPosition(), attacker.getFlipX());
-//        currentAnimation.create();
-//        currentAnimation.addListener(listener);
-//        this.currentAnimations.put(attacker.getID(), currentAnimation);
-//        this.currentStates.put(attacker.getID(), CreatureState.WALKING);
-//    }
-//
-//    private void deathAnimation(ICreature dying, AnimationEndedListener listener) {
-////        this.startWalk(creature, path.get(0), path.get(1));
-//        AbstractAnimation currentAnimation = new AnimDeath(dying, dying.getPosition().getPosition(), dying.getFlipX());
-//        currentAnimation.create();
-//        currentAnimation.addListener(listener);
-//        this.currentAnimations.put(dying.getID(), currentAnimation);
-//        this.currentStates.put(dying.getID(), CreatureState.WALKING);
-//    }
     private void startCreatureAnimation(final ICreature toAnimate, AnimationData data, CreatureState state) {
         this.startCreatureAnimation(toAnimate, data, state, null);
     }

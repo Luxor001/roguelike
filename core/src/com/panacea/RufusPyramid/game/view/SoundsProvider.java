@@ -1,11 +1,8 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 

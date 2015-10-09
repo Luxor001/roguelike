@@ -8,12 +8,7 @@ import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.InteractAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
-import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.items.Item;
-import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
-import com.panacea.RufusPyramid.game.view.GameDrawer;
-import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
-import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
 

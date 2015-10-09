@@ -15,7 +15,6 @@ import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
-import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Tile;

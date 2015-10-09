@@ -3,7 +3,6 @@ package com.panacea.RufusPyramid.game.creatures;
 import com.badlogic.gdx.Gdx;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.IAnimated;
-import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
 import com.panacea.RufusPyramid.game.view.animations.IAnimationEndListenable;
