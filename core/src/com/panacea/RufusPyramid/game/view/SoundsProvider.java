@@ -22,7 +22,7 @@ public class SoundsProvider {
         COMBAT_SLICE(3), //the number into the parenthesis indicates the size of the array returned
         COMBAT_WRATH(3),
         COMBAT_MNSTR(2),
-        COIN(1),
+        GOLD_PICKUP(2),
         FOOTSTEPS_INTERNAL(2),
         INVENTORY(2),
         CLICK(1);
@@ -78,8 +78,9 @@ public class SoundsProvider {
                 files.add(Gdx.audio.newSound(Gdx.files.internal("data/sfx/combat/shade3.ogg")));
                 break;
             }
-            case COIN:{
-                files.add(Gdx.audio.newSound((Gdx.files.internal("data/sfx/misc/coins.ogg"))));
+            case GOLD_PICKUP:{
+                files.add(Gdx.audio.newSound((Gdx.files.internal("data/sfx/misc/gold_pickup1.ogg"))));
+                files.add(Gdx.audio.newSound((Gdx.files.internal("data/sfx/misc/gold_pickup2.ogg"))));
                 break;
             }
             case FOOTSTEPS_INTERNAL:{

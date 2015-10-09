@@ -14,15 +14,18 @@ public class DefaultHero extends AbstractCreature {
     private static final double ATTACK = 7;
     private static final double DEFENCE = 7;
     private static final double SPEED = 7;
+    private int goldAmount;
     private ICreature firstTarget;
     public HealthBar health;
 
+
 //    TODO aggiungere il livello con l'oggetto Level
-    public DefaultHero(String name) {
+    public DefaultHero(String name, int goldAmount) {
         super(name, DESCRIPTION, MAX_HP, ATTACK, DEFENCE, SPEED);
         //TODO la posizione di spawn va presa dalla mappa;
         this.getHealthBar().setVisible(true);
         this.setCreatureType(CreatureType.HERO);
+        this.goldAmount = goldAmount;
     }
 
     @Override
@@ -37,5 +40,12 @@ public class DefaultHero extends AbstractCreature {
     }
     public ICreature getFirstTarget(){
         return this.firstTarget;
+    }
+
+    public int getGoldAmount(){
+        return this.goldAmount;
+    }
+    public void addGold(int gold){
+        this.goldAmount += gold;
     }
 }

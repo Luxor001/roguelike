@@ -64,4 +64,10 @@
 			<TexturePosition>0</TexturePosition>
 		</ChestItem>
 	</ChestItem>
+	<GoldItem>
+		<path>Items/misc.png</path>
+		<GoldItem>
+			<TexturePosition>0</TexturePosition>
+		</GoldItem>
+	</GoldItem>
 </item>

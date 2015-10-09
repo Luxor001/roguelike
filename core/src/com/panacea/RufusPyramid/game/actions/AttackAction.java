@@ -17,7 +17,7 @@ public class AttackAction implements IAction {
     private final ICreature attacked;
     private final ICreature attacker;
 
-    public static final double[] attackMultipliers = new double[]      { 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f}; //probabilità
+    public static final double[] attackMultipliers = new double[]      { 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f}; //probabilità //TODO: da mettere su db!
     public static final double[] attackMultipliersProb = new double[] { 0.5, 0.1, 0.5, 0.2, 0.1, 0.5 };
     public AttackAction(ICreature attacker, ICreature attacked) {
         this.attacker = attacker;

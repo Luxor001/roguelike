@@ -3,8 +3,10 @@ package com.panacea.RufusPyramid.game.view.ui;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -24,6 +26,7 @@ import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.ViewObject;
@@ -64,6 +67,7 @@ public class UIDrawer extends ViewObject {
         this.labels = new ArrayList<Label>(3);
     }
 
+    private BitmapFont goldAmountText;
     @Override
     public void create() {
         super.create();
@@ -119,6 +123,10 @@ public class UIDrawer extends ViewObject {
         lifeStats = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
         lifeStats.setPosition(0, maxY - imageTexture.getHeight());
         lifeStats.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+
+        goldAmountText = new BitmapFont();
+        goldAmountText.setColor(Color.YELLOW);
+        goldAmountText.getData().setScale(0.7f);
 
         SpriteDrawable healthForeGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/health.png"))));
         SpriteDrawable healthBackgroundd = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/healthBack.png"))));
@@ -246,7 +254,7 @@ public class UIDrawer extends ViewObject {
 
         imageTexture = new Texture(Gdx.files.internal("data/ui/inventory.png"));
         inventory = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
-        inventory.setPosition((maxX/2)-(imageTexture.getWidth()/2), (maxY/2 )- (imageTexture.getHeight()/2)+200);
+        inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
         inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         inventory.setVisible(false);
 
@@ -272,9 +280,15 @@ public class UIDrawer extends ViewObject {
         for (int i = 0; i < diaryLastLines.size(); i++) {
             this.labels.get(i).setText(diaryLastLines.get(i));
         }
-
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        SpriteBatch batch = GameBatch.get();
+        batch.begin();
+
+        float maxX = GameCamera.get().viewportWidth;
+        float maxY = GameCamera.get().viewportHeight;
+        goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount() + "fpmoasfosfaojfspjo", 200, 500);
+        batch.end();
     }
 
     private Label getNewLabel(String text) {

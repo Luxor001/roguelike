@@ -1,14 +1,20 @@
 package com.panacea.RufusPyramid.game.actions;
 
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Diary;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.items.ChestItem;
+import com.panacea.RufusPyramid.game.items.GoldItem;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.SoundsProvider;
 
 import java.util.ArrayList;
 
@@ -19,6 +25,7 @@ public class InteractAction implements IAction {
 
     private Item itemToInteract;
     private ICreature creature;
+    private Sound goldPickSound;
 
     public InteractAction(Item itemToInteract, ICreature creature){
         this.itemToInteract = itemToInteract;
@@ -50,16 +57,28 @@ public class InteractAction implements IAction {
             items.add(itemStored);
         }
 
+        Diary diario= GameModel.get().getDiary();
+        DefaultHero hero = GameModel.get().getHero();
         if(UsableItem.class.isAssignableFrom(itemToInteract.getClass())){
-            Diary diario= GameModel.get().getDiary();
             UsableItem convItem = (UsableItem)itemToInteract;
             items.remove(convItem);
-            DefaultHero hero = GameModel.get().getHero();
-            hero.setPosition(GameModel.get().getCurrentMap().getMapContainer().getTile(convItem.getPosition()));
+            hero.fireActionChosenEvent(new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())));
+   //         hero.setPosition(GameModel.get().getCurrentMap().getMapContainer().getTile(convItem.getPosition()));
             hero.addEffects(((UsableItem) itemToInteract).getEffects());
 
-            diario.addLine("Hai raccolto "+convItem.getItemName()+"!");
+            diario.addLine("Hai raccolto " + convItem.getItemName() + "!");
      //       diario.addLine("+"+attackBonus+" Attack!");
+        }
+        if(itemToInteract instanceof GoldItem){
+            GoldItem convItem = (GoldItem)itemToInteract;
+            hero.fireActionChosenEvent(new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())));
+            int goldAmount = convItem.getGoldAmount();
+            hero.addGold(goldAmount);
+            GameDrawer.get().getCreaturesDrawer().displayInfo(hero.getPosition().getPosition(), "+" + goldAmount, Color.YELLOW);
+            int randSound = Utilities.randInt(0,SoundsProvider.Sounds.GOLD_PICKUP.getValue()-1);
+            goldPickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.GOLD_PICKUP)[randSound];
+            goldPickSound.play(1f);
+            items.remove(convItem);
         }
 
         return true;

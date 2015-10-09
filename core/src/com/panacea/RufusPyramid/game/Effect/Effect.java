@@ -22,6 +22,10 @@ public class Effect {
         this.coefficient=coefficient;
         this.type = type;
     }
+    public Effect(EffectType type){
+        this.coefficient=1f;
+        this.type = type;
+    }
 
     public float getCoefficient(){
         return coefficient;

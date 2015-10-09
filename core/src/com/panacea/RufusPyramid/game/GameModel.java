@@ -12,8 +12,11 @@ import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.creatures.Stats;
 import com.panacea.RufusPyramid.game.items.ChestItem;
+import com.panacea.RufusPyramid.game.items.GoldItem;
 import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
+import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
@@ -32,6 +35,10 @@ public class GameModel {
     private ArrayList<ICreature> creatures;
     private Diary diary;
     private ArrayList<Item> items;
+
+    public static final double[] extractedItem = new double[]      { 00, 01, 02, 03}; //0 = golditem, 1 = miscitem, 2= weapon, 3=wearable //TODO: DA METTERE SU DB!
+    public static final double[] itemProb = new double[]          { 0.6, 0.2, 0.1, 0.1}; //probabilità
+
     /**
      * Ritorna l'unica istanza (singleton) di GameModel.
      * @return l'unica istanza di GameModel.
@@ -44,9 +51,8 @@ public class GameModel {
         SINGLETON = new GameModel();
     }
     
-    
+
     /* Instance methods */
-    
     private DefaultHero hero;
     private ArrayList<Map> maps;
     private int currentMapIndex;
@@ -59,7 +65,6 @@ public class GameModel {
         }
     };
 
-
     private GameModel() {
         this.currentMapIndex = 0;
         this.creatures = new ArrayList<ICreature>();
@@ -69,7 +74,7 @@ public class GameModel {
 
         Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt());
         this.maps.add(newMap);
-        this.hero = new DefaultHero("Rufus");
+        this.hero = new DefaultHero("Rufus", 50);
         GridPoint2 spawnpoint=newMap.getSpawnPoint().getPosition();
         this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
         GridPoint2 absolute = Utilities.convertToAbsolutePos(spawnpoint);
@@ -113,15 +118,36 @@ public class GameModel {
         }
 
         for(int i=0; i < 5; i++) {
-            Item newItem;
+            Item newItem = null;
             Tile randomPos;
             ArrayList<Effect> itemEffects = new ArrayList<Effect>();
-            itemEffects.add(new Effect(Effect.EffectType.ATTACK, 1f));
-            newItem = new ChestItem(new Weapon(Weapon.WeaponType.DAGGER, itemEffects, "Sharp ToothPick Dagger"));
+            int index = (int)Utilities.randWithProb(extractedItem,itemProb);//0 = golditem, 1 = miscitem, 2= weapon, 3=wearable
+            switch (index){
+                case 0:{
+                    itemEffects.add(new Effect(Effect.EffectType.ATTACK));
+                    int goldAmount = Utilities.randInt(25,100);
+                    newItem = new ChestItem(new GoldItem(goldAmount));
+                    break;
+                }
+                case 1:{
+                    int goldAmount = Utilities.randInt(25,100);
+                    itemEffects.add(new Effect(Effect.EffectType.HEALTH, 0.5f));
+                    newItem = new ChestItem(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION,itemEffects,"Health Potion"));
+                    break;
+                }
+                case 2:{
+                    itemEffects.add(new Effect(Effect.EffectType.ATTACK,2f));
+                    newItem = new ChestItem(new Weapon(Weapon.WeaponType.DAGGER, itemEffects, "Sharp ToothPick Dagger"));
+                    break;
+                }
+                case 3:{
+                    itemEffects.add(new Effect(Effect.EffectType.DEFENSE,3f));
+                    newItem = new ChestItem(new Wearable(Wearable.WearableType.ARMOR, itemEffects, "Rusty Chainmail"));
+                    break;
+                }
+            }
             randomPos = getCurrentMap().getRandomItemLocation();
-            //   randomPos = getCurrentMap().getSpawnPoint();
-            //   if(randomPos != null && randomPos.getPosition() != spawnpoint) {//DA RIMETTERE!!
-            if (randomPos != null) {
+            if (randomPos != null && randomPos.getPosition() != spawnpoint) {
                 newItem.setPosition(randomPos.getPosition());
                 this.addItem(newItem);
             }
