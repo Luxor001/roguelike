@@ -10,6 +10,6 @@ public class DesktopLauncher {
 		config.title = "Rufus";
 		config.width = 360;
 		config.height = 640;
-		new LwjglApplication(new Main(), config);
+		new LwjglApplication(new Main(new DatabaseDesktop()), config);
 	}
 }
