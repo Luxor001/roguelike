@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game.actions;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Diary;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
@@ -55,11 +56,13 @@ public class InteractAction implements IAction {
             UsableItem convItem = (UsableItem)itemToInteract;
             items.remove(convItem);
             DefaultHero hero = GameModel.get().getHero();
-            hero.setPosition(GameModel.get().getCurrentMap().getMapContainer().getTile(convItem.getPosition()));
-            hero.addEffects(((UsableItem) itemToInteract).getEffects());
+            ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
+            if (result.hasSuccess()) {
+//                hero.setPosition(GameModel.get().getCurrentMap().getMapContainer().getTile(convItem.getPosition()));
+                hero.addEffects(((UsableItem) itemToInteract).getEffects());
 
-            diario.addLine("Hai raccolto "+convItem.getItemName()+"!");
-     //       diario.addLine("+"+attackBonus+" Attack!");
+                diario.addLine("Hai raccolto " + convItem.getItemName() + "!");
+            }
         }
 
         return true;

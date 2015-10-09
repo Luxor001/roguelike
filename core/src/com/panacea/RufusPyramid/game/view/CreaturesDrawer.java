@@ -1,8 +1,6 @@
 package com.panacea.RufusPyramid.game.view;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,10 +8,8 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
-import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
@@ -25,15 +21,11 @@ import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimationData;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedEvent;
 import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
-import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javafx.animation.Animation;
 
 /**
  * Created by gio on 16/07/15.
