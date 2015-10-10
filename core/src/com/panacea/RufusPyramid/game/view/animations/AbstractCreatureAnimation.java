@@ -65,7 +65,7 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
             currentFrame.flip(true, false);
 
         spriteBatch.begin();
-        spriteBatch.draw(currentFrame, absolutePosition.x, absolutePosition.y, 32, 32);
+        spriteBatch.draw(currentFrame, absolutePosition.x, absolutePosition.y, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
         spriteBatch.end();
 
         if (animation.isAnimationFinished(stateTime)) {

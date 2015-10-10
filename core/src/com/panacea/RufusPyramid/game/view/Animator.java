@@ -19,7 +19,7 @@ public class Animator extends ViewObject {
         //Esempio di animazione, scollegata dai model
 //        walkAnim = new com.panacea.RufusPyramid.game.view.animations.AnimWalk(new GridPoint2(0,0), new GridPoint2(0,32), 40.0f);
 //        walkAnim.create(/*path*/);
-        this.anim = new AnimDamage(new GridPoint2(32,32), 10);
+//        this.anim = new AnimDamage(new GridPoint2(32,32), 10);
 
         screenLimits = new GridPoint2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        InputManager.get().addProcessor(new TestInput());

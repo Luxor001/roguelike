@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.common;
 
+import com.badlogic.gdx.Gdx;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 
 /**
@@ -27,10 +28,15 @@ public abstract class Database {
 //        execute("INSERT INTO 'highscores'(name,score) values ('Cris',1234)");
         //Example of query to get DB data of Highscore table
         System.out.println("Enemies loaded from db: ");
-        Result q=query("SELECT * FROM 'Enemies'");
-        if (!q.isEmpty()){
-            while (q.moveToNext())
-                System.out.println("Creature "+q.getString(q.getColumnIndex("Type"))+": "+q.getString(q.getColumnIndex("Name")));
+        try {
+            Result q = query("SELECT * FROM 'Enemies'");
+            if (!q.isEmpty()) {
+                while (q.moveToNext())
+                    System.out.println("Creature " + q.getString(q.getColumnIndex("Type")) + ": " + q.getString(q.getColumnIndex("Name")));
+            }
+        } catch (Exception e) {
+            System.err.println("[" + Database.class.toString() + "]" + " ERRORE NELLA LETTURA DAL DB: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -65,7 +65,8 @@ public class AttackAction implements IAction {
         GridPoint2 pos1 = attacker.getPosition().getPosition(),
         pos2 = attacked.getPosition().getPosition();
 
-        if (Math.abs(pos1.x - pos2.x) > 32 || Math.abs(pos1.y - pos2.y) > 32) {
+        if (Math.abs(pos1.x - pos2.x) > Utilities.DEFAULT_BLOCK_WIDTH
+                || Math.abs(pos1.y - pos2.y) > Utilities.DEFAULT_BLOCK_HEIGHT) {
             //Se le due creature sono distanti più di un quadretto non è possibile effettuare l'attacco.
             return false;
         }
