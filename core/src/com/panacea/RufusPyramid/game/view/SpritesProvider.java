@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.panacea.RufusPyramid.common.StaticDataProvider;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 
 import java.util.Arrays;
@@ -22,10 +23,10 @@ public class SpritesProvider {
 
     private static final String BASE_PATH = "data/";
     private static TextureRegion[][] hero1 = loadTexture("creatures/hero_spritesheetx32.png", 13, 21);
-    private static TextureRegion[][] orc_base = loadTexture("creatures/orc_spritesheetx32.png", 13, 21);
-    private static TextureRegion[][] skeleton_base = loadTexture("creatures/skeleton_spritesheetx32.png", 13, 21);
-    private static TextureRegion[][] wtfcreature_base = loadTexture("creatures/wtfCreature2.png", 7, 5);
-    private static TextureRegion[][] wraith_base = loadTexture("creatures/wraith2.png", 8, 6);
+    private static TextureRegion[][] orc_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.ORC), 13, 21);
+    private static TextureRegion[][] skeleton_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.SKELETON), 13, 21);
+    private static TextureRegion[][] wtfcreature_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.UGLYYETI), 7, 5);
+    private static TextureRegion[][] wraith_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.WRAITH), 8, 6);
     private static TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
 
     /**

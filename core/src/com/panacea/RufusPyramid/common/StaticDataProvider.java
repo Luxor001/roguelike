@@ -53,6 +53,16 @@ public class StaticDataProvider {
         return requested;
     }
 
+    public static String getSpritesheetPath(ICreature.CreatureType type) {
+        String path = null;
+        Database.Result res = gameDb.query("SELECT SpritesheetPath FROM Enemies WHERE Type = '" + type.name()+ "'");
+        if (!res.isEmpty() && res.moveToNext()) {
+            path = res.getString(res.getColumnIndex("SpritesheetPath"));
+        }
+
+        return path;
+    }
+
     public static List<Enemy> listEnemies() {
         List<Enemy> list = new ArrayList<Enemy>(4);
         Database.Result res = gameDb.query("SELECT * FROM Enemies WHERE Type != \"HERO\"");
