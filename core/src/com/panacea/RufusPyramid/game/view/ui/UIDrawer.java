@@ -26,13 +26,16 @@ import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
-import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,8 +197,33 @@ public class UIDrawer extends ViewObject {
         spellButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("spell", "Clicked");
 
+                try{
+
+                URL url = new URL("http://graph.facebook.com/me/feed");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+// Indicates POST.
+                connection.setDoOutput(true);
+
+// Encode parameters.
+                StringBuffer parameters = new StringBuffer();
+                parameters.append(URLEncoder.encode("message", "UTF-8"));
+                parameters.append("=");
+                parameters.append(URLEncoder.encode("\"Score Data Here\"", "UTF-8"));
+                parameters.append(URLEncoder.encode("access_token", "UTF-8"));
+                        parameters.append("=");
+                parameters.append(URLEncoder.encode("Access Token Here", "UTF-8"));
+
+// Transmit data.
+                    OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+                writer.write(parameters.toString());
+                writer.flush();
+
+
+                }catch (Exception e){
+
+                }
                 return true;
             }
         });
@@ -251,7 +279,6 @@ public class UIDrawer extends ViewObject {
             }
         });
 
-
         imageTexture = new Texture(Gdx.files.internal("data/ui/inventory.png"));
         inventory = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
         inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
@@ -282,12 +309,13 @@ public class UIDrawer extends ViewObject {
         }
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        SpriteBatch batch = GameBatch.get();
+
+        SpriteBatch batch = new SpriteBatch();
         batch.begin();
 
         float maxX = GameCamera.get().viewportWidth;
         float maxY = GameCamera.get().viewportHeight;
-        goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount() + "fpmoasfosfaojfspjo", 200, 500);
+        goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount()+"", 70, 635);
         batch.end();
     }
 
