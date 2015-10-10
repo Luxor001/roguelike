@@ -73,7 +73,6 @@ public class InteractAction implements IAction {
             GoldItem convItem = (GoldItem)itemToInteract;
             ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
             if(result.hasSuccess()){
-                hero.addEffects(((UsableItem) itemToInteract).getEffects());
                 int goldAmount = convItem.getGoldAmount();
                 hero.addGold(goldAmount);
                 GameDrawer.get().getCreaturesDrawer().displayInfo(hero.getPosition().getPosition(), "+" + goldAmount, Color.YELLOW);
