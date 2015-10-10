@@ -257,7 +257,7 @@ public class GameMaster {
 
     public void disposeGame() {
         //TODO
-        this.currentAgent = -100;
+//        this.currentAgent = -100;
         this.agentsPlaying.clear();
     }
 }

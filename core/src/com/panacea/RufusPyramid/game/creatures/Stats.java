@@ -1,5 +1,7 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.panacea.RufusPyramid.common.Utilities;
+
 /**
  * Created by lux on 19/09/15.
  */
@@ -35,4 +37,13 @@ public class Stats {
     public void setSpeed( double speed ) { this.speed = speed; }
     public double getSpeed() { return this.speed; }
 
+
+    public static Stats generateRandom(int minHp, int maxHp, double minAttack, double maxAttack, double minDefence, double maxDefence, double minSpeed, double maxSpeed) {
+        return new Stats(
+            Utilities.randInt(minHp, maxHp),
+            Utilities.randDouble(minAttack, maxAttack),
+            Utilities.randDouble(minDefence, maxDefence),
+            Utilities.randDouble(minSpeed,maxSpeed)
+        );
+    }
 }

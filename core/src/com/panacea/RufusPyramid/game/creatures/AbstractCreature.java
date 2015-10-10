@@ -52,15 +52,11 @@ public abstract class AbstractCreature implements ICreature {
 
     private CreatureType creatureType;
 
-    public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
+    public AbstractCreature(String name, String description, Stats stats) {
         this.idCreature = getUniqueCreatureId();
         this.setName(name);
         this.setDescription(description);
-        this.baseStats = new Stats(maximumHP, attack, defence, speed);
-        this.baseStats.setMaximumHP(maximumHP);
-        this.baseStats.setAttack(attack);
-        this.baseStats.setDefence(defence);
-        this.baseStats.setSpeed(speed);
+        this.baseStats = stats;
         this.setHPCurrent(this.baseStats.getMaximumHP());
         this.setPosition(null);
         this.backpack = new com.panacea.RufusPyramid.game.creatures.Backpack();
@@ -68,7 +64,6 @@ public abstract class AbstractCreature implements ICreature {
         this.changeListeners = new ArrayList<PositionChangeListener>();
         this.actionChosenListeners = new ArrayList<ActionChosenListener>(1);
         this.creatureDeadListeners = new ArrayList<CreatureDeadListener>();
-
 
         SpriteDrawable foreGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/health_bar.png"))));
         SpriteDrawable background = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-frame.png"))));
@@ -80,6 +75,10 @@ public abstract class AbstractCreature implements ICreature {
         this.healthBar.setWidth(DEFAULT_HEALTHBAR_WIDTH );
         this.healthBar.setVisible(false);
         this.flipX = false;
+    }
+
+    public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
+        this(name, description, new Stats(maximumHP, attack, defence, speed));
     }
 
     private static int getUniqueCreatureId() {
@@ -266,6 +265,11 @@ public abstract class AbstractCreature implements ICreature {
     public Stats getBaseStats(){
         return baseStats;
     }
+
+    public void setBaseStats(Stats stats) {
+        this.baseStats = stats;
+    }
+
     public Stats getCurrentStats(){ //current stats calculated by the effects of the creature
 
         Stats currStats = new Stats(baseStats);

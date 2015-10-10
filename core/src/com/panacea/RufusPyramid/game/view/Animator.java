@@ -32,6 +32,6 @@ public class Animator extends ViewObject {
         //x++;//movimento di prova..
         //walkAnim.updateLocation(new GridPoint2(x, y)); //aggiorno la posizione da disegnare della "tile"
 //        walkAnim.render(delta);
-        this.anim.render(delta);
+//        this.anim.render(delta);
     }
 }

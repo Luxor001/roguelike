@@ -22,7 +22,8 @@ public class GameScreen implements Screen {
     }
 
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
+//        Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //richiama uno step della turnazione

@@ -6,6 +6,7 @@ import org.apache.commons.math3.distribution.EnumeratedRealDistribution;
 
 import java.util.Random;
 
+
 /**
  * Created by lux on 10/07/15.
  */
@@ -23,6 +24,17 @@ public class Utilities {
     public static int randInt(int min, int max, long seed) {
         Random rand = new Random(seed);
         int randomNum = rand.nextInt((max - min) + 1) + min;
+        return randomNum;
+    }
+
+    public static double randDouble(double min, double max) {
+        Random rand = new Random();
+        double randomNum = rand.nextDouble() * ((max - min)) + min;
+        return randomNum;
+    }
+    public static double randDouble(double min, double max, long seed) {
+        Random rand = new Random(seed);
+        double randomNum = rand.nextDouble() * ((max - min)) + min;
         return randomNum;
     }
     public static double randWithProb(double[] numsToGenerate, double[] prob){
