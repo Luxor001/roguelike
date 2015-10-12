@@ -50,6 +50,12 @@ public class SoundsProvider {
         soundsMap.put(reqSound, sounds);
     }
 
+    public void loadAllSounds() {
+        for(Sounds type : Sounds.values()) {
+            loadSound(type);
+        }
+    }
+
     public boolean isLoaded(Sounds reqSound){
         return soundsMap.containsKey(reqSound);
     }

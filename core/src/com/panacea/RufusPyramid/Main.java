@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid;
 import com.badlogic.gdx.Game;
 import com.panacea.RufusPyramid.common.Database;
 import com.panacea.RufusPyramid.common.StaticDataProvider;
+import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import com.panacea.RufusPyramid.game.view.screens.SplashScreen;
 
@@ -19,6 +20,7 @@ public class Main extends Game {
 //        this.setScreen(new SplashScreen());
 //        gameDb.onCreate();    //Chiamato automaticamente se necessario
         StaticDataProvider.setDatabase(gameDb);
+        SoundsProvider.get().loadAllSounds();
         this.setScreen(new MenuScreen());
 	}
 

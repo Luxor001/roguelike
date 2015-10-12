@@ -310,11 +310,10 @@ public class UIDrawer extends ViewObject {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        SpriteBatch batch = new SpriteBatch();
-        batch.begin();
+//        float maxX = GameCamera.get().viewportWidth;
+//        float maxY = GameCamera.get().viewportHeight;
 
-        float maxX = GameCamera.get().viewportWidth;
-        float maxY = GameCamera.get().viewportHeight;
+        batch.begin();
         goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount()+"", 70, 635);
         batch.end();
     }
