@@ -8,14 +8,18 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 import com.panacea.RufusPyramid.game.view.animations.AnimatedImage;
@@ -105,11 +109,15 @@ public class MenuScreen implements Screen {
         animImg.setPosition(20, VIEWPORT_HEIGHT - 140);
         stage.addActor(animImg);
 
-        Animation animation2 = new Animation(0.05f, frames);
+//        Animation animation2 = new Animation(0.05f, frames);
         AnimatedImage animImg2 = new AnimatedImage(animation);
         animImg2.setPosition(stage.getWidth() - 80, VIEWPORT_HEIGHT - 140);
         stage.addActor(animImg2);
 
+        TextureRegion[] textures = SpritesProvider.getStaticSprites(SpritesProvider.OggettoStatico.SPEAKERS);
+        ImageButton speakers = new ImageButton(new TextureRegionDrawable(textures[0]), new TextureRegionDrawable(textures[1]));
+        speakers.setPosition(stage.getWidth() - textures[0].getRegionWidth() - 20, 20);
+        stage.addActor(speakers);
 
         Gdx.input.setInputProcessor(stage);
     }

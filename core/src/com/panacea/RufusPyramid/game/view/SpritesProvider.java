@@ -28,6 +28,7 @@ public class SpritesProvider {
     private static TextureRegion[][] wtfcreature_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.UGLYYETI), 7, 5);
     private static TextureRegion[][] wraith_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.WRAITH), 8, 6);
     private static TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
+    private static TextureRegion[] speakers = loadTexture("ui/speakers.png", 2, 1)[0];
 
     /**
      *  Ritorna la corretta TextureRegion dato un oggetto da animare e l'azione da effettuare.
@@ -129,6 +130,9 @@ public class SpritesProvider {
             case FIRE:
                 animationFrames = staticFire;
                 break;
+            case SPEAKERS:
+                animationFrames = speakers;
+                break;
             default:
                 throw new IllegalArgumentException("Nessuno sprite disponibile per l'oggetto " + obj);
         }
@@ -137,7 +141,7 @@ public class SpritesProvider {
     }
 
     public enum OggettoStatico {
-        FIRE
+        FIRE, SPEAKERS
     }
 
     public enum Azione {
