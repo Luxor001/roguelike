@@ -102,7 +102,7 @@ public class MenuScreen implements Screen {
         stage.addActor(table);
 
         /* Aggiungo i fuochi animati */
-        TextureRegion[] frames = SpritesProvider.getStaticSprites(SpritesProvider.OggettoStatico.FIRE);
+        TextureRegion[] frames = SpritesProvider.get().getStaticSprites(SpritesProvider.OggettoStatico.FIRE);
 
         Animation animation = new Animation(0.05f, frames);
         AnimatedImage animImg = new AnimatedImage(animation);
@@ -114,7 +114,7 @@ public class MenuScreen implements Screen {
         animImg2.setPosition(stage.getWidth() - 80, VIEWPORT_HEIGHT - 140);
         stage.addActor(animImg2);
 
-        TextureRegion[] textures = SpritesProvider.getStaticSprites(SpritesProvider.OggettoStatico.SPEAKERS);
+        TextureRegion[] textures = SpritesProvider.get().getStaticSprites(SpritesProvider.OggettoStatico.SPEAKERS);
         ImageButton speakers = new ImageButton(new TextureRegionDrawable(textures[0]), new TextureRegionDrawable(textures[1]));
         speakers.setPosition(stage.getWidth() - textures[0].getRegionWidth() - 20, 20);
         stage.addActor(speakers);

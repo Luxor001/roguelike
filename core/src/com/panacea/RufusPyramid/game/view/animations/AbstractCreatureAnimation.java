@@ -42,7 +42,7 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
     }
 
     public void create() {
-        frames = SpritesProvider.getSprites(this.model.getCreatureType(), this.actionType);
+        frames = SpritesProvider.get().getSprites(this.model.getCreatureType(), this.actionType);
         animation = new Animation(frameDuration, frames);
         spriteBatch = GameBatch.get();
         stateTime = 0f;

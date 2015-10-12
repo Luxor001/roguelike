@@ -89,7 +89,7 @@ public class CreaturesDrawer extends ViewObject {
     }
 
     private static TextureRegion getCreatureSprite(ICreature creature) {
-        return SpritesProvider.getSprites(creature.getCreatureType(), SpritesProvider.Azione.STAND)[0];
+        return SpritesProvider.get().getSprites(creature.getCreatureType(), SpritesProvider.Azione.STAND)[0];
     }
 
     private static TextureRegion getHeroSprite(DefaultHero heroModel) {

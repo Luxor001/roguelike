@@ -1,8 +1,10 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.panacea.RufusPyramid.common.AssetsProvider;
 import com.panacea.RufusPyramid.common.StaticDataProvider;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 
@@ -20,16 +22,29 @@ public class SpritesProvider {
     /*  TODO: alla chiusura del programma fare il dispose di tutte queste textures
         Oppure per ogni TextureRegion[][] lanciare "region[0][0].getTexture().dispose()" */
     private static List<Texture> allTextures = new LinkedList<Texture>();
+    private static AssetsProvider as = AssetsProvider.get();
+    //FIXME: non è un bene gestire gli assets come statici (e soprattutto NON usare l'instance di AssetsProvider statica!!!)
 
     private static final String BASE_PATH = "data/";
-    private static TextureRegion[][] hero1 = loadTexture("creatures/hero_spritesheetx32.png", 13, 21);
-    private static TextureRegion[][] orc_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.ORC), 13, 21);
-    private static TextureRegion[][] skeleton_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.SKELETON), 13, 21);
-    private static TextureRegion[][] wtfcreature_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.UGLYYETI), 7, 5);
-    private static TextureRegion[][] wraith_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.WRAITH), 8, 6);
-    private static TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
-    private static TextureRegion[] speakers = loadTexture("ui/speakers.png", 2, 1)[0];
-
+    private static SpritesProvider SINGLETON;
+    private TextureRegion[][] hero1 = loadTexture("creatures/hero_spritesheetx32.png", 13, 21);
+    private TextureRegion[][] orc_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.ORC), 13, 21);
+    private TextureRegion[][] skeleton_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.SKELETON), 13, 21);
+    private TextureRegion[][] wtfcreature_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.UGLYYETI), 7, 5);
+    private TextureRegion[][] wraith_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.WRAITH), 8, 6);
+    private TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
+    private TextureRegion[] speakers = loadTexture("ui/speakers.png", 2, 1)[0];
+    
+    private SpritesProvider() {
+    }
+    
+    public static SpritesProvider get() {
+        if (SINGLETON == null) {
+            SINGLETON = new SpritesProvider();
+        }
+        return SpritesProvider.SINGLETON;
+    }
+    
     /**
      *  Ritorna la corretta TextureRegion dato un oggetto da animare e l'azione da effettuare.
      *
@@ -37,7 +52,7 @@ public class SpritesProvider {
      * @param azione
      * @return la texture region dell'oggetto necessaria ad effettuare l'animazione dell'azione richiesta.
      */
-    public static TextureRegion[] getSprites(ICreature.CreatureType oggettoDaAnimare, Azione azione) {
+    public TextureRegion[] getSprites(ICreature.CreatureType oggettoDaAnimare, Azione azione) {
         TextureRegion[] animationFrames = null;
         TextureRegion[][] allFrames = null;
 
@@ -123,7 +138,7 @@ public class SpritesProvider {
         return animationFrames;
     }
 
-    public static TextureRegion[] getStaticSprites(OggettoStatico obj) {
+    public TextureRegion[] getStaticSprites(OggettoStatico obj) {
         TextureRegion[] animationFrames = null;
 
         switch(obj) {
@@ -148,9 +163,20 @@ public class SpritesProvider {
         STAND, WALK, STRIKE, CAST, DEATH
     }
 
-    private static TextureRegion[][] loadTexture(String path, int cols, int rows) {
-        Texture animationTexture = new Texture(Gdx.files.internal(BASE_PATH + path));
+    private TextureRegion[][] loadTexture(String path, int cols, int rows) {
+        Texture animationTexture = as.get(BASE_PATH + path, Texture.class);
         allTextures.add(animationTexture);
         return TextureRegion.split(animationTexture, animationTexture.getWidth()/cols, animationTexture.getHeight()/rows);
+    }
+
+    public static void requestAssets() {
+        AssetsProvider as = AssetsProvider.get();
+        as.load(BASE_PATH + "creatures/hero_spritesheetx32.png", Texture.class);
+        as.load(BASE_PATH + StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.ORC), Texture.class);
+        as.load(BASE_PATH + StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.SKELETON), Texture.class);
+        as.load(BASE_PATH + StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.UGLYYETI), Texture.class);
+        as.load(BASE_PATH + StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.WRAITH), Texture.class);
+        as.load(BASE_PATH + "animations/fireloop.png", Texture.class);
+        as.load(BASE_PATH + "ui/speakers.png", Texture.class);
     }
 }

@@ -36,7 +36,7 @@ public class ObjectAnimation extends AbstractAnimation {
     }
 
     public void create() {
-        frames = SpritesProvider.getStaticSprites(type);
+        frames = SpritesProvider.get().getStaticSprites(type);
 
         animation = new Animation(frameDuration, frames);
         spriteBatch = GameBatch.get();

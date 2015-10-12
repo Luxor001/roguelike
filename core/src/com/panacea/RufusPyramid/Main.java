@@ -5,6 +5,7 @@ import com.panacea.RufusPyramid.common.AssetsProvider;
 import com.panacea.RufusPyramid.common.Database;
 import com.panacea.RufusPyramid.common.StaticDataProvider;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
+import com.panacea.RufusPyramid.game.view.SpritesProvider;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import com.panacea.RufusPyramid.game.view.screens.SplashScreen;
 
@@ -20,11 +21,12 @@ public class Main extends Game {
 	public void create () {
         this.setScreen(new SplashScreen());
 //        gameDb.onCreate();    //Chiamato automaticamente se necessario
+        StaticDataProvider.setDatabase(gameDb);
 
         SoundsProvider.requestAssets();
+        SpritesProvider.requestAssets();
         AssetsProvider.get().finishLoading();   //TODO: Chiamata bloccante, andrà usata una chiamata asincrona se si vuole visualizzare una barra di caricamento
 
-        StaticDataProvider.setDatabase(gameDb);
         SoundsProvider.get().loadAllSounds();
 //        AssetsProvider.finishLoading();
         this.setScreen(new MenuScreen());
