@@ -3,6 +3,10 @@ package com.panacea.RufusPyramid.desktop;
 import com.panacea.RufusPyramid.common.Database;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -20,7 +24,7 @@ public class DatabaseDesktop extends Database {
     public DatabaseDesktop() {
         loadDatabase();
         if (isNewDatabase()){
-            onCreate();
+            onCreate(this.readDumpFile(Database.dump_name + ".sql"));
             upgradeVersion();
         } else if (isVersionDifferent()){
             onUpgrade();
@@ -84,6 +88,28 @@ public class DatabaseDesktop extends Database {
             return (q.getInt(1)!=version);
         else
             return true;
+    }
+
+    private String readDumpFile(String path) {
+        String textFile = "";
+        File file = new File(path);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+            textFile = new String(data, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fis.close();
+            } catch (Exception e) {
+                //Do nothing
+            }
+        }
+        return textFile;
     }
 
     public class ResultDesktop implements Result{

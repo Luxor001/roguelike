@@ -16,9 +16,8 @@ public class Main extends Game {
 
 	@Override
 	public void create () {
-        this.setScreen(new SplashScreen());
-        gameDb.onCreate();
-        gameDb.loadFromSql();
+//        this.setScreen(new SplashScreen());
+//        gameDb.onCreate();    //Chiamato automaticamente se necessario
         StaticDataProvider.setDatabase(gameDb);
         this.setScreen(new MenuScreen());
 	}
