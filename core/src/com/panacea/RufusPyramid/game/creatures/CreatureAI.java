@@ -1,6 +1,8 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.utils.PerformanceCounter;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
@@ -45,7 +47,8 @@ public class CreatureAI {
     }
 
     public IAction chooseNextAction(){
-
+        PerformanceCounter we= new PerformanceCounter("ASsd");
+        we.start();
         GridPoint2 absoluteDistance = Utilities.absoluteDistance(creature.getPosition().getPosition(),hero.getPosition().getPosition());
 
         IAction chosenAction = new PassAction(creature);
@@ -54,7 +57,6 @@ public class CreatureAI {
             if (path != null) { //se il giocatore è raggiungibile..
                 int distance = path.size();
                 if (path.size() < creature.sigthLength) {
-                    System.out.println("ti vedo!");
                     if (currentState == State.FOLLOWING || currentState == State.STANDING || currentState == State.ROAMING || currentState == State.ATTACKING) {
                         if (distance <= 1) {
                             currentState = State.ATTACKING;
@@ -70,6 +72,9 @@ public class CreatureAI {
                 }
             }
         }
+
+        we.stop();
+        Gdx.app.log(we.current+"","");
         return  chosenAction;
     }
 
