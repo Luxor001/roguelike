@@ -86,11 +86,12 @@ public class GameDrawer extends ViewObject {
             view.render(delta);
         }
 
-        if(i == 100) {
+       /* if(i == 100) {
             System.out.println(Gdx.app.getJavaHeap() / 1024);
             System.out.println(Gdx.app.getNativeHeap() / 1024);
             i=0;
         }i++;
+        */
 
         if(hero.getFirstTarget() != null)
            this.uiDrawer.getAttackButton().setDisabled(false);
