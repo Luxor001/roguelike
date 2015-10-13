@@ -23,10 +23,7 @@ import java.util.ArrayList;
  */
 public class MapDrawer extends ViewObject {
 
-//    private static final int TILE_WIDTH = 32;
-//    private static final int TILE_HEIGHT = 32;
     private static final String decalsPath = "data/deco/map";
-
 
     private Map map;
     private OrthographicCamera camera;
@@ -110,7 +107,6 @@ public class MapDrawer extends ViewObject {
     @Override
     public void render(float delta) {
         super.render(delta);
-
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
