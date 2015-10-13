@@ -198,32 +198,6 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                try{
-
-                URL url = new URL("http://graph.facebook.com/me/feed");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-// Indicates POST.
-                connection.setDoOutput(true);
-
-// Encode parameters.
-                StringBuffer parameters = new StringBuffer();
-                parameters.append(URLEncoder.encode("message", "UTF-8"));
-                parameters.append("=");
-                parameters.append(URLEncoder.encode("\"Score Data Here\"", "UTF-8"));
-                parameters.append(URLEncoder.encode("access_token", "UTF-8"));
-                        parameters.append("=");
-                parameters.append(URLEncoder.encode("Access Token Here", "UTF-8"));
-
-// Transmit data.
-                    OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-                writer.write(parameters.toString());
-                writer.flush();
-
-
-                }catch (Exception e){
-
-                }
                 return true;
             }
         });
