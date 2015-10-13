@@ -22,7 +22,6 @@ public class DefaultHero extends AbstractCreature {
 //    TODO aggiungere il livello con l'oggetto Level
     public DefaultHero(String name, int goldAmount) {
         super(name, DESCRIPTION, MAX_HP, ATTACK, DEFENCE, SPEED);
-        //TODO la posizione di spawn va presa dalla mappa;
         this.getHealthBar().setVisible(true);
         this.setCreatureType(CreatureType.HERO);
         this.goldAmount = goldAmount;
@@ -30,8 +29,8 @@ public class DefaultHero extends AbstractCreature {
 
     @Override
     public void chooseNextAction(ActionResult resultPreviousAction) {
-        //TODO il giocatore ora è libero di impartire ordini al proprio giocatore
-        //TODO dal controller abilita l'input utente
+        //il giocatore ora è libero di impartire ordini al proprio eroe
+        //dal controller si abilita l'input utente
         return;
     }
 
