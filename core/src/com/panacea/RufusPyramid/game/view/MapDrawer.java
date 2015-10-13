@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
+import com.panacea.RufusPyramid.common.AssetsProvider;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
@@ -22,8 +23,9 @@ import java.util.ArrayList;
  */
 public class MapDrawer extends ViewObject {
 
-    private static final int TILE_WIDTH = 32;
-    private static final int TILE_HEIGHT = 32;
+//    private static final int TILE_WIDTH = 32;
+//    private static final int TILE_HEIGHT = 32;
+    private static final String decalsPath = "data/deco/map";
 
 
     private Map map;
@@ -39,6 +41,8 @@ public class MapDrawer extends ViewObject {
     private static TextureRegion[] doors; //doors consists in a 64x32 block, "closed" state in the first 32px
 
     private ArrayList<Tile> dynamicMapTiles=new ArrayList<Tile>();
+    private Map.MapType typeOfLoadedAssets = null;
+
     public MapDrawer(Map map) {
         this.map = map;
     }
@@ -89,39 +93,17 @@ public class MapDrawer extends ViewObject {
     }
 
     private void initializeTextures(Map.MapType mapType){ //load the texture regions based on current map type
-        String path="";
-        int wallsFrameCols = 0;
-        int groundsFrameCols = 0;
+        AssetsProvider ap = AssetsProvider.get();
+        String path = MapDrawer.getFileNameFromMapType(mapType);
 
-        switch (mapType){
-            case DUNGEON_COBBLE:
-                path = "dungeon1";
-                wallsFrameCols=7;
-                break;
-            case DUNGEON_SAND:
-                path = "dungeon2";
-                groundsFrameCols=4;
-                wallsFrameCols=10;
-                break;
-            case DUNGEON_SEWERS:
-                path = "dungeon3";
-                wallsFrameCols=7;
-                break;
-            case DUNGEON_CAVE:
-                path = "dungeon4";
-                break;
-            default:
-                path = "dungeon1";
-                break;
-        }
+        this.requestAssetsConditional(mapType);
+        walls = loadTextureRegion(ap.get("data/walls/"+path+".png", Texture.class));
+        grounds = loadTextureRegion(ap.get("data/grounds/" + path + ".png", Texture.class));
+        doors = loadTextureRegion(ap.get("data/mapObjects/doors_" + path + ".png", Texture.class));
 
-        walls = loadTextureRegion(new Texture("data/walls/"+path+".png"));
-        grounds = loadTextureRegion(new Texture("data/grounds/"+path+".png"));
-
-        grounds_deco = loadDecals("data/deco/map");
 /*        if(new File("data/grounds/"+path+"_deco.png").exists())
           grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));*/
-        doors = loadTextureRegion(new Texture("data/mapObjects/doors_"+path+".png"));
+        grounds_deco = loadDecals(MapDrawer.decalsPath);
     }
 
 
@@ -209,5 +191,88 @@ public class MapDrawer extends ViewObject {
         }
         TextureRegion[] values = new TextureRegion[allTextures.size()];
         return allTextures.toArray(values);
+    }
+
+    public static void requestAssets() {
+        AssetsProvider ap = AssetsProvider.get();
+
+        //Tiles will be requested later, at game start, when someone will choose the map type
+
+        //Requesting decals
+        FileHandle files = Gdx.files.internal(decalsPath);
+        for (FileHandle file: files.list()) {
+            ap.load(file.path(), Texture.class);
+        }
+    }
+
+    public void requestAssetsConditional(Map.MapType mapType) {
+        if (this.typeOfLoadedAssets != null) {
+            if (this.typeOfLoadedAssets.equals(mapType)) {
+                return;
+            } else {
+                this.unloadAssets(this.typeOfLoadedAssets);
+            }
+        }
+
+        String path = MapDrawer.getFileNameFromMapType(mapType);
+
+        String wallsPath = "data/walls/" + path + ".png";
+        String groundsPath = "data/grounds/" + path + ".png";
+        String doorsPath = "data/mapObjects/doors_" + path + ".png";
+
+        //Requesting tiles to AssetsProvider
+        AssetsProvider ap = AssetsProvider.get();
+        ap.load(wallsPath, Texture.class);
+        ap.load(groundsPath, Texture.class);
+        ap.load(doorsPath, Texture.class);
+        ap.finishLoading();
+
+        walls = loadTextureRegion(new Texture(wallsPath));
+        grounds = loadTextureRegion(new Texture(groundsPath));
+
+/*        if(new File("data/grounds/"+path+"_deco.png").exists())
+          grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));*/
+        doors = loadTextureRegion(new Texture(doorsPath));
+
+        this.typeOfLoadedAssets = mapType;
+    }
+
+    private void unloadAssets(Map.MapType mapType) {
+        String path = MapDrawer.getFileNameFromMapType(mapType);
+
+        String wallsPath = "data/walls/" + path + ".png";
+        String groundsPath = "data/grounds/" + path + ".png";
+        String doorsPath = "data/mapObjects/doors_" + path + ".png";
+
+        AssetsProvider ap = AssetsProvider.get();
+        ap.unload(wallsPath);
+        ap.unload(groundsPath);
+        ap.unload(doorsPath);
+    }
+
+    private static String getFileNameFromMapType(Map.MapType mapType) {
+        String path = "";
+        switch (mapType){
+            case DUNGEON_COBBLE:
+                path = "dungeon1";
+//                wallsFrameCols=7;
+                break;
+            case DUNGEON_SAND:
+                path = "dungeon2";
+//                groundsFrameCols=4;
+//                wallsFrameCols=10;
+                break;
+            case DUNGEON_SEWERS:
+                path = "dungeon3";
+//                wallsFrameCols=7;
+                break;
+            case DUNGEON_CAVE:
+                path = "dungeon4";
+                break;
+            default:
+                path = "dungeon1";
+                break;
+        }
+        return path;
     }
 }
