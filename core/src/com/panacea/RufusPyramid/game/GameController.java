@@ -44,8 +44,8 @@ public class GameController {
             facebook = GDXFacebookSystem.install(config);
             loginPermissions.add("public_profile");
             permissionsPublish.add("publish_actions");
+            facebook.signOut();
         }
-        facebook.signOut();
     }
 
     private static void resetAll() {
