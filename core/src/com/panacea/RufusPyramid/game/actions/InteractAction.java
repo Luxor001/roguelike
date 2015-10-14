@@ -14,6 +14,7 @@ import com.panacea.RufusPyramid.game.items.GoldItem;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 
 import java.util.ArrayList;
@@ -76,9 +77,10 @@ public class InteractAction implements IAction {
                 int goldAmount = convItem.getGoldAmount();
                 hero.addGold(goldAmount);
                 GameDrawer.get().getCreaturesDrawer().displayInfo(hero.getPosition().getPosition(), "+" + goldAmount, Color.YELLOW);
-                int randSound = Utilities.randInt(0, SoundsProvider.Sounds.GOLD_PICKUP.getValue() - 1);
-                goldPickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.GOLD_PICKUP)[randSound];
-                goldPickSound.play(1f);
+//                int randSound = Utilities.randInt(0, SoundsProvider.Sounds.GOLD_PICKUP.getValue() - 1);
+//                goldPickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.GOLD_PICKUP)[randSound];
+//                goldPickSound.play(1f);
+                MusicPlayer.playSound(MusicPlayer.SoundType.GOLD_PICK, this.creature.getCreatureType(), this.creature.getID());
             }        
             items.remove(convItem);
         }

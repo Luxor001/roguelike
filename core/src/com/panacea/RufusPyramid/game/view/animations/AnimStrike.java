@@ -2,6 +2,7 @@ package com.panacea.RufusPyramid.game.view.animations;
 
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
@@ -21,19 +22,6 @@ public class AnimStrike extends AbstractCreatureAnimation {
 
     public void create() {
         super.create();
-        if (this.modelType.equals(ICreature.CreatureType.HERO)) {
-            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_SLICE.getValue() - 1);
-            this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_SLICE)[randSound]);
-        }
-        if (this.modelType.equals(ICreature.CreatureType.WRAITH)) {
-            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_WRATH.getValue() - 1);
-            this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_WRATH)[randSound]);
-            this.setSoundVolume(0.5f);
-        }
-        if (this.modelType.equals(ICreature.CreatureType.UGLYYETI)) {
-            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.COMBAT_MNSTR.getValue() - 1);
-            this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.COMBAT_MNSTR)[randSound]);
-            this.setSoundVolume(0.5f);
-        }
+        this.setAnimationSound(MusicPlayer.SoundType.STRIKE);
     }
 }

@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.view;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.panacea.RufusPyramid.common.AssetsProvider;
 
@@ -17,18 +18,21 @@ public class SoundsProvider {
 
 
     public enum Sounds {
-        COMBAT_SLICE(3), //the number into the parenthesis indicates the size of the array returned
-        COMBAT_WRATH(3),
-        COMBAT_MNSTR(2),
-        GOLD_PICKUP(2),
-        FOOTSTEPS_INTERNAL(2),
-        INVENTORY(2),
-        CLICK(1);
-
-        private final int id;
-        Sounds(int id) { this.id = id; }
-        public int getValue() { return id; }
+        COMBAT_SLICE, //the number into the parenthesis indicates the size of the array returned
+        COMBAT_WRATH,
+        COMBAT_MNSTR,
+        GOLD_PICKUP,
+        FOOTSTEPS_INTERNAL,
+        INVENTORY_OPEN,
+        INVENTORY_CLOSE,
+        CLICK
     }
+    public enum Musics {
+        MENU,
+        GAMEOVER,
+        GAME
+    }
+
     private SoundsProvider(){
         
         soundsMap = new HashMap<Sounds, Sound[]>();
@@ -46,6 +50,22 @@ public class SoundsProvider {
             loadSound(reqSound);
 
         return soundsMap.get(reqSound);
+    }
+
+    public Music getMusic(Musics type) {
+        Music toReturn = null;
+        switch(type) {
+            case MENU:
+                toReturn = this.as.get("data/sfx/intro.mp3", Music.class);
+                break;
+            case GAMEOVER:
+                toReturn = this.as.get("data/sfx/death_music.ogg", Music.class);
+                break;
+            case GAME:
+//                toReturn = this.as.get("data/sfx/combat/___.ogg", Sound.class))
+                break;
+        }
+        return toReturn;
     }
 
     public void loadSound(Sounds reqSound){
@@ -67,42 +87,37 @@ public class SoundsProvider {
         ArrayList<Sound> files = new ArrayList<Sound>();
 
         switch(reqSound){
-            case COMBAT_SLICE:{
+            case COMBAT_SLICE:
                 files.add(this.as.get("data/sfx/combat/swing1.ogg", Sound.class));
                 files.add(this.as.get("data/sfx/combat/swing2.ogg", Sound.class));
                 files.add(this.as.get("data/sfx/combat/swing3.ogg", Sound.class));
                 break;
-            }
-            case COMBAT_MNSTR:{
+            case COMBAT_MNSTR:
                 files.add(this.as.get("data/sfx/combat/mnstr1.ogg", Sound.class));
                 files.add(this.as.get("data/sfx/combat/mnstr2.ogg", Sound.class));
                 break;
-            }
-            case COMBAT_WRATH:{
+            case COMBAT_WRATH:
                 files.add(this.as.get("data/sfx/combat/shade1.ogg", Sound.class));
                 files.add(this.as.get("data/sfx/combat/shade2.ogg", Sound.class));
                 files.add(this.as.get("data/sfx/combat/shade3.ogg", Sound.class));
                 break;
-            }
-            case GOLD_PICKUP:{
+            case GOLD_PICKUP:
                 files.add(this.as.get("data/sfx/misc/gold_pickup1.ogg", Sound.class));
                 files.add(this.as.get("data/sfx/misc/gold_pickup2.ogg", Sound.class));
                 break;
-            }
-            case FOOTSTEPS_INTERNAL:{
+            case FOOTSTEPS_INTERNAL:
                 files.add(this.as.get("data/sfx/misc/footsteps1.ogg", Sound.class));
                 files.add(this.as.get("data/sfx/misc/footsteps2.ogg", Sound.class));
                 break;
-            }
-            case INVENTORY:{
+            case INVENTORY_OPEN:
                 files.add(this.as.get("data/sfx/misc/inventory.ogg", Sound.class));
+                break;
+            case INVENTORY_CLOSE:
                 files.add(this.as.get("data/sfx/misc/inventory_close.ogg", Sound.class));
                 break;
-            }
-            case CLICK:{
+            case CLICK:
                 files.add(this.as.get("data/sfx/misc/pick.ogg", Sound.class));
                 break;
-            }
         }
         Sound [] dummyArray = new Sound[files.size()];
         return files.toArray(dummyArray);
@@ -127,5 +142,7 @@ public class SoundsProvider {
         as.load("data/sfx/misc/inventory.ogg", Sound.class);
         as.load("data/sfx/misc/inventory_close.ogg", Sound.class);
         as.load("data/sfx/misc/pick.ogg", Sound.class);
+        as.load("data/sfx/death_music.ogg", Music.class);
+        as.load("data/sfx/intro.mp3", Music.class);
     }
 }

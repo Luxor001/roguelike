@@ -1,7 +1,6 @@
 
 package com.panacea.RufusPyramid.game.view.animations;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameBatch;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
 /**
@@ -28,10 +28,12 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
 
     private ICreature model;
     private boolean flipX;//the texture should be mirrored?
+    private MusicPlayer.SoundType soundType;
+    private boolean soundPlayed;
 
-    private Sound sound;
-    private float soundVolume = 1f;
-    private Long soundId;
+//    private Sound soundType;
+//    private float soundVolume = 1f;
+//    private Long soundId;
 
     public AbstractCreatureAnimation(ICreature creature, AnimationData data, SpritesProvider.Azione actionType) {
         this.frameDuration = 0.05f;
@@ -39,6 +41,7 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
         this.setAbsolutePosition(Utilities.convertToAbsolutePos(data.position));
         this.flipX = data.flipX;
         this.actionType = actionType;
+        this.soundPlayed = false;
     }
 
     public void create() {
@@ -50,12 +53,9 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
 
     @Override
     public void render(float delta) {
-        if (this.sound != null) {
-            if (this.soundId == null) {
-                this.soundId = this.sound.play(this.soundVolume);
-            } else {
-                this.sound.setVolume(this.soundId, this.soundVolume);
-            }
+        if (!soundPlayed && this.soundType != null) {
+            MusicPlayer.playSound(this.soundType, this.model.getCreatureType(), this.model.getID());
+            this.soundPlayed = true;
         }
         stateTime += delta;
 
@@ -89,15 +89,11 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
         return this.absolutePosition;
     }
 
-    public void setAnimationSound(Sound sound) {
-        //TODO: dispose old sound?
-//        if (this.sound != null && SoundsProvider.get().isLoaded(this.sound)) {
-            //SoundsProvider.get().dispose(this.sound);
-//        }
-        this.sound = sound;
+    public void setAnimationSound(MusicPlayer.SoundType sound) {
+        this.soundType = sound;
     }
 
-    public void setSoundVolume(float volume) {
-        this.soundVolume = volume;
-    }
+//    public void setSoundVolume(float volume) {
+//        this.soundVolume = volume;
+//    }
 }

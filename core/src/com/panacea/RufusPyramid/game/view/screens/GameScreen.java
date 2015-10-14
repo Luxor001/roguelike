@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 public class GameScreen implements Screen {
@@ -19,6 +20,7 @@ public class GameScreen implements Screen {
         InputManager.get().addProcessor(GameController.getGm().heroInput);
 
         Gdx.input.setInputProcessor(InputManager.get());
+        MusicPlayer.setAmbient(MusicPlayer.AmbientType.GAME);
     }
 
     public void render(float delta) {

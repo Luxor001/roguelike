@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
@@ -35,15 +36,15 @@ public class AnimWalk extends AbstractCreatureAnimation {
         this.speed = 140f;
         this.creature = creature;
         this.setAbsolutePosition(Utilities.convertToAbsolutePos(startPoint));
-        this.setSoundVolume(0.1f);
+//        this.setSoundVolume(0.1f);
     }
 
     public void create() {
         super.create();
         if (this.creature.getClass() == DefaultHero.class) {
-            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.FOOTSTEPS_INTERNAL.getValue() - 1);
-            SoundsProvider.get().loadSound(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL);
-            this.setAnimationSound(SoundsProvider.get().getSound(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL)[randSound]);
+//            int randSound = Utilities.randInt(0, SoundsProvider.Sounds.FOOTSTEPS_INTERNAL.getValue() - 1);
+//            SoundsProvider.get().loadSound(SoundsProvider.Sounds.FOOTSTEPS_INTERNAL);
+            this.setAnimationSound(MusicPlayer.SoundType.WALK);
         }
 
         // Reference: http://stackoverflow.com/questions/17694076/moving-a-point-vector-on-an-angle-libgdx

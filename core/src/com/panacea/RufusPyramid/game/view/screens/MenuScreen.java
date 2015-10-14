@@ -8,19 +8,19 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 import com.panacea.RufusPyramid.game.view.animations.AnimatedImage;
 
@@ -46,7 +46,7 @@ public class MenuScreen implements Screen {
     private TextButton buttonExit;
     private Texture texture;
     private Image title;
-    private Music introMusic;
+//    private Music introMusic;
 
     AssetManager manager;
     @Override
@@ -56,7 +56,8 @@ public class MenuScreen implements Screen {
         manager = new AssetManager();
         manager.load("data/sfx/intro.mp3", Music.class);
 
-        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/intro.mp3"));
+//        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/intro.mp3"));
+        MusicPlayer.setAmbient(MusicPlayer.AmbientType.MENU);
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         skin.getAtlas().getTextures().iterator().next().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         skin.getFont("default-font").getData().markupEnabled = true;
@@ -114,18 +115,48 @@ public class MenuScreen implements Screen {
         animImg2.setPosition(stage.getWidth() - 80, VIEWPORT_HEIGHT - 140);
         stage.addActor(animImg2);
 
+        //Pulsanti per attivare/disattivare il muto
+        Stack stackSpeakersBox = new Stack();
+
         TextureRegion[] textures = SpritesProvider.get().getStaticSprites(SpritesProvider.OggettoStatico.SPEAKERS);
-        ImageButton speakers = new ImageButton(new TextureRegionDrawable(textures[0]), new TextureRegionDrawable(textures[1]));
-        speakers.setPosition(stage.getWidth() - textures[0].getRegionWidth() - 20, 20);
-        stage.addActor(speakers);
+        final ImageButton btnSpeakerOn = new ImageButton(new TextureRegionDrawable(textures[0]));
+        final ImageButton btnSpeakerOff = new ImageButton(new TextureRegionDrawable(textures[1]));
+        btnSpeakerOn.setVisible(!MusicPlayer.isMute());
+        btnSpeakerOff.setVisible(MusicPlayer.isMute());
+
+        btnSpeakerOn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                MusicPlayer.setMute(true);
+                btnSpeakerOn.setVisible(false);
+                btnSpeakerOff.setVisible(true);
+            }
+        });
+        btnSpeakerOff.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                MusicPlayer.setMute(false);
+                btnSpeakerOn.setVisible(true);
+                btnSpeakerOff.setVisible(false);
+            }
+        });
+
+        stackSpeakersBox.addActor(btnSpeakerOn);
+        stackSpeakersBox.addActor(btnSpeakerOff);
+
+        stackSpeakersBox.setWidth(textures[0].getRegionWidth());
+        stackSpeakersBox.setHeight(textures[0].getRegionHeight());
+
+        stackSpeakersBox.setPosition(stage.getWidth() - stackSpeakersBox.getWidth() - 20, 20);
+        stage.addActor(stackSpeakersBox);
 
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
-        introMusic.play();
-        introMusic.setLooping(true);
+//        introMusic.play();
+//        introMusic.setLooping(true);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
@@ -156,6 +187,6 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        introMusic.dispose();
+//        introMusic.dispose();
     }
 }

@@ -27,15 +27,11 @@ import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.GameCamera;
-import com.panacea.RufusPyramid.game.view.SoundsProvider;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,9 +59,9 @@ public class UIDrawer extends ViewObject {
     private TextButton button;
     private HealthBar healthBar;
     private HealthBar manaBar;
-    private Sound inventoryOpenSound;
-    private Sound inventoryCloseSound;
-    private Sound pickSound;
+//    private Sound inventoryOpenSound;
+//    private Sound inventoryCloseSound;
+//    private Sound pickSound;
     public UIDrawer() {
         this.labels = new ArrayList<Label>(3);
     }
@@ -85,9 +81,9 @@ public class UIDrawer extends ViewObject {
 //        camera.update();
         OrthographicCamera camera = new OrthographicCamera();
 
-
-        SoundsProvider.get().loadSound(SoundsProvider.Sounds.INVENTORY);
-        SoundsProvider.get().loadSound(SoundsProvider.Sounds.CLICK);
+//
+//        SoundsProvider.get().loadSound(SoundsProvider.Sounds.INVENTORY);
+//        SoundsProvider.get().loadSound(SoundsProvider.Sounds.CLICK);
         //VEDI https://github.com/libgdx/libgdx/wiki/Viewports
         //Se si vuole rendere utilizzabile (e ridimensionabile) il gioco bisogna sicuramente cambiare Viewport
         stage = new Stage(new StretchViewport(GameCamera.get().viewportWidth, GameCamera.get().viewportHeight));
@@ -179,9 +175,9 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 GameModel.get().getHero().fireActionChosenEvent(new PassAction(GameModel.get().getHero()));
-                if (pickSound == null)
-                    pickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.CLICK)[0];
-                pickSound.play(0.6f);
+//                if (pickSound == null)
+//                    pickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.CLICK)[0];
+                MusicPlayer.playSound(MusicPlayer.SoundType.ITEM_PICK);
                 return true;
             }
         });
@@ -217,17 +213,17 @@ public class UIDrawer extends ViewObject {
                 if(!GameController.gameInUI) {
                     GameController.gameInUI=true;
                     inventory.setVisible(true);
-                    if (inventoryOpenSound == null)
-                        inventoryOpenSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[0];
+//                    if (inventoryOpenSound == null)
+//                        inventoryOpenSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[0];
                     InputManager.get().getHeroProcessor().setPaused(true);
-                    inventoryOpenSound.play(1f);
+                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_OPEN);
                 }else{
                     GameController.gameInUI = false;
                     inventory.setVisible(false);
-                    if (inventoryCloseSound == null)
-                        inventoryCloseSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[1];
+//                    if (inventoryCloseSound == null)
+//                        inventoryCloseSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[1];
                     InputManager.get().getHeroProcessor().setPaused(false);
-                    inventoryCloseSound.play(1f);
+                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_CLOSE);
                 }
                 return true;
             }

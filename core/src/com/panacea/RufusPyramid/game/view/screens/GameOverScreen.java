@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class GameOverScreen implements Screen {
     private Image title;
     private ArrayList<ObjectAnimation> menuAnimations;
     private ObjectAnimation fireAnim;
-    private Music introMusic;
+//    private Music introMusic;
 
     private final static String decalsDirectory = "data/deco/gameover";
     private TextureRegion[] bloodDecals;
@@ -55,7 +56,8 @@ public class GameOverScreen implements Screen {
     @Override
     public void show() {
 
-        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/death_music.ogg"));
+//        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/death_music.ogg"));
+        MusicPlayer.setAmbient(MusicPlayer.AmbientType.GAMEOVER);
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         skin.getAtlas().getTextures().iterator().next().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         skin.getFont("default-font").getData().markupEnabled = true;
@@ -121,8 +123,8 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        introMusic.play();
-        introMusic.setLooping(true);
+//        introMusic.play();
+//        introMusic.setLooping(true);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -154,7 +156,7 @@ public class GameOverScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        introMusic.dispose();
+//        introMusic.dispose();
         texture.dispose();
 
         this.bloodDecals[0].getTexture().dispose();
