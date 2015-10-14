@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.view.ui;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -38,6 +39,11 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.tomgrill.gdxfacebook.core.GDXFacebookCallback;
+import de.tomgrill.gdxfacebook.core.GDXFacebookError;
+import de.tomgrill.gdxfacebook.core.SignInMode;
+import de.tomgrill.gdxfacebook.core.SignInResult;
 
 /**
  * Created by gio on 28/07/15.
@@ -198,10 +204,46 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
+                if(Gdx.app.getType() == Application.ApplicationType.Android) {
+                    try {
+                        GameController.facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, new GDXFacebookCallback<SignInResult>() {
+                            @Override
+                            public void onSuccess(SignInResult result) {
+                                Gdx.app.debug("asdas", "SIGN IN (read permissions): User signed in successfully.");
+
+
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                Gdx.app.debug("rufus", "SIGN IN (read permissions): User canceled login process");
+
+                            }
+
+                            @Override
+                            public void onFail(Throwable t) {
+                                Gdx.app.error("rufus", "SIGN IN (read permissions): Technical error occured:");
+                                //		logout();
+                                t.printStackTrace();
+                            }
+
+                            @Override
+                            public void onError(GDXFacebookError error) {
+                                Gdx.app.error("rufus", "SIGN IN (read permissions): Error login: " + error.getErrorMessage());
+                                //		logout();
+
+                            }
+
+                        });
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    
+                }
                 return true;
             }
         });
-
 
         currX +=imageTexture.getWidth()+5;
         imageTexture = new Texture(Gdx.files.internal("data/ui/inventory2.png"));
