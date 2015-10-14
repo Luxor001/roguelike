@@ -47,8 +47,6 @@ public class CreatureAI {
     }
 
     public IAction chooseNextAction(){
-        PerformanceCounter we= new PerformanceCounter("ASsd");
-        we.start();
         GridPoint2 absoluteDistance = Utilities.absoluteDistance(creature.getPosition().getPosition(),hero.getPosition().getPosition());
 
         IAction chosenAction = new PassAction(creature);
@@ -73,8 +71,6 @@ public class CreatureAI {
             }
         }
 
-        we.stop();
-        Gdx.app.log(we.current+"","");
         return  chosenAction;
     }
 
