@@ -31,36 +31,41 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new Main(new DatabaseAndroid(this.getBaseContext())), config);
 
-	/*	GDXFacebookConfig we = new GDXFacebookConfig();
-		we.PREF_FILENAME = ".facebookSessionData"; // optional
-		we.APP_ID = "1343627892330664"; // required
-		facebook = GDXFacebookSystem.install(we);
-		List<String> permissions = new ArrayList<>();
-		permissions.add("email");
-		permissions.add("public_profile");
-		permissions.add("user_friends");
+		try {
+			GDXFacebookConfig we = new GDXFacebookConfig();
+			we.PREF_FILENAME = ".facebookSessionData"; // optional
+			we.APP_ID = "1343627892330664"; // required
+			facebook = GDXFacebookSystem.install(we);
+			List<String> permissions = new ArrayList<>();
+			permissions.add("email");
+			permissions.add("public_profile");
+			permissions.add("user_friends");
 
-		facebook.loginWithReadPermissions(permissions, new GDXFacebookCallback<GDXFacebookLoginResult>() {
-			@Override
-			public void onSuccess(GDXFacebookLoginResult result) {
-				int a=0;
-			}
+			facebook.loginWithReadPermissions(permissions, new GDXFacebookCallback<GDXFacebookLoginResult>() {
+				@Override
+				public void onSuccess(GDXFacebookLoginResult result) {
+					int a = 0;
+				}
 
-			@Override
-			public void onError(GDXFacebookError error) {
-				// Error handling
-			}
+				@Override
+				public void onError(GDXFacebookError error) {
+					// Error handling
+				}
 
-			@Override
-			public void onCancel() {
-				// When the user cancels the login process
-			}
+				@Override
+				public void onCancel() {
+					// When the user cancels the login process
+				}
 
-			@Override
-			public void onFail(Throwable t) {
-				// When the login fails
-			}
-		});*/
+				@Override
+				public void onFail(Throwable t) {
+					// When the login fails
+				}
+			});
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 /* questo pezzo di codice ritorna l'hash key dell'applicazione, necessario per facebook.
 		PackageInfo info;
 		try {
