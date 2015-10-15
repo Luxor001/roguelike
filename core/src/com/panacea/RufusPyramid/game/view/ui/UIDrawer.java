@@ -1,8 +1,10 @@
+
 package com.panacea.RufusPyramid.game.view.ui;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,8 +38,11 @@ import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tomgrill.gdxfacebook.core.GDXFacebook;
 import de.tomgrill.gdxfacebook.core.GDXFacebookCallback;
 import de.tomgrill.gdxfacebook.core.GDXFacebookError;
+import de.tomgrill.gdxfacebook.core.GDXFacebookGraphRequest;
+import de.tomgrill.gdxfacebook.core.JsonResult;
 import de.tomgrill.gdxfacebook.core.SignInMode;
 import de.tomgrill.gdxfacebook.core.SignInResult;
 
@@ -62,6 +67,13 @@ public class UIDrawer extends ViewObject {
     private com.badlogic.gdx.scenes.scene2d.ui.Image attackBackground;
     private com.badlogic.gdx.scenes.scene2d.ui.Image lifeStats;
     private com.badlogic.gdx.scenes.scene2d.ui.Image inventory;
+
+
+    private com.badlogic.gdx.scenes.scene2d.ui.Image options;
+    private ImageButton resumeButton;
+    private ImageButton postButton;
+    private ImageButton exitButton;
+
     private TextButton button;
     private HealthBar healthBar;
     private HealthBar manaBar;
@@ -146,7 +158,7 @@ public class UIDrawer extends ViewObject {
         manaBar.setValue(100);
         manaBar.setHeight(manaForeGround.getSprite().getHeight());
         manaBar.setWidth(manaForeGround.getSprite().getWidth());
-        manaBar.setPosition(113, maxY - imageTexture.getHeight()+37);
+        manaBar.setPosition(113, maxY - imageTexture.getHeight() + 37);
 
         imageTexture = new Texture(Gdx.files.internal("data/ui/backAttack.png"));
         attackBackground= new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
@@ -199,10 +211,41 @@ public class UIDrawer extends ViewObject {
         spellButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                    GDXFacebook facebook = GameController.facebook;
+                    if (!facebook.isSignedIn()) {
+                        facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, null);
+                    }
+                    GDXFacebookGraphRequest request = new GDXFacebookGraphRequest().setNode("me/feed").useCurrentAccessToken();
+                    request.setMethod(Net.HttpMethods.POST);
+                    request.putField("message", "Hey, i just scored " + GameModel.get().getHero().getGoldAmount() + " on Rufus Quest!");
+                    request.putField("link", "http://postimg.org/image/ni32aiugb/7647c725/");
+                    request.putField("caption", "Rufus Quest");
 
-                if(Gdx.app.getType() == Application.ApplicationType.Android) {
+                    facebook.newGraphRequest(request, new GDXFacebookCallback<JsonResult>() {
+                        @Override
+                        public void onSuccess(JsonResult result) {
+                            // Success
+                        }
+
+                        @Override
+                        public void onError(GDXFacebookError error) {
+                            // Error
+                        }
+
+                        @Override
+                        public void onFail(Throwable t) {
+                            // Fail
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            // Cancel
+                        }
+                    });
+
                     try {
-                        GameController.facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, new GDXFacebookCallback<SignInResult>() {
+                        facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, new GDXFacebookCallback<SignInResult>() {
                             @Override
                             public void onSuccess(SignInResult result) {
                                 Gdx.app.debug("asdas", "SIGN IN (read permissions): User signed in successfully.");
@@ -231,11 +274,10 @@ public class UIDrawer extends ViewObject {
                             }
 
                         });
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    
+
                 }
                 return true;
             }
@@ -252,14 +294,14 @@ public class UIDrawer extends ViewObject {
         inventoryButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(!GameController.gameInUI) {
-                    GameController.gameInUI=true;
+                if (!GameController.gameInUI) {
+                    GameController.gameInUI = true;
                     inventory.setVisible(true);
 //                    if (inventoryOpenSound == null)
 //                        inventoryOpenSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[0];
                     InputManager.get().getHeroProcessor().setPaused(true);
                     MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_OPEN);
-                }else{
+                } else {
                     GameController.gameInUI = false;
                     inventory.setVisible(false);
 //                    if (inventoryCloseSound == null)
@@ -283,10 +325,10 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("options", "Clicked");
-
-                ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
+                options.setVisible(true);
+                /*((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
                 GameModel.get().disposeAll();
-                        ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: Fare dispose!
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: Fare dispose!*/
                 return true;
             }
         });
@@ -297,6 +339,15 @@ public class UIDrawer extends ViewObject {
         inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         inventory.setVisible(false);
 
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
+        options = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
+        options.setPosition((maxX/2) - imageTexture.getWidth()/2, (maxY/2) - imageTexture.getHeight()/2);
+        options.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        options.setVisible(false);
+
+
+        stage.addActor(options);
         stage.addActor(lifeStats);
         stage.addActor(inventory);
         stage.addActor(healthBar);

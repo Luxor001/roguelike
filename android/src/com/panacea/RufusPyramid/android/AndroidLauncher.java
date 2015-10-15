@@ -13,6 +13,8 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.utils.Array;
 import com.panacea.RufusPyramid.Main;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +35,8 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new Main(new DatabaseAndroid(this.getBaseContext())), config);
 
-/* questo pezzo di codice ritorna l'hash key dell'applicazione, necessario per facebook.
-		PackageInfo info;
+// questo pezzo di codice ritorna l'hash key dell'applicazione, necessario per facebook.
+/*		PackageInfo info;
 		try {
 			info = getPackageManager().getPackageInfo(getBaseContext().getPackageName(), PackageManager.GET_SIGNATURES);
 			for (Signature signature : info.signatures) {
