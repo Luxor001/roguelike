@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.panacea.RufusPyramid.common.AssetsProvider;
@@ -31,7 +30,7 @@ public class SpritesProvider {
     private TextureRegion[][] orc_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.ORC), 13, 21);
     private TextureRegion[][] skeleton_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.SKELETON), 13, 21);
     private TextureRegion[][] wtfcreature_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.UGLYYETI), 7, 5);
-    private TextureRegion[][] wraith_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.WRAITH), 8, 6);
+    private TextureRegion[][] wraith_base = loadTexture(StaticDataProvider.getSpritesheetPath(ICreature.CreatureType.WRAITH), 8, 7);
     private TextureRegion[] staticFire = loadTexture("animations/fireloop.png", 50, 1)[0];
     private TextureRegion[] speakers = loadTexture("ui/speakers.png", 2, 1)[0];
     
@@ -120,18 +119,31 @@ public class SpritesProvider {
                     }
                     break;
                 case CAST:
-                        animationCols = 4;                    // Colonne 7
-                        animationRow = 7;                     // Righe 1-4
+                        animationCols = 7;                    // Colonne 7
+                        animationRow = 4;                     // Righe 1-4
                     break;
                 case DEATH:
-                        animationCols = 6;                    // Colonne 6
-                        animationRow = 1;                    // Righe 21
+                    animationCols = 6;                    // Colonne 6
+                    animationRow = 21;                    // Righe 21
+                    if (oggettoDaAnimare == ICreature.CreatureType.WRAITH) {
+                        animationCols = 6;
+                        animationRow = 7;
+                    }
+                    if (oggettoDaAnimare == ICreature.CreatureType.UGLYYETI) {
+                        animationCols = 7;
+                        animationRow = 1;
+                    }
                     break;
                 default:
                     throw new NullPointerException("Impossibile trovare lo sprite corretto per l'animazione " + azione + " dell'oggetto " + oggettoDaAnimare + ".");
             }
+        try {
             animationFrames = Arrays.copyOf(allFrames[animationRow - 1], animationCols);
-//        }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            Gdx.app.error(SpritesProvider.class.toString(), "La creatura " + oggettoDaAnimare + " non ha l'animazione " + azione + " settata bene (righe e/o colonne sbagliate).");
+            ex.printStackTrace();
+            Gdx.app.exit();
+        }
 
         if (animationFrames == null)
             throw new NullPointerException("Impossibile trovare lo sprite corretto per l'animazione " + azione + " dell'oggetto " + oggettoDaAnimare + ".");
