@@ -74,7 +74,6 @@ public class UIDrawer extends ViewObject {
     private ImageButton postButton;
     private ImageButton exitButton;
 
-    private TextButton button;
     private HealthBar healthBar;
     private HealthBar manaBar;
 //    private Sound inventoryOpenSound;
@@ -326,6 +325,7 @@ public class UIDrawer extends ViewObject {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("options", "Clicked");
                 options.setVisible(true);
+                resumeButton.setVisible(true);
                 /*((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
                 GameModel.get().disposeAll();
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: Fare dispose!*/
@@ -340,14 +340,32 @@ public class UIDrawer extends ViewObject {
         inventory.setVisible(false);
 
 
-        imageTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
-        options = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
-        options.setPosition((maxX/2) - imageTexture.getWidth()/2, (maxY/2) - imageTexture.getHeight()/2);
-        options.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
+        options = new com.badlogic.gdx.scenes.scene2d.ui.Image(optionsTexture);
+        options.setPosition((maxX / 2) - optionsTexture.getWidth() / 2, (maxY / 2) - optionsTexture.getHeight() / 2);
+        options.setSize(optionsTexture.getWidth(), optionsTexture.getHeight());
         options.setVisible(false);
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/resume.png"));
+       // Texture selectedTexture= new Texture(Gdx.files.internal("data/ui/attackButton_deact.png"));
+        resumeButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        resumeButton.setPosition(maxX / 2 - imageTexture.getWidth() / 2, maxY / 2);
+        resumeButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+      //  resumeButton.getStyle().imageDisabled = new SpriteDrawable(new Sprite(selectedTexture));
+        resumeButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                DefaultHero hero = GameModel.get().getHero();
+                if (hero.getFirstTarget() != null)
+                    hero.fireActionChosenEvent(new AttackAction(hero, hero.getFirstTarget()));
+                return true;
+            }
+        });
+        resumeButton.setVisible(false);
 
 
         stage.addActor(options);
+        stage.addActor(resumeButton);
         stage.addActor(lifeStats);
         stage.addActor(inventory);
         stage.addActor(healthBar);
