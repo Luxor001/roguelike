@@ -36,7 +36,7 @@ public class AbstractCreatureAnimation extends AbstractAnimation {
 //    private Long soundId;
 
     public AbstractCreatureAnimation(ICreature creature, AnimationData data, SpritesProvider.Azione actionType) {
-        this.frameDuration = 0.05f;
+        this.frameDuration = 0.03f;
         this.model = creature;
         this.setAbsolutePosition(Utilities.convertToAbsolutePos(data.position));
         this.flipX = data.flipX;

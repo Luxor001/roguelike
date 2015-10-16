@@ -118,6 +118,7 @@ public class HeroInputManager extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (isPaused) return false;
         this.touchDownPosition = new Vector2(screenX, screenY);
         return false;
     }
@@ -137,6 +138,7 @@ public class HeroInputManager extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
+        if (isPaused) return false;
         switch (keycode) {
             case Input.Keys.LEFT:
                 this.hero.chooseTheRightAction(Utilities.Directions.WEST);

@@ -17,7 +17,10 @@ import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,7 +98,8 @@ public class GameMaster {
 
 
     public void step() {
-        if (someoneIsPlaying || GameController.isGameEnded())   return;
+        if (someoneIsPlaying || GameController.isGameEnded() || GameDrawer.get().getCreaturesDrawer().isPlayingAnimations())
+            return;
         someoneIsPlaying = true;
 
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
@@ -107,6 +111,10 @@ public class GameMaster {
                 agentOnTurn = turnToNextAgent();
             } while (agentOnTurn.getEnergy() < MIN_ENERGY_TO_ACT);
 
+
+            if (agentOnTurn instanceof DefaultHero) {
+                this.heroInput.setPaused(false);
+            }
             agentsPlaying.get(currentAgent).chooseNextAction(lastResult);
         }
     }
@@ -125,6 +133,10 @@ public class GameMaster {
                                     "wtfAgentToString: " + source.toString() + "\n"
                     );
                     return;
+                }
+
+                if (source instanceof DefaultHero) {
+                    GameMaster.this.heroInput.setPaused(true);
                 }
 
                 if(source instanceof AbstractCreature)

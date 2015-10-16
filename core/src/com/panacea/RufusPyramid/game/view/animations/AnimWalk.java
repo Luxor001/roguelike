@@ -33,7 +33,7 @@ public class AnimWalk extends AbstractCreatureAnimation {
         super(creature, data, SpritesProvider.Azione.WALK);
         this.startPoint = data.position;
         this.endPoint = data.endPosition;
-        this.speed = 140f;
+        this.speed = 200f;
         this.creature = creature;
         this.setAbsolutePosition(Utilities.convertToAbsolutePos(startPoint));
 //        this.setSoundVolume(0.1f);
@@ -69,7 +69,6 @@ public class AnimWalk extends AbstractCreatureAnimation {
         boolean toDispose = false;
         deltaMovement.set(velocity).scl(delta);
 
-        creature.setAbsoluteTickPosition(currentPos);
         if (currentPos.dst2(endPos) > deltaMovement.len2()) { //Se la distanza tra la posiz. attuale e la posiz. finale è minore di deltaMovement
             currentPos.add(deltaMovement);
         } else {
@@ -77,6 +76,7 @@ public class AnimWalk extends AbstractCreatureAnimation {
             toDispose = true;
         }
 
+        creature.setAbsoluteTickPosition(currentPos);
         this.setAbsolutePosition(new GridPoint2(Math.round(currentPos.x), Math.round(currentPos.y)));
 
         super.render(delta);

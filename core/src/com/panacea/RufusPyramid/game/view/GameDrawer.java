@@ -66,7 +66,8 @@ public class GameDrawer extends ViewObject {
             view.resize(width, height);
         }
     }
-    int i=0;
+
+//    int i=0;
     @Override
     public void render(float delta) {
         super.render(delta);

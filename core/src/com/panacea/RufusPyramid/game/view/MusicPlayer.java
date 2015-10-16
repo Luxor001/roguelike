@@ -73,9 +73,11 @@ public class MusicPlayer {
                 type = SoundsProvider.Sounds.FOOTSTEPS_INTERNAL;
                 break;
             case CAST:
+                Gdx.app.log(MusicPlayer.class.toString(), "Nessun suono disponibile per il cast.");
 //                type = SoundsProvider.Sounds.;
                 break;
             case DEATH:
+                Gdx.app.log(MusicPlayer.class.toString(), "Nessun suono disponibile per la morte.");
 //                type = SoundsProvider.Sounds.;
                 break;
             case GOLD_PICK:
@@ -117,25 +119,15 @@ public class MusicPlayer {
 
     private static void play(Sound sound, boolean looping) {
         if (sound != null) {
-            float volume = MusicPlayer.volumeLevel;
-            if (isMute()) {
-                volume = 0f;
-            }
-
             long id = sound.play();
-            sound.setVolume(id, volume);
+            sound.setVolume(id, MusicPlayer.getVolume());
             sound.setLooping(id, looping);
         }
     }
 
     private static void play(Music sound) {
         if (sound != null) {
-            float volume = MusicPlayer.volumeLevel;
-            if (isMute()) {
-                volume = 0f;
-            }
-
-            sound.setVolume(volume);
+            sound.setVolume(MusicPlayer.getVolume());
             sound.play();
             sound.setLooping(true);
         }
@@ -145,11 +137,16 @@ public class MusicPlayer {
         MusicPlayer.mute = mute;
 
         if (MusicPlayer.activeAmbient != null) {
-            if (mute) {
-                activeAmbient.setVolume(0f);
-            } else {
-                activeAmbient.setVolume(MusicPlayer.volumeLevel);
-            }
+            activeAmbient.setVolume(MusicPlayer.getVolume());
+        }
+        //TODO azzerare o ripristinare il volume di tutti i suoni in corso
+    }
+
+    public static float getVolume() {
+        if (MusicPlayer.isMute()) {
+            return 0f;
+        } else {
+            return MusicPlayer.volumeLevel;
         }
     }
 

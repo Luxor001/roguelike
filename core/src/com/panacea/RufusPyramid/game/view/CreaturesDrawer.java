@@ -47,6 +47,8 @@ public class CreaturesDrawer extends ViewObject {
     private HashMap<Integer, AbstractAnimation> currentAnimations = null;
     private DelayedRemovalArray<AbstractAnimation> generalAnimations = null;
 
+    private int currentAnimationsCounter;
+
     private SpriteBatch batch;
 
     public CreaturesDrawer(List creaturesList) {
@@ -55,6 +57,8 @@ public class CreaturesDrawer extends ViewObject {
         this.currentStates = new HashMap<Integer, CreatureState>();
         this.currentAnimations = new HashMap<Integer, AbstractAnimation>();
         this.generalAnimations = new DelayedRemovalArray<AbstractAnimation>();
+
+        this.currentAnimationsCounter = 0;
 
         this.batch = GameBatch.get();
 
@@ -115,11 +119,11 @@ public class CreaturesDrawer extends ViewObject {
                         break;
                     case STANDING:
                         //                    GridPoint2 pos = creature.getPosition().getPosition();
-                        GridPoint2 spritePosition = creature.getPosition().getPosition();
                         TextureRegion currentFrame = this.sprites.get(creature.getID());
                         if ((!currentFrame.isFlipX() && creature.getFlipX()) || (currentFrame.isFlipX() && !creature.getFlipX())) {
                             currentFrame.flip(true, false);
                         }
+                        GridPoint2 spritePosition = creature.getPosition().getPosition();
                         GridPoint2 newPos = Utilities.convertToAbsolutePos(spritePosition);
                         batch.begin();
                         batch.draw(currentFrame, newPos.x, newPos.y, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
@@ -228,9 +232,9 @@ public class CreaturesDrawer extends ViewObject {
      */
     private void startCreatureAnimation(final ICreature toAnimate, AnimationData data, final CreatureState state, AnimationEndedListener listener) {
         //Preparo il gioco per iniziare l'animazione
-        if(heroInput == null)
-            this.heroInput = InputManager.get().getHeroProcessor();
-        CreaturesDrawer.this.heroInput.setPaused(true);
+//        if(heroInput == null)
+//            this.heroInput = InputManager.get().getHeroProcessor();
+//        CreaturesDrawer.this.heroInput.setPaused(true);
 
         if (listener == null) { //Utilizzo il listener di default, che semplicemente reimposta lo stato della creatura a STANDING
             listener = new AnimationEndedListener() {
@@ -238,12 +242,16 @@ public class CreaturesDrawer extends ViewObject {
                 public void ended(AnimationEndedEvent event, Object source) {
                     //Poi renderizzo l'eroe in setStanding e riabilito l'input
                     //A meno che non sia morto
+//                    CreaturesDrawer.this.currentAnimations.put(toAnimate.getID(), null);
+                    CreaturesDrawer.this.currentAnimationsCounter--;
                     if (state.equals(CreatureState.DYING)) {
                         CreaturesDrawer.this.setDead(toAnimate.getID());
                     } else {
                         CreaturesDrawer.this.setStanding(toAnimate.getID());
                     }
-                    CreaturesDrawer.this.heroInput.setPaused(false);
+//                    if (!CreaturesDrawer.this.isPlayingAnimations()) {
+//                        CreaturesDrawer.this.heroInput.setPaused(false);
+//                    }
                 }
             };
         }
@@ -270,13 +278,28 @@ public class CreaturesDrawer extends ViewObject {
 
         currentAnimation.create();
         currentAnimation.addListener(listener);
-        Gdx.app.log(CreaturesDrawer.class.toString(), "Now: " + this.currentAnimations.get(toAnimate.getID()) + " - Then: " + currentAnimation);
+//        Gdx.app.log(CreaturesDrawer.class.toString(), "Now: " + this.currentAnimations.get(toAnimate.getID()) + " - Then: " + currentAnimation);
         this.currentAnimations.put(toAnimate.getID(), currentAnimation);
+        this.currentAnimationsCounter++;
         this.currentStates.put(toAnimate.getID(), state);
     }
 
     private void setDead(int creatureId) {
         currentStates.put(creatureId, CreatureState.DEAD);
+    }
+
+    public boolean isPlayingAnimations() {
+//        for(AbstractAnimation anim : this.currentAnimations.values()) {
+//            if (anim != null) {
+//                return true;
+//            }
+//        }
+//        return false;
+        if (this.currentAnimationsCounter < 0) {
+            Gdx.app.error(CreaturesDrawer.class.toString(), "Animation counter < 0 ?! " + this.currentAnimationsCounter);
+            this.currentAnimationsCounter = 0;
+        }
+        return this.currentAnimationsCounter > 0;
     }
 
     private enum CreatureState {
