@@ -130,7 +130,6 @@ public class UIDrawer extends ViewObject {
         table.pack();
 
 
-        stage.addActor(table);
 
         Texture imageTexture = new Texture(Gdx.files.internal("data/ui/quickback3.png"));
         background = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
@@ -144,7 +143,7 @@ public class UIDrawer extends ViewObject {
 
         goldAmountText = new BitmapFont();
         goldAmountText.setColor(Color.YELLOW);
-        goldAmountText.getData().setScale(0.7f);
+        goldAmountText.getData().setScale(Gdx.graphics.getHeight() / 640f);
 
 
         notificationText = new BitmapFont();
@@ -294,6 +293,7 @@ public class UIDrawer extends ViewObject {
                                    @Override
                                    public void run() {
                                        GameController.gameInUI = false;
+                                       InputManager.get().getHeroProcessor().setPaused(false);
                                        options.setVisible(false);
                                        resumeButton.setVisible(false);
                                        postButton.setVisible(false);
@@ -398,7 +398,7 @@ public class UIDrawer extends ViewObject {
                     @Override
                     public void run() {
                         ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
-                         GameModel.get().disposeAll();
+                        GameModel.get().disposeAll();
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
                     }
                 }, 0.5f        //    delay per fare vedere la selezione utente..
@@ -414,6 +414,7 @@ public class UIDrawer extends ViewObject {
         layout.setText(notificationText, "Score on facebook posted!");
         notificationTextWidth = (int) layout.width;// contains the width of the current set text
 
+        stage.addActor(table);
         stage.addActor(options);
         stage.addActor(resumeButton);
         stage.addActor(postButton);
@@ -429,7 +430,6 @@ public class UIDrawer extends ViewObject {
         stage.addActor(spellButton);
         stage.addActor(inventoryButton);
         stage.addActor(optionsButton);
-
     }
 
     @Override
@@ -444,13 +444,11 @@ public class UIDrawer extends ViewObject {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-//        float maxX = GameCamera.get().viewportWidth;
-//        float maxY = GameCamera.get().viewportHeight;
+        float maxY =  Gdx.graphics.getHeight();
         batch.begin();
-        goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount() + "", 70, 635);
+        goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount() + "", 160, maxY - 7);
         if(notificationTextVisible)
             notificationText.draw(batch, "Score on facebook posted!",GameCamera.get().viewportWidth/2-notificationTextWidth/3, 250 );
-
         batch.end();
     }
 
