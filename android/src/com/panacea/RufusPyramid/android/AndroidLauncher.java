@@ -6,6 +6,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -34,7 +35,6 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new Main(new DatabaseAndroid(this.getBaseContext())), config);
-
 // questo pezzo di codice ritorna l'hash key dell'applicazione, necessario per facebook.
 /*		PackageInfo info;
 		try {

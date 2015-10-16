@@ -5,11 +5,11 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,9 +20,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameModel;
@@ -73,7 +73,6 @@ public class UIDrawer extends ViewObject {
     private ImageButton resumeButton;
     private ImageButton postButton;
     private ImageButton exitButton;
-
     private HealthBar healthBar;
     private HealthBar manaBar;
 //    private Sound inventoryOpenSound;
@@ -84,6 +83,9 @@ public class UIDrawer extends ViewObject {
     }
 
     private BitmapFont goldAmountText;
+    private BitmapFont notificationText;
+    private  boolean notificationTextVisible;
+    private int notificationTextWidth;
     @Override
     public void create() {
         super.create();
@@ -143,6 +145,11 @@ public class UIDrawer extends ViewObject {
         goldAmountText = new BitmapFont();
         goldAmountText.setColor(Color.YELLOW);
         goldAmountText.getData().setScale(0.7f);
+
+
+        notificationText = new BitmapFont();
+        notificationText.setColor(Color.WHITE);
+        notificationText.getData().setScale(2.5f);
 
         SpriteDrawable healthForeGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/health.png"))));
         SpriteDrawable healthBackgroundd = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/ui/healthBack.png"))));
@@ -210,6 +217,105 @@ public class UIDrawer extends ViewObject {
         spellButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        currX +=imageTexture.getWidth()+5;
+        imageTexture = new Texture(Gdx.files.internal("data/ui/inventory2.png"));
+        selectedTexture= new Texture(Gdx.files.internal("data/ui/inventory2_sel.png"));
+        inventoryButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        inventoryButton.setPosition(currX, 10);
+        inventoryButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        inventoryButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
+        inventoryButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (!GameController.gameInUI) {
+                    GameController.gameInUI = !GameController.gameInUI;
+                    inventory.setVisible(!inventory.isVisible());
+                    InputManager.get().getHeroProcessor().setPaused(true);
+                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_OPEN);
+                } else {
+                    GameController.gameInUI = false;
+                    inventory.setVisible(false);
+                    InputManager.get().getHeroProcessor().setPaused(false);
+                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_CLOSE);
+                }
+                return true;
+            }
+        });
+
+        currX +=imageTexture.getWidth() + 5;
+        imageTexture = new Texture(Gdx.files.internal("data/ui/options2.png"));
+        selectedTexture= new Texture(Gdx.files.internal("data/ui/options2_sel.png"));
+        optionsButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        optionsButton= new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        optionsButton.setPosition(currX, 10);
+        optionsButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        optionsButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
+        optionsButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                GameController.gameInUI = !GameController.gameInUI;
+                InputManager.get().getHeroProcessor().setPaused(GameController.gameInUI);
+                options.setVisible(GameController.gameInUI);
+                resumeButton.setVisible(GameController.gameInUI);
+                postButton.setVisible(GameController.gameInUI);
+                exitButton.setVisible(GameController.gameInUI);
+                return true;
+            }
+        });
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/inventory.png"));
+        inventory = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
+        inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
+        inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        inventory.setVisible(false);
+
+
+        Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
+        options = new com.badlogic.gdx.scenes.scene2d.ui.Image(optionsTexture);
+        options.setPosition((maxX / 2) - optionsTexture.getWidth() / 2, (maxY / 2) - optionsTexture.getHeight() / 2);
+        options.setSize(optionsTexture.getWidth(), optionsTexture.getHeight());
+        options.setVisible(false);
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/resume.png"));
+        selectedTexture= new Texture(Gdx.files.internal("data/ui/resume_sel.png"));
+        resumeButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        resumeButton.setPosition(maxX / 2 - imageTexture.getWidth() / 2, maxY / 2 + 50);
+        resumeButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        resumeButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
+        resumeButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Timer.schedule(new Timer.Task() {  //    delay per fare vedere la selezione utente..
+                                   @Override
+                                   public void run() {
+                                       GameController.gameInUI = false;
+                                       options.setVisible(false);
+                                       resumeButton.setVisible(false);
+                                       postButton.setVisible(false);
+                                       exitButton.setVisible(false);
+                                   }
+                               }, 0.2f
+                );
+                return true;
+            }
+        });
+        resumeButton.setVisible(false);
+
+        imageTexture = new Texture(Gdx.files.internal("data/ui/post.png"));
+        selectedTexture= new Texture(Gdx.files.internal("data/ui/post_sel.png"));
+        postButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        postButton.setPosition(maxX / 2 - imageTexture.getWidth() / 2, maxY / 2 - 50);
+        postButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        postButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
+        postButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
                 if (Gdx.app.getType() == Application.ApplicationType.Android) {
                     GDXFacebook facebook = GameController.facebook;
                     if (!facebook.isSignedIn()) {
@@ -247,125 +353,71 @@ public class UIDrawer extends ViewObject {
                         facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, new GDXFacebookCallback<SignInResult>() {
                             @Override
                             public void onSuccess(SignInResult result) {
-                                Gdx.app.debug("asdas", "SIGN IN (read permissions): User signed in successfully.");
-
-
+                                notificationTextVisible = true;
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            notificationTextVisible = false;
+                                        }
+                                    }, 2f);
                             }
 
                             @Override
                             public void onCancel() {
                                 Gdx.app.debug("rufus", "SIGN IN (read permissions): User canceled login process");
-
                             }
 
                             @Override
                             public void onFail(Throwable t) {
-                                Gdx.app.error("rufus", "SIGN IN (read permissions): Technical error occured:");
-                                //		logout();
-                                t.printStackTrace();
                             }
 
                             @Override
                             public void onError(GDXFacebookError error) {
-                                Gdx.app.error("rufus", "SIGN IN (read permissions): Error login: " + error.getErrorMessage());
-                                //		logout();
-
                             }
 
                         });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
                 return true;
             }
         });
+        postButton.setVisible(false);
 
-        currX +=imageTexture.getWidth()+5;
-        imageTexture = new Texture(Gdx.files.internal("data/ui/inventory2.png"));
-        selectedTexture= new Texture(Gdx.files.internal("data/ui/inventory2_sel.png"));
-        inventoryButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        inventoryButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        inventoryButton.setPosition(currX, 10);
-        inventoryButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-        inventoryButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
-        inventoryButton.addListener(new InputListener() {
+        imageTexture = new Texture(Gdx.files.internal("data/ui/exit.png"));
+        selectedTexture= new Texture(Gdx.files.internal("data/ui/exit_sel.png"));
+        exitButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
+        exitButton.setPosition(maxX / 2 - imageTexture.getWidth() / 2, maxY / 2 - 150);
+        exitButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        exitButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
+        exitButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (!GameController.gameInUI) {
-                    GameController.gameInUI = true;
-                    inventory.setVisible(true);
-//                    if (inventoryOpenSound == null)
-//                        inventoryOpenSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[0];
-                    InputManager.get().getHeroProcessor().setPaused(true);
-                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_OPEN);
-                } else {
-                    GameController.gameInUI = false;
-                    inventory.setVisible(false);
-//                    if (inventoryCloseSound == null)
-//                        inventoryCloseSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.INVENTORY)[1];
-                    InputManager.get().getHeroProcessor().setPaused(false);
-                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_CLOSE);
-                }
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
+                         GameModel.get().disposeAll();
+                        ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
+                    }
+                }, 0.5f        //    delay per fare vedere la selezione utente..
+                );
                 return true;
             }
         });
+        exitButton.setVisible(false);
 
-        currX +=imageTexture.getWidth() + 5;
-        imageTexture = new Texture(Gdx.files.internal("data/ui/options2.png"));
-        selectedTexture= new Texture(Gdx.files.internal("data/ui/options2_sel.png"));
-        optionsButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        optionsButton= new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        optionsButton.setPosition(currX, 10);
-        optionsButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-        optionsButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
-        optionsButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("options", "Clicked");
-                options.setVisible(true);
-                resumeButton.setVisible(true);
-                /*((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
-                GameModel.get().disposeAll();
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: Fare dispose!*/
-                return true;
-            }
-        });
+//Some stuff like setBounds, set the content with .add(actor), and so on
 
-        imageTexture = new Texture(Gdx.files.internal("data/ui/inventory.png"));
-        inventory = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
-        inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
-        inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-        inventory.setVisible(false);
-
-
-        Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
-        options = new com.badlogic.gdx.scenes.scene2d.ui.Image(optionsTexture);
-        options.setPosition((maxX / 2) - optionsTexture.getWidth() / 2, (maxY / 2) - optionsTexture.getHeight() / 2);
-        options.setSize(optionsTexture.getWidth(), optionsTexture.getHeight());
-        options.setVisible(false);
-
-        imageTexture = new Texture(Gdx.files.internal("data/ui/resume.png"));
-       // Texture selectedTexture= new Texture(Gdx.files.internal("data/ui/attackButton_deact.png"));
-        resumeButton = new ImageButton(new SpriteDrawable(new Sprite(imageTexture)));
-        resumeButton.setPosition(maxX / 2 - imageTexture.getWidth() / 2, maxY / 2);
-        resumeButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-      //  resumeButton.getStyle().imageDisabled = new SpriteDrawable(new Sprite(selectedTexture));
-        resumeButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                DefaultHero hero = GameModel.get().getHero();
-                if (hero.getFirstTarget() != null)
-                    hero.fireActionChosenEvent(new AttackAction(hero, hero.getFirstTarget()));
-                return true;
-            }
-        });
-        resumeButton.setVisible(false);
-
+        GlyphLayout layout = new GlyphLayout(); //dont do this every frame! Store it as member
+        layout.setText(notificationText, "Score on facebook posted!");
+        notificationTextWidth = (int) layout.width;// contains the width of the current set text
 
         stage.addActor(options);
         stage.addActor(resumeButton);
+        stage.addActor(postButton);
+        stage.addActor(exitButton);
         stage.addActor(lifeStats);
         stage.addActor(inventory);
         stage.addActor(healthBar);
@@ -377,6 +429,7 @@ public class UIDrawer extends ViewObject {
         stage.addActor(spellButton);
         stage.addActor(inventoryButton);
         stage.addActor(optionsButton);
+
     }
 
     @Override
@@ -393,9 +446,11 @@ public class UIDrawer extends ViewObject {
 
 //        float maxX = GameCamera.get().viewportWidth;
 //        float maxY = GameCamera.get().viewportHeight;
-
         batch.begin();
-        goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount()+"", 70, 635);
+        goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount() + "", 70, 635);
+        if(notificationTextVisible)
+            notificationText.draw(batch, "Score on facebook posted!",GameCamera.get().viewportWidth/2-notificationTextWidth/3, 250 );
+
         batch.end();
     }
 
