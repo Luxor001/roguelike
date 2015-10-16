@@ -153,6 +153,9 @@ public class HeroInputManager extends InputAdapter {
             case Input.Keys.ESCAPE:
                 GameController.endGame();
                 break;
+            case Input.Keys.F1:
+                GameModel.get().getHero().setHPCurrent(GameModel.get().getHero().getCurrentStats().getMaximumHP());
+                break;
             default:
                 return false;
         }

@@ -35,7 +35,6 @@ public class GameMaster {
     private static final int MIN_ENERGY_TO_ACT = 1000;
     private final ActionChosenListener commonActionPerformedListener;
     private final CreatureDeadListener removeFromTurnWhenDeadListener;
-    ;
     public static final int DEFAULT_ACTION_COST = 200;
     /**
      * Lista ordinata delle agent che prendono parte alla turnazione.
@@ -63,7 +62,6 @@ public class GameMaster {
         for(ICreature creature : GameModel.get().getCreatures()){
             if(creature instanceof Enemy) {
                 this.addAgent(creature);
-                creature.addCreatureDeadListener(this.removeFromTurnWhenDeadListener);
             }
         }
 
@@ -77,6 +75,9 @@ public class GameMaster {
 
     public void addAgent(IAgent newAgent) {
         this.agentsPlaying.add(newAgent);
+        if (newAgent instanceof ICreature) {
+            ((ICreature)newAgent).addCreatureDeadListener(this.removeFromTurnWhenDeadListener);
+        }
         newAgent.addActionChosenListener(this.commonActionPerformedListener);
         Gdx.app.log(GameMaster.class.toString(), "Aggiunto agente alla turnazione: " + newAgent);
     }
@@ -115,7 +116,7 @@ public class GameMaster {
         return new ActionChosenListener() {
             public void performed(ActionChosenEvent event, IAgent source) {
                 /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
-                if (!source.equals(agentsPlaying.get(currentAgent))) {
+                if (!source.equals(agentsPlaying.get(currentAgent)) || (source instanceof ICreature && ((ICreature)source).getHPCurrent() <= 0)) {
                     Gdx.app.error(
                             this.getClass().getName(),
                             "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +

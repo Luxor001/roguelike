@@ -24,6 +24,7 @@ import com.panacea.RufusPyramid.game.view.animations.AnimationEndedListener;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,12 +47,16 @@ public class CreaturesDrawer extends ViewObject {
     private HashMap<Integer, AbstractAnimation> currentAnimations = null;
     private DelayedRemovalArray<AbstractAnimation> generalAnimations = null;
 
+    private SpriteBatch batch;
+
     public CreaturesDrawer(List creaturesList) {
-        this.creaturesList = creaturesList;
+        this.creaturesList = new ArrayList<ICreature>(creaturesList);
         this.sprites = new HashMap<Integer, TextureRegion>();
         this.currentStates = new HashMap<Integer, CreatureState>();
         this.currentAnimations = new HashMap<Integer, AbstractAnimation>();
         this.generalAnimations = new DelayedRemovalArray<AbstractAnimation>();
+
+        this.batch = GameBatch.get();
 
 //        this.posChangeListener = new AbstractCreature.PositionChangeListener() {
 //            @Override
@@ -100,44 +105,43 @@ public class CreaturesDrawer extends ViewObject {
         super.render(delta);
 
         for (ICreature creature : this.creaturesList) {
-            switch (this.currentStates.get(creature.getID())) {
+            CreatureState state = this.currentStates.get(creature.getID());
+            if (!state.equals(CreatureState.DEAD)) {
+                switch (this.currentStates.get(creature.getID())) {
+                    case STRIKING:
+                    case DYING:
+                    case WALKING:
+                        this.animate(creature.getID(), delta);
+                        break;
+                    case STANDING:
+                        //                    GridPoint2 pos = creature.getPosition().getPosition();
+                        GridPoint2 spritePosition = creature.getPosition().getPosition();
+                        TextureRegion currentFrame = this.sprites.get(creature.getID());
+                        if ((!currentFrame.isFlipX() && creature.getFlipX()) || (currentFrame.isFlipX() && !creature.getFlipX())) {
+                            currentFrame.flip(true, false);
+                        }
+                        GridPoint2 newPos = Utilities.convertToAbsolutePos(spritePosition);
+                        batch.begin();
+                        batch.draw(currentFrame, newPos.x, newPos.y, Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
+                        batch.end();
 
-                case STRIKING:
-                case DYING:
-                case WALKING:
-                    AbstractAnimation currentAnimation = this.currentAnimations.get(creature.getID());
-                    if (currentAnimation != null) {
-                        currentAnimation.render(delta);
-                    }
-                    break;
-                case STANDING:
-                    GridPoint2 pos = creature.getPosition().getPosition();
-                    GridPoint2 spritePosition = creature.getPosition().getPosition();
+                        break;
+                    default:
+                        Gdx.app.error(CreaturesDrawer.class.toString(), "Non so che sprite disegnare! Stato corrente: " + this.currentStates.get(creature.getID()));
+                        break;
+                }
+
+                Vector2 position = creature.getAbsoluteTickPosition();
+                HealthBar health = creature.getHealthBar();
+                if (position != null && health.isVisible()) {
                     SpriteBatch batch = GameBatch.get();
                     batch.begin();
-                    GridPoint2 newPos=Utilities.convertToAbsolutePos(spritePosition);
-                    TextureRegion currentFrame = this.sprites.get(creature.getID());
-                    if((!currentFrame.isFlipX() && creature.getFlipX()) || (currentFrame.isFlipX() && !creature.getFlipX()))
-                        currentFrame.flip(true, false);
-                    batch.draw(currentFrame,newPos.x,newPos.y,Utilities.DEFAULT_BLOCK_WIDTH, Utilities.DEFAULT_BLOCK_HEIGHT);
+                    health.setValue(creature.getHPCurrent());
+                    health.setX(position.x + 5);
+                    health.setY(position.y - 10);
+                    health.draw(batch, 1);
                     batch.end();
-
-                    break;
-                default:
-                    Gdx.app.error(CreaturesDrawer.class.toString(), "Non so che sprite disegnare! Stato corrente: " + this.currentStates.get(creature.getID()));
-                    break;
-            }
-
-            Vector2 position = creature.getAbsoluteTickPosition();
-            HealthBar health = creature.getHealthBar();
-            if(position != null && health.isVisible()) {
-                SpriteBatch batch = GameBatch.get();
-                batch.begin();
-                health.setValue(creature.getHPCurrent());
-                health.setX(position.x + 5);
-                health.setY(position.y - 10);
-                health.draw(batch, 1);
-                batch.end();
+                }
             }
         }
 
@@ -149,6 +153,13 @@ public class CreaturesDrawer extends ViewObject {
             anim.render(delta);
         }
         this.generalAnimations.end();
+    }
+
+    private void animate(int creatureId, float delta) {
+        AbstractAnimation currentAnimation = this.currentAnimations.get(creatureId);
+        if (currentAnimation != null) {
+            currentAnimation.render(delta);
+        }
     }
 
     public void startWalk(final ICreature creature, GridPoint2 startPoint, final GridPoint2 endPoint) {
@@ -215,7 +226,7 @@ public class CreaturesDrawer extends ViewObject {
      * @param state Lo stato in cui la creatura deve essere impostata
      * @param listener Il listener da settare con le operazioni da effettuare alla fine dell'animazione (opzionale). Se null viene usato il listener di default.
      */
-    private void startCreatureAnimation(final ICreature toAnimate, AnimationData data, CreatureState state, AnimationEndedListener listener) {
+    private void startCreatureAnimation(final ICreature toAnimate, AnimationData data, final CreatureState state, AnimationEndedListener listener) {
         //Preparo il gioco per iniziare l'animazione
         if(heroInput == null)
             this.heroInput = InputManager.get().getHeroProcessor();
@@ -226,7 +237,12 @@ public class CreaturesDrawer extends ViewObject {
                 @Override
                 public void ended(AnimationEndedEvent event, Object source) {
                     //Poi renderizzo l'eroe in setStanding e riabilito l'input
-                    CreaturesDrawer.this.setStanding(toAnimate.getID());
+                    //A meno che non sia morto
+                    if (state.equals(CreatureState.DYING)) {
+                        CreaturesDrawer.this.setDead(toAnimate.getID());
+                    } else {
+                        CreaturesDrawer.this.setStanding(toAnimate.getID());
+                    }
                     CreaturesDrawer.this.heroInput.setPaused(false);
                 }
             };
@@ -254,14 +270,20 @@ public class CreaturesDrawer extends ViewObject {
 
         currentAnimation.create();
         currentAnimation.addListener(listener);
+        Gdx.app.log(CreaturesDrawer.class.toString(), "Now: " + this.currentAnimations.get(toAnimate.getID()) + " - Then: " + currentAnimation);
         this.currentAnimations.put(toAnimate.getID(), currentAnimation);
         this.currentStates.put(toAnimate.getID(), state);
+    }
+
+    private void setDead(int creatureId) {
+        currentStates.put(creatureId, CreatureState.DEAD);
     }
 
     private enum CreatureState {
         STANDING,
         WALKING,
         DYING,
-        STRIKING
+        STRIKING,
+        DEAD
     }
 }

@@ -325,4 +325,11 @@ public abstract class AbstractCreature implements ICreature {
     public void setCreatureType(CreatureType param){
         this.creatureType =  param;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null
+                && obj instanceof ICreature
+                && ((ICreature) obj).getID() == this.getID();
+    }
 }
