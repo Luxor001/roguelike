@@ -76,7 +76,7 @@ public class AnimWalk extends AbstractCreatureAnimation {
             toDispose = true;
         }
 
-        creature.setAbsoluteTickPosition(currentPos);
+        creature.setAbsoluteTickPosition(new GridPoint2(Math.round(currentPos.x), Math.round(currentPos.y)));
         this.setAbsolutePosition(new GridPoint2(Math.round(currentPos.x), Math.round(currentPos.y)));
 
         super.render(delta);

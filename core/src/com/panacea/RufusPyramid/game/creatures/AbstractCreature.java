@@ -45,7 +45,7 @@ public abstract class AbstractCreature implements ICreature {
     private ArrayList<Effect> effects;
     private Stats baseStats;
     private HealthBar healthBar;
-    private Vector2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
+    private GridPoint2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
 
     private boolean flipX;
     public int sigthLength = 6; //TODO : Da mettere da costruttore!
@@ -100,6 +100,8 @@ public abstract class AbstractCreature implements ICreature {
         this.currentHP = currentHP;
         if (this.currentHP <= 0) {
             this.fireCreatureDeadEvent();
+        } else if (this.currentHP <= this.getCurrentStats().getMaximumHP()) {
+            this.getHealthBar().setVisible(true);
         }
     }
 
@@ -303,12 +305,12 @@ public abstract class AbstractCreature implements ICreature {
         this.healthBar = bar;
     }
 
-    public Vector2 getAbsoluteTickPosition(){
+    public GridPoint2 getAbsoluteTickPosition(){
         return absoluteTickPosition;
     }
-    public void setAbsoluteTickPosition(Vector2 position){
+    public void setAbsoluteTickPosition(GridPoint2 position){
         if(absoluteTickPosition == null)
-            absoluteTickPosition = new Vector2();
+            absoluteTickPosition = new GridPoint2();
         absoluteTickPosition=position;
     }
 

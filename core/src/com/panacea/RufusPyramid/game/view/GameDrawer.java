@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
@@ -78,7 +79,7 @@ public class GameDrawer extends ViewObject {
         }
 
         DefaultHero hero = GameModel.get().getHero();
-        GameCamera.get().position.set(hero.getAbsoluteTickPosition(), 0); /*Update the camera based on the hero position*/
+        GameCamera.get().position.set(new Vector2(hero.getAbsoluteTickPosition().x, hero.getAbsoluteTickPosition().y), 0); /*Update the camera based on the hero position*/
 
         GameCamera.get().update();
         GameBatch.get().setProjectionMatrix(GameCamera.get().combined);

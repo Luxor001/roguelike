@@ -135,7 +135,7 @@ public class CreaturesDrawer extends ViewObject {
                         break;
                 }
 
-                Vector2 position = creature.getAbsoluteTickPosition();
+                GridPoint2 position = creature.getAbsoluteTickPosition();
                 HealthBar health = creature.getHealthBar();
                 if (position != null && health.isVisible()) {
                     SpriteBatch batch = GameBatch.get();

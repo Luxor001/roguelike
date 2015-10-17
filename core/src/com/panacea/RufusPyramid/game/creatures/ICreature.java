@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.creatures;
 
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
@@ -43,8 +44,8 @@ public interface ICreature extends IAgent {
     void addEffect(Effect effect);
     void addEffects(List<Effect> effect);
 
-    public Vector2 getAbsoluteTickPosition();
-    public void setAbsoluteTickPosition(Vector2 position);
+    public GridPoint2 getAbsoluteTickPosition();
+    public void setAbsoluteTickPosition(GridPoint2 position);
     public HealthBar getHealthBar();
     public void setHealthBar(HealthBar bar);
     /**

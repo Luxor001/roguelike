@@ -79,7 +79,7 @@ public class GameModel {
         GridPoint2 spawnpoint=newMap.getSpawnPoint().getPosition();
         this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
         GridPoint2 absolute = Utilities.convertToAbsolutePos(spawnpoint);
-        this.hero.setAbsoluteTickPosition(new Vector2(absolute.x, absolute.y));
+        this.hero.setAbsoluteTickPosition(new GridPoint2(absolute));
         this.addCreature(this.hero);
 
 
