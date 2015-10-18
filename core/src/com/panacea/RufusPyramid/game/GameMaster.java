@@ -21,6 +21,7 @@ import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +51,7 @@ public class GameMaster {
     public HeroInputManager heroInput;
 
     private ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
+    private SaveLoadHelper sl;
 
     public GameMaster() {
         this.agentsPlaying = new ArrayList<IAgent>();
@@ -62,6 +64,14 @@ public class GameMaster {
     }
 
     private void init() {
+
+        this.sl = new SaveLoadHelper();
+        this.sl.startSave();
+        sl.saveObject("TestStringSave");
+        sl.saveObject("TestStringSave2");
+        sl.saveObject(new Integer(42));
+        this.sl.stopSave();
+
         for(ICreature creature : GameModel.get().getCreatures()){
             if(creature instanceof Enemy) {
                 this.addAgent(creature);
@@ -100,7 +110,15 @@ public class GameMaster {
     public void step() {
         if (someoneIsPlaying || GameController.isGameEnded() || GameDrawer.get().getCreaturesDrawer().isPlayingAnimations())
             return;
+
+        this.sl.startLoad();
+        Gdx.app.log(GameMaster.class.toString(), "READ STRING: " + this.sl.loadObject(String.class));
+        Gdx.app.log(GameMaster.class.toString(), "READ STRING: " + this.sl.loadObject(String.class));
+        Gdx.app.log(GameMaster.class.toString(), "THE ANSWER TO LIFE, THE UNIVERSE AND EVERYTHING: " + this.sl.loadObject(Integer.class));
+        this.sl.stopLoad();
+
         someoneIsPlaying = true;
+
 
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
             //Al primo avvio this.currentAgent == -1, viene inizializzata dalla prima chiamata a turnToNextAgent
