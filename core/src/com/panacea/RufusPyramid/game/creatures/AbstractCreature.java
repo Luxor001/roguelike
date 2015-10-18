@@ -53,6 +53,7 @@ public abstract class AbstractCreature implements ICreature {
     private CreatureType creatureType;
 
     public AbstractCreature(String name, String description, Stats stats) {
+        this.effects = new ArrayList<Effect>();
         this.idCreature = getUniqueCreatureId();
         this.setName(name);
         this.setDescription(description);
@@ -67,7 +68,6 @@ public abstract class AbstractCreature implements ICreature {
 
         SpriteDrawable foreGround = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/health_bar.png"))));
         SpriteDrawable background = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("data/loading-frame.png"))));
-        this.effects = new ArrayList<Effect>();
 
         this.healthBar = new HealthBar((float)0,(float)getCurrentStats().getMaximumHP(),1,false,new HealthBar.ProgressBarStyle(background,foreGround));
         this.healthBar.setValue((getHPCurrent() * 100)  / getBaseStats().getMaximumHP());
@@ -100,7 +100,7 @@ public abstract class AbstractCreature implements ICreature {
         this.currentHP = currentHP;
         if (this.currentHP <= 0) {
             this.fireCreatureDeadEvent();
-        } else if (this.currentHP <= this.getCurrentStats().getMaximumHP()) {
+        } else if (this.currentHP < this.getCurrentStats().getMaximumHP()) {
             this.getHealthBar().setVisible(true);
         }
     }
