@@ -16,6 +16,13 @@ import java.io.FileOutputStream;
  *
  * Libgdx tutorial: https://github.com/libgdx/libgdx/wiki/Saved-game-serialization
  * Kryo doc:        https://github.com/EsotericSoftware/kryo#quickstart
+ *
+ * Tutorial easy di un terzo: http://www.moddb.com/games/office-management-101/features/implementing-a-savegame-system
+ *
+ * TODO: per aumentare l'efficienza si possono registrare le classi degli oggetti che
+ * verranno salvati assegnandoli un ID. Kryo identificherà le istanze di tali classi
+ * con l'ID al posto che con il nome della classe in modo quindi più efficiente.
+ * Esempio in Kryo doc -> registration
  */
 public class SaveLoadHelper {
     private static final String saveFile = "game.save";
