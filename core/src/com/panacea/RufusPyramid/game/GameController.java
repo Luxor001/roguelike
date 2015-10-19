@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
+import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import de.tomgrill.gdxfacebook.core.GDXFacebook;
 import de.tomgrill.gdxfacebook.core.GDXFacebookCallback;
@@ -36,6 +37,7 @@ public class GameController {
 
         GameModel.createInstance();
         gm = new GameMaster();
+
 
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             GDXFacebookConfig config = new GDXFacebookConfig();

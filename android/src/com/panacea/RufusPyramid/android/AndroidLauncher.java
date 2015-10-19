@@ -35,6 +35,8 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new Main(new DatabaseAndroid(this.getBaseContext())), config);
+
+
 // questo pezzo di codice ritorna l'hash key dell'applicazione, necessario per facebook.
 /*		PackageInfo info;
 		try {

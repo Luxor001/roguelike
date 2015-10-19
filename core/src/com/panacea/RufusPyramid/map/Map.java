@@ -36,6 +36,8 @@ public class Map {
         this.level=level;
         this.type=type;
     }
+    public Map(){
+    }
 
     public Tile getRandomEnemyPosition(){
         return mapcontainer.getRandomTile(Tile.TileType.Walkable);

@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
@@ -34,7 +35,7 @@ import java.util.Collection;
  * del GameMaster.
  * Created by gio on 22/07/15.
  */
-public class GameMaster {
+public class GameMaster{
     private static final int BASE_ENERGY_AT_EVERY_TURN = 200;
     private static final int MIN_ENERGY_TO_ACT = 1000;
     private final ActionChosenListener commonActionPerformedListener;
