@@ -18,6 +18,9 @@ public class DefaultHero extends AbstractCreature {
     private ICreature firstTarget;
     public HealthBar health;
 
+    public DefaultHero() {
+        this("Awesome Awful Hero", 0);
+    }
 
 //    TODO aggiungere il livello con l'oggetto Level
     public DefaultHero(String name, int goldAmount) {

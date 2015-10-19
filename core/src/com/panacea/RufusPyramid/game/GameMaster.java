@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
@@ -18,6 +19,7 @@ import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
+import com.panacea.RufusPyramid.game.creatures.Stats;
 import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
@@ -66,12 +68,12 @@ public class GameMaster{
 
     private void init() {
 
-        this.sl = new SaveLoadHelper();
-        this.sl.startSave();
-        sl.saveObject("TestStringSave");
-        sl.saveObject("TestStringSave2");
-        sl.saveObject(new Integer(42));
-        this.sl.stopSave();
+//        this.sl = new SaveLoadHelper();
+//        this.sl.startSave();
+//        sl.saveObject("TestStringSave");
+//        sl.saveObject("TestStringSave2");
+//        sl.saveObject(new Stats(50, 2, 2, 2));
+//        this.sl.stopSave();
 
         for(ICreature creature : GameModel.get().getCreatures()){
             if(creature instanceof Enemy) {
@@ -112,11 +114,12 @@ public class GameMaster{
         if (someoneIsPlaying || GameController.isGameEnded() || GameDrawer.get().getCreaturesDrawer().isPlayingAnimations())
             return;
 
-        this.sl.startLoad();
-        Gdx.app.log(GameMaster.class.toString(), "READ STRING: " + this.sl.loadObject(String.class));
-        Gdx.app.log(GameMaster.class.toString(), "READ STRING: " + this.sl.loadObject(String.class));
-        Gdx.app.log(GameMaster.class.toString(), "THE ANSWER TO LIFE, THE UNIVERSE AND EVERYTHING: " + this.sl.loadObject(Integer.class));
-        this.sl.stopLoad();
+//        this.sl.startLoad();
+//        Gdx.app.log(GameMaster.class.toString(), "READ STRING: " + this.sl.loadObject(String.class));
+//        Gdx.app.log(GameMaster.class.toString(), "READ STRING: " + this.sl.loadObject(String.class));
+//        Stats hero = this.sl.loadObject(Stats.class);
+//        Gdx.app.log(GameMaster.class.toString(), "Hero name: " + hero.getMaximumHP());
+//        this.sl.stopLoad();
 
         someoneIsPlaying = true;
 
@@ -140,51 +143,9 @@ public class GameMaster{
 
     /* Turnazioni - vers. ad eventi */
     private ActionChosenListener getActionChosenListener() {
-        return new ActionChosenListener() {
-            public void performed(ActionChosenEvent event, IAgent source) {
-                /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
-                if (!source.equals(agentsPlaying.get(currentAgent)) || (source instanceof ICreature && ((ICreature)source).getHPCurrent() <= 0)) {
-                    Gdx.app.error(
-                            this.getClass().getName(),
-                            "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
-                                    "CurrentAgentIndex: " + currentAgent + "\n" +
-                                    "wtfAgentIndex: " + agentsPlaying.indexOf(source) + "\n" +
-                                    "wtfAgentToString: " + source.toString() + "\n"
-                    );
-                    return;
-                }
-
-                if (source instanceof DefaultHero) {
-                    GameMaster.this.heroInput.setPaused(true);
-                }
-
-                if(source instanceof AbstractCreature)
-                    checkEffects((AbstractCreature)source);
-
-                IAgent agentOnTurn = source;
-                IAction actionChosen = event.getChosenAction();
-
-                //TODO il risultato (success) deve essere passato tramite l'evento o
-                //TODO deve essere il GameMaster lanciare IAction.perform() ?
-                //Eseguo l'azione scelta dalla creatura
-                ActionResult result = actionChosen.perform();
-
-                if (result.hasSuccess()) {
-                    //La creatura "paga" il prezzo per l'azione effettuata
-                    payForAction(agentOnTurn, actionChosen);
-                }
-
-                //Fine del ciclo di controllo
-                GameMaster.this.lastResult = result;
-                GameMaster.this.someoneIsPlaying = false;
-
-                if (!GameController.isGameEnded()) {
-                    //TODO questa funzione dovrebbe essere lanciata solo subito prima di passare il turno all'eroe
-                    //altrimenti viene lanciata ad ogni turno di una creatura!
-                    checkEnemiesNearby();
-                }
-            }
-        };
+        PerformAndPayActionChosenListener listener = new PerformAndPayActionChosenListener();
+        listener.setGameMaster(this);
+        return listener;
     }
 
     /**
@@ -193,14 +154,9 @@ public class GameMaster{
      * @return il listener
      */
     private CreatureDeadListener getDeadListener() {
-        return new CreatureDeadListener() {
-            @Override
-            public void changed(CreatureDeadEvent event, Object source) {
-                if (source instanceof IAgent) {
-                    GameMaster.this.removeAgent((IAgent) source);
-                }
-            }
-        };
+        RemoveOnDeathListener listener = new RemoveOnDeathListener();
+        listener.setGameMaster(this);
+        return listener;
     }
 
     /**
@@ -291,5 +247,75 @@ public class GameMaster{
         //TODO
 //        this.currentAgent = -100;
         this.agentsPlaying.clear();
+    }
+
+    private static class PerformAndPayActionChosenListener implements ActionChosenListener {
+        private GameMaster gm;
+
+        public PerformAndPayActionChosenListener() {}
+
+        public void setGameMaster(GameMaster gameMaster) {
+            this.gm = gameMaster;
+        }
+
+        public void performed(ActionChosenEvent event, IAgent source) {
+            /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
+            if (!source.equals(this.gm.agentsPlaying.get(this.gm.currentAgent))
+                    || (source instanceof ICreature && ((ICreature)source).getHPCurrent() <= 0)) {
+                Gdx.app.error(
+                        this.getClass().getName(),
+                        "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
+                                "CurrentAgentIndex: " + gm.currentAgent + "\n" +
+                                "wtfAgentIndex: " + gm.agentsPlaying.indexOf(source) + "\n" +
+                                "wtfAgentToString: " + source.toString() + "\n"
+                );
+                return;
+            }
+
+            if (source instanceof DefaultHero) {
+                this.gm.heroInput.setPaused(true);
+            }
+
+            if(source instanceof AbstractCreature)
+                this.gm.checkEffects((AbstractCreature) source);
+
+            IAgent agentOnTurn = source;
+            IAction actionChosen = event.getChosenAction();
+
+            //TODO il risultato (success) deve essere passato tramite l'evento o
+            //TODO deve essere il GameMaster lanciare IAction.perform() ?
+            //Eseguo l'azione scelta dalla creatura
+            ActionResult result = actionChosen.perform();
+
+            if (result.hasSuccess()) {
+                //La creatura "paga" il prezzo per l'azione effettuata
+                this.gm.payForAction(agentOnTurn, actionChosen);
+            }
+
+            //Fine del ciclo di controllo
+            this.gm.lastResult = result;
+            this.gm.someoneIsPlaying = false;
+
+            if (!GameController.isGameEnded()) {
+                //TODO questa funzione dovrebbe essere lanciata solo subito prima di passare il turno all'eroe
+                //altrimenti viene lanciata ad ogni turno di una creatura!
+                this.gm.checkEnemiesNearby();
+            }
+        }
+    }
+
+    private static class RemoveOnDeathListener implements CreatureDeadListener {
+        private GameMaster gm;
+
+        public void setGameMaster(GameMaster gm) {
+            this.gm = gm;
+        }
+
+        @Override
+        public void changed(CreatureDeadEvent event, Object source) {
+            if (source instanceof IAgent) {
+                this.gm.removeAgent((IAgent) source);
+            }
+        }
     }
 }

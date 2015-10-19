@@ -38,16 +38,17 @@ public class Main extends Game implements ApplicationListener {
         this.setScreen(new MenuScreen());
         SaveLoadHelper sl = new SaveLoadHelper();
 
-     /*   try {
+        try {
             sl.startLoad();
-            Map loaded = sl.loadObject(Map.class);
+            GameModel loaded = sl.loadObject(GameModel.class);
+            Gdx.app.log("", loaded.getHero().getName());
             int a = 0;
             sl.stopLoad();
 
         }
         catch (Exception e){
             e.printStackTrace();
-        }*/
+        }
 	}
 
     @Override
@@ -56,13 +57,12 @@ public class Main extends Game implements ApplicationListener {
 
     @Override
     public void pause () {
-     /*   if(GameModel.get() != null){
+        if(GameModel.get() != null){
             SaveLoadHelper sl = new SaveLoadHelper();
             sl.startSave();
-            sl.saveObject(GameModel.get().getCurrentMap());
-            sl.saveObject(GameModel.get().getHero());
+            sl.saveObject(GameModel.get());
             sl.stopSave();
-        }*/
+        }
 
         //saveAll
     }
@@ -73,7 +73,7 @@ public class Main extends Game implements ApplicationListener {
     }
 
     @Override
-    public void dispose () {
+    public void dispose() {
         Gdx.app.log("sada", "disposewewewewe");
     }
 

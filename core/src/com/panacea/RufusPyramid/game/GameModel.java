@@ -58,15 +58,11 @@ public class GameModel {
     private ArrayList<Map> maps;
     private int currentMapIndex;
     
-    private CreatureDeadListener creatureDeadListener = new CreatureDeadListener() {
-        @Override
-        public void changed(CreatureDeadEvent event, Object source) {
-            GameModel.this.creatures.remove(source);
-            Gdx.app.log(this.getClass().toString(), "Morta la creatura " + ((ICreature)source).getName());
-        }
-    };
+    private RemoveOnDeathListener creatureDeadListener;
 
     private GameModel() {
+        this.creatureDeadListener = new RemoveOnDeathListener();
+        this.creatureDeadListener.setGameModel(this);
         this.currentMapIndex = 0;
         this.creatures = new ArrayList<ICreature>();
         this.maps = new ArrayList<Map>();
@@ -220,5 +216,21 @@ public class GameModel {
     public void disposeAll() {
         //TODO per ora non fa niente, non credo sia necessario fare qualcosa
         GameModel.SINGLETON = null;
+    }
+
+    private static class RemoveOnDeathListener implements CreatureDeadListener {
+        private GameModel gModel;
+
+        public RemoveOnDeathListener() {}
+        
+        public void setGameModel(GameModel gameModel) {
+            this.gModel = gameModel;
+        }
+
+        @Override
+        public void changed(CreatureDeadEvent event, Object source) {
+            this.gModel.creatures.remove(source);
+            Gdx.app.log(this.getClass().toString(), "Morta la creatura " + ((ICreature) source).getName());
+        }
     }
 }
