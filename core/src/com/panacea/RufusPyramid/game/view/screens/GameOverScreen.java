@@ -1,12 +1,18 @@
 package com.panacea.RufusPyramid.game.view.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
@@ -17,11 +23,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.panacea.RufusPyramid.game.GameController;
+import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.animations.ObjectAnimation;
 
 import java.util.ArrayList;
+
+import de.tomgrill.gdxfacebook.core.GDXFacebook;
+import de.tomgrill.gdxfacebook.core.GDXFacebookCallback;
+import de.tomgrill.gdxfacebook.core.GDXFacebookError;
+import de.tomgrill.gdxfacebook.core.GDXFacebookGraphRequest;
+import de.tomgrill.gdxfacebook.core.JsonResult;
+import de.tomgrill.gdxfacebook.core.SignInMode;
+import de.tomgrill.gdxfacebook.core.SignInResult;
 
 /**
  * Created by gio on 30/07/15.
@@ -42,20 +60,26 @@ public class GameOverScreen implements Screen {
 
     Skin skin;
     private TextButton buttonPlay;
+    private TextButton buttonPublish;
     private TextButton buttonMenu;
 //    private Label title;
     private Texture texture;
     private Image title;
     private ArrayList<ObjectAnimation> menuAnimations;
     private ObjectAnimation fireAnim;
+    private  boolean notificationTextVisible;
+    private BitmapFont notificationText;
+    private int notificationTextWidth;
 //    private Music introMusic;
 
     private final static String decalsDirectory = "data/deco/gameover";
     private TextureRegion[] bloodDecals;
+    private SpriteBatch batch;
 
     @Override
     public void show() {
 
+        batch = new SpriteBatch();
 //        introMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sfx/death_music.ogg"));
         MusicPlayer.setAmbient(MusicPlayer.AmbientType.GAMEOVER);
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
@@ -65,6 +89,7 @@ public class GameOverScreen implements Screen {
         skin.getFont("default-font").getData().setScale(scale);
 
         buttonPlay = new TextButton("Restart", skin);
+        buttonPublish = new TextButton("Publish Score", skin);
         buttonMenu = new TextButton("Menu", skin);
 
 //        title = new Label("Game Title", skin);
@@ -72,6 +97,14 @@ public class GameOverScreen implements Screen {
         title = new Image(texture);
         stage.addActor(title);
 
+
+        notificationText = new BitmapFont();
+        notificationText.setColor(Color.WHITE);
+        notificationText.getData().setScale(2.5f);
+
+        GlyphLayout layout = new GlyphLayout(); //dont do this every frame! Store it as member
+        layout.setText(notificationText, "Score on facebook posted!");
+        notificationTextWidth = (int) layout.width;// contains the width of the current set text
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -85,6 +118,79 @@ public class GameOverScreen implements Screen {
                 dispose();
             }
         });
+
+        if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            buttonPublish.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+
+                    GDXFacebook facebook = GameController.facebook;
+                    if (!facebook.isSignedIn()) {
+                        facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, null);
+                    }
+                    GDXFacebookGraphRequest request = new GDXFacebookGraphRequest().setNode("me/feed").useCurrentAccessToken();
+                    request.setMethod(Net.HttpMethods.POST);
+                    request.putField("message", "Hey, i just scored " + GameModel.get().getHero().getGoldAmount() + " on Rufus Quest!");
+                    request.putField("link", "http://postimg.org/image/ni32aiugb/7647c725/");
+                    request.putField("caption", "Rufus Quest");
+
+                    facebook.newGraphRequest(request, new GDXFacebookCallback<JsonResult>() {
+                        @Override
+                        public void onSuccess(JsonResult result) {
+                            // Success
+                        }
+
+                        @Override
+                        public void onError(GDXFacebookError error) {
+                            // Error
+                        }
+
+                        @Override
+                        public void onFail(Throwable t) {
+                            // Fail
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            // Cancel
+                        }
+                    });
+
+                    try {
+                        facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, new GDXFacebookCallback<SignInResult>() {
+                            @Override
+                            public void onSuccess(SignInResult result) {
+                                notificationTextVisible = true;
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        notificationTextVisible = false;
+                                    }
+                                }, 2f);
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                Gdx.app.debug("rufus", "SIGN IN (read permissions): User canceled login process");
+                            }
+
+                            @Override
+                            public void onFail(Throwable t) {
+                            }
+
+                            @Override
+                            public void onError(GDXFacebookError error) {
+                            }
+
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            });
+        }
+
         buttonMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -96,6 +202,8 @@ public class GameOverScreen implements Screen {
         //The first appear on top, the last at the bottom.
         table.add(title).padBottom(40).row();
         table.add(buttonPlay).size(150, 60).padBottom(20).row();
+        if (Gdx.app.getType() == Application.ApplicationType.Android)
+            table.add(buttonPublish).size(150, 60).padBottom(20).row();
         table.add(buttonMenu).size(150, 60).padBottom(20).row();
 
         table.setFillParent(true);
@@ -127,6 +235,9 @@ public class GameOverScreen implements Screen {
 //        introMusic.setLooping(true);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if(notificationTextVisible)
+            notificationText.draw(batch, "Score on facebook posted!", GameCamera.get().viewportWidth/2-notificationTextWidth/3, 250 );
 
         stage.act();
         stage.draw();
