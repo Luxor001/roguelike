@@ -22,6 +22,9 @@ public class Enemy extends AbstractCreature {
         super(name, description, stats.getMaximumHP(), stats.getAttack(), stats.getDefence(),stats.getSpeed());
         this.setCreatureType(type);
     }
+    private Enemy(){
+
+    }
 
     /**
      * L'azione di default della classe Enemy, per ora, è passare il turno,

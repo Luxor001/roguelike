@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
+import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import de.tomgrill.gdxfacebook.core.GDXFacebook;
@@ -47,6 +48,18 @@ public class GameController {
             loginPermissions.add("public_profile");
             permissionsPublish.add("publish_actions");
             facebook.signOut();
+        }
+        if(GameModel.get() != null){
+            SaveLoadHelper sl = new SaveLoadHelper();
+            sl.startLoad();
+            GameModel model = sl.loadObject(GameModel.class);
+            sl.stopLoad();
+        }
+        if(GameModel.get() != null){
+            SaveLoadHelper sl = new SaveLoadHelper();
+            sl.startSave();
+            sl.saveObject(gm);
+            sl.stopSave();
         }
     }
 

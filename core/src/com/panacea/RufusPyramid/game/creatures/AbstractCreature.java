@@ -80,6 +80,9 @@ public abstract class AbstractCreature implements ICreature {
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this(name, description, new Stats(maximumHP, attack, defence, speed));
     }
+    public AbstractCreature(){
+
+    }
 
     private static int getUniqueCreatureId() {
         return AbstractCreature.nextFreeIdCreature++;

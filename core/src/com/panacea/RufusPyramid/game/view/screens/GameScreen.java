@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.panacea.RufusPyramid.game.GameController;
+import com.panacea.RufusPyramid.game.GameMaster;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.map.Map;
+import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 public class GameScreen implements Screen {
     GameDrawer objectsDrawer;
@@ -21,6 +25,13 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(InputManager.get());
         MusicPlayer.setAmbient(MusicPlayer.AmbientType.GAME);
+
+        if(GameModel.get() != null){
+            SaveLoadHelper sl = new SaveLoadHelper();
+            sl.startSave();
+            sl.saveObject(GameModel.get());
+            sl.stopSave();
+        }
     }
 
     public void render(float delta) {

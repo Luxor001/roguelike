@@ -22,7 +22,7 @@ public class HealthBar extends Table{
     protected float min, max, stepSize;
     protected float value, animateFromValue;
     protected float progressPos;
-    protected final boolean vertical;
+    protected boolean vertical = false;
     int draggingPointer = -1;
     protected float animateDuration, animateTime;
     protected Interpolation animateInterpolation = Interpolation.linear;
@@ -36,6 +36,10 @@ public class HealthBar extends Table{
 
     public HealthBar(float min, float max, float stepSize, boolean vertical, Skin skin, String styleName) {
         this(min, max, stepSize, vertical, skin.get(styleName, ProgressBarStyle.class));
+    }
+
+    private HealthBar(){
+
     }
 
     /** Creates a new progress bar. It's width is determined by the given prefWidth parameter, its height is determined by the maximum of

@@ -45,6 +45,9 @@ public class CreatureAI {
         pathFinderOptions.diagonalMovementCost = 0;
 
     }
+    private CreatureAI(){
+
+    }
 
     public IAction chooseNextAction(){
         GridPoint2 absoluteDistance = Utilities.absoluteDistance(creature.getPosition().getPosition(),hero.getPosition().getPosition());

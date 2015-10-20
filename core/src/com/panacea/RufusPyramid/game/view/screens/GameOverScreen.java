@@ -60,7 +60,6 @@ public class GameOverScreen implements Screen {
 
     Skin skin;
     private TextButton buttonPlay;
-    private TextButton buttonPublish;
     private TextButton buttonMenu;
 //    private Label title;
     private Texture texture;
@@ -89,7 +88,6 @@ public class GameOverScreen implements Screen {
         skin.getFont("default-font").getData().setScale(scale);
 
         buttonPlay = new TextButton("Restart", skin);
-        buttonPublish = new TextButton("Publish Score", skin);
         buttonMenu = new TextButton("Menu", skin);
 
 //        title = new Label("Game Title", skin);
@@ -119,77 +117,6 @@ public class GameOverScreen implements Screen {
             }
         });
 
-        if (Gdx.app.getType() == Application.ApplicationType.Android) {
-            buttonPublish.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-
-                    GDXFacebook facebook = GameController.facebook;
-                    if (!facebook.isSignedIn()) {
-                        facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, null);
-                    }
-                    GDXFacebookGraphRequest request = new GDXFacebookGraphRequest().setNode("me/feed").useCurrentAccessToken();
-                    request.setMethod(Net.HttpMethods.POST);
-                    request.putField("message", "Hey, i just scored " + GameModel.get().getHero().getGoldAmount() + " on Rufus Quest!");
-                    request.putField("link", "http://postimg.org/image/ni32aiugb/7647c725/");
-                    request.putField("caption", "Rufus Quest");
-
-                    facebook.newGraphRequest(request, new GDXFacebookCallback<JsonResult>() {
-                        @Override
-                        public void onSuccess(JsonResult result) {
-                            // Success
-                        }
-
-                        @Override
-                        public void onError(GDXFacebookError error) {
-                            // Error
-                        }
-
-                        @Override
-                        public void onFail(Throwable t) {
-                            // Fail
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            // Cancel
-                        }
-                    });
-
-                    try {
-                        facebook.signIn(SignInMode.PUBLISH, GameController.permissionsPublish, new GDXFacebookCallback<SignInResult>() {
-                            @Override
-                            public void onSuccess(SignInResult result) {
-                                notificationTextVisible = true;
-                                Timer.schedule(new Timer.Task() {
-                                    @Override
-                                    public void run() {
-                                        notificationTextVisible = false;
-                                    }
-                                }, 2f);
-                            }
-
-                            @Override
-                            public void onCancel() {
-                                Gdx.app.debug("rufus", "SIGN IN (read permissions): User canceled login process");
-                            }
-
-                            @Override
-                            public void onFail(Throwable t) {
-                            }
-
-                            @Override
-                            public void onError(GDXFacebookError error) {
-                            }
-
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            });
-        }
 
         buttonMenu.addListener(new ClickListener() {
             @Override
@@ -202,8 +129,6 @@ public class GameOverScreen implements Screen {
         //The first appear on top, the last at the bottom.
         table.add(title).padBottom(40).row();
         table.add(buttonPlay).size(150, 60).padBottom(20).row();
-        if (Gdx.app.getType() == Application.ApplicationType.Android)
-            table.add(buttonPublish).size(150, 60).padBottom(20).row();
         table.add(buttonMenu).size(150, 60).padBottom(20).row();
 
         table.setFillParent(true);

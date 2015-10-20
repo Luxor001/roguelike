@@ -68,13 +68,6 @@ public class GameMaster{
 
     private void init() {
 
-//        this.sl = new SaveLoadHelper();
-//        this.sl.startSave();
-//        sl.saveObject("TestStringSave");
-//        sl.saveObject("TestStringSave2");
-//        sl.saveObject(new Stats(50, 2, 2, 2));
-//        this.sl.stopSave();
-
         for(ICreature creature : GameModel.get().getCreatures()){
             if(creature instanceof Enemy) {
                 this.addAgent(creature);
