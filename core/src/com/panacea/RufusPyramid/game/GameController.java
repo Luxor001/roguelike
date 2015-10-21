@@ -49,10 +49,10 @@ public class GameController {
             permissionsPublish.add("publish_actions");
             facebook.signOut();
         }
-        if(GameModel.get() != null){
-            SaveLoadHelper sl = new SaveLoadHelper();
+       if(GameModel.get() != null){
+           SaveLoadHelper sl = new SaveLoadHelper();
             sl.startLoad();
-            GameModel model = sl.loadObject(GameModel.class);
+            GameMaster model = sl.loadObject(GameMaster.class);
             sl.stopLoad();
         }
         if(GameModel.get() != null){

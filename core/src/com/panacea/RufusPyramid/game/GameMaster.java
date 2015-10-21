@@ -40,8 +40,8 @@ import java.util.Collection;
 public class GameMaster{
     private static final int BASE_ENERGY_AT_EVERY_TURN = 200;
     private static final int MIN_ENERGY_TO_ACT = 1000;
-    private final ActionChosenListener commonActionPerformedListener;
-    private final CreatureDeadListener removeFromTurnWhenDeadListener;
+    private transient final ActionChosenListener commonActionPerformedListener;
+    private transient final CreatureDeadListener removeFromTurnWhenDeadListener;
     public static final int DEFAULT_ACTION_COST = 200;
     /**
      * Lista ordinata delle agent che prendono parte alla turnazione.
@@ -50,11 +50,11 @@ public class GameMaster{
     private int currentAgent;
     private boolean someoneIsPlaying;
 
-    private HeroController heroController;
-    public HeroInputManager heroInput;
+    private transient HeroController heroController;
+    public transient HeroInputManager heroInput;
 
-    private ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
-    private SaveLoadHelper sl;
+    private transient ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
+  //  private SaveLoadHelper sl;
 
     public GameMaster() {
         this.agentsPlaying = new ArrayList<IAgent>();

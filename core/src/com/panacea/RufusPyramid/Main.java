@@ -39,12 +39,11 @@ public class Main extends Game implements ApplicationListener {
         SaveLoadHelper sl = new SaveLoadHelper();
 
         try {
-            sl.startLoad();
+        /*    sl.startLoad();
             GameModel loaded = sl.loadObject(GameModel.class);
             Gdx.app.log("", loaded.getHero().getName());
             int a = 0;
-            sl.stopLoad();
-
+            sl.stopLoad();*/
         }
         catch (Exception e){
             e.printStackTrace();
