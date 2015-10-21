@@ -13,10 +13,23 @@ import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 public class GameScreen implements Screen {
+    private boolean loadSavedGame;
     GameDrawer objectsDrawer;
 
+    public GameScreen(boolean loadSavedGame) {
+        this.loadSavedGame = loadSavedGame;
+    }
+
+    public GameScreen() {
+        this(false);
+    }
+
     public void show() {
-        GameController.initializeGame();
+        if (loadSavedGame) {
+            GameController.resumeGame();
+        } else {
+            GameController.initializeGame();
+        }
         GameDrawer.reset();
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
@@ -26,12 +39,12 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(InputManager.get());
         MusicPlayer.setAmbient(MusicPlayer.AmbientType.GAME);
 
-        if(GameModel.get() != null){
+        /*if(GameModel.get() != null){
             SaveLoadHelper sl = new SaveLoadHelper();
             sl.startSave();
             sl.saveObject(GameModel.get());
             sl.stopSave();
-        }
+        }*/
     }
 
     public void render(float delta) {

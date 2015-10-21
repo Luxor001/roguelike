@@ -56,12 +56,12 @@ public class Main extends Game implements ApplicationListener {
 
     @Override
     public void pause () {
-        if(GameModel.get() != null){
+        /*if(GameModel.get() != null){
             SaveLoadHelper sl = new SaveLoadHelper();
             sl.startSave();
             sl.saveObject(GameModel.get());
             sl.stopSave();
-        }
+        }*/
 
         //saveAll
     }

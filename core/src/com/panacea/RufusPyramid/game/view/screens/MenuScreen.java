@@ -42,6 +42,7 @@ public class MenuScreen implements Screen {
     private Table table = new Table();
 
     Skin skin;
+    private TextButton buttonResume;
     private TextButton buttonPlay;
     private TextButton buttonExit;
     private Texture texture;
@@ -49,6 +50,7 @@ public class MenuScreen implements Screen {
 //    private Music introMusic;
 
     AssetManager manager;
+
     @Override
     public void show() {
         stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT));
@@ -64,6 +66,7 @@ public class MenuScreen implements Screen {
         float scale = 1;
         skin.getFont("default-font").getData().setScale(scale);
 
+        buttonResume = new TextButton("Resume", skin);
         buttonPlay = new TextButton("Play", skin);
         buttonExit = new TextButton("Exit", skin);
 
@@ -82,7 +85,21 @@ public class MenuScreen implements Screen {
                 //FIXME sembra che per poter cliccare il pulsante bisogna fare un doppioclick.... perchè?
 //                ((Game)Gdx.app.getApplicationListener()).setScreen(new SplashScreen());
 
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(false));
+                dispose();
+            }
+        });
+        buttonResume.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //Same way we moved here from the Splash Screen
+                //We set it to new Splash because we got no other screens
+                //otherwise you put the screen there where you want to go
+
+                //FIXME sembra che per poter cliccare il pulsante bisogna fare un doppioclick.... perchè?
+//                ((Game)Gdx.app.getApplicationListener()).setScreen(new SplashScreen());
+
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(true));
                 dispose();
             }
         });
@@ -96,6 +113,7 @@ public class MenuScreen implements Screen {
         //The elements are displayed in the order you add them.
         //The first appear on top, the last at the bottom.
         table.add(title).padBottom(40).row();
+        table.add(buttonResume).size(150, 60).padBottom(20).row();
         table.add(buttonPlay).size(150, 60).padBottom(20).row();
         table.add(buttonExit).size(150, 60).padBottom(20).row();
 

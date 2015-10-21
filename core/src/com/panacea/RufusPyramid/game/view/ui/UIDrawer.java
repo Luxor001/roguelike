@@ -34,6 +34,7 @@ import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
+import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -399,6 +400,14 @@ public class UIDrawer extends ViewObject {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
+                        if(GameModel.get() != null){
+                            SaveLoadHelper sl = new SaveLoadHelper();
+                            Gdx.app.log(GameController.class.toString(), "Inizio salvataggio");
+                            sl.startSave();
+                            sl.saveObject(GameController.getGm());
+                            sl.stopSave();
+                            Gdx.app.log(GameController.class.toString(), "Salvataggio completato correttamente");
+                        }
                         ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
                         GameModel.get().disposeAll();
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!

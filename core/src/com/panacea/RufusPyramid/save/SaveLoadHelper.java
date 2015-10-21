@@ -10,8 +10,10 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
+import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
@@ -70,9 +72,20 @@ public class SaveLoadHelper {
 
     public SaveLoadHelper() {}
 
+    /**
+     * Controlla se c'è un gioco salvato caricabile e ritorna true o false rispettivamente.
+     * @return true se c'è un gioco precedentemente salvato caricabile, false altrimenti.
+     */
+    public boolean existsSavedGame() {
+        return Gdx.files.local(saveFile).exists();
+    }
+
     /********** Save methods ***********/
     public void startSave() {
         this.kryo = new Kryo();
+
+        CollectionSerializer collecionSerializer = new CollectionSerializer();
+
 //        try {
             this.output = new Output(Gdx.files.local(saveFile).write(false));
 //        } catch (FileNotFoundException e) {
@@ -226,7 +239,7 @@ public class SaveLoadHelper {
         kryo.register(HeroController.class, 25);
         kryo.register(HeroInputManager.class, 26);
         kryo.register(ActionResult.class, 27);
-        kryo.register(ArrayList.class, 28);
+        kryo.register(ArrayList.class, collecionSerializer,28);
         kryo.register(IAction.class, 29);
         kryo.register(ActionChosenEvent.class, 30);
         kryo.register(ActionResult.class, 31);
@@ -235,7 +248,7 @@ public class SaveLoadHelper {
         kryo.register(MoveAction.class, 34);
         kryo.register(OpenedChestListener.class, 35);
         kryo.register(PassAction.class, 36);
-
+        kryo.register(GameMaster.class, 37);
 
     }
 
@@ -298,6 +311,9 @@ public class SaveLoadHelper {
         this.input.close();
         this.input = null;
         this.kryo = null;
+
+        //Cancello il file in quanto il gioco è stato caricato
+//        Gdx.files.local(saveFile).delete();
     }
 
     public <T> T loadWithSerializer(ISerializable toLoad, Class<T> classe) {

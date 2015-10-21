@@ -28,6 +28,7 @@ import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Gestore delle turnazioni.
@@ -46,7 +47,7 @@ public class GameMaster{
     /**
      * Lista ordinata delle agent che prendono parte alla turnazione.
      */
-    private final ArrayList<IAgent> agentsPlaying;
+    private transient final ArrayList<IAgent> agentsPlaying;
     private int currentAgent;
     private boolean someoneIsPlaying;
 
@@ -91,7 +92,7 @@ public class GameMaster{
         Gdx.app.log(GameMaster.class.toString(), "Aggiunto agente alla turnazione: " + newAgent);
     }
 
-    public void addAllAgents(Collection<IAgent> agents) {
+    public void addAllAgents(List<ICreature> agents) {
         for (IAgent agent : agents) {
             this.addAgent(agent);
         }
