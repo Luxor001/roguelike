@@ -402,11 +402,7 @@ public class UIDrawer extends ViewObject {
                     public void run() {
                         if(GameModel.get() != null){
                             SaveLoadHelper sl = new SaveLoadHelper();
-                            Gdx.app.log(GameController.class.toString(), "Inizio salvataggio");
-                            sl.startSave();
-                            sl.saveObject(GameController.getGm());
-                            sl.stopSave();
-                            Gdx.app.log(GameController.class.toString(), "Salvataggio completato correttamente");
+                            sl.saveGame();
                         }
                         ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
                         GameModel.get().disposeAll();

@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.items.usableItems;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lux on 17/09/2015.
@@ -19,7 +20,7 @@ public class Weapon extends UsableItem {
 
     private WeaponType type;
 
-    public Weapon(WeaponType type, ArrayList<Effect> effects, String itemName){
+    public Weapon(WeaponType type, List<Effect> effects, String itemName){
         super(type.name(), effects, itemName);
         this.type = type;
     }

@@ -47,6 +47,8 @@ public class GameModel {
     public static GameModel get() {
         return SINGLETON;
     }
+
+    public static void set(GameModel instance) { SINGLETON = instance; }
     
     public static void createInstance() {
         SINGLETON = new GameModel();

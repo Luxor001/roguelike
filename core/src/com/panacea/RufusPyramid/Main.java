@@ -36,18 +36,18 @@ public class Main extends Game implements ApplicationListener {
         SoundsProvider.get().loadAllSounds();
 //        AssetsProvider.finishLoading();
         this.setScreen(new MenuScreen());
-        SaveLoadHelper sl = new SaveLoadHelper();
-
-        try {
-        /*    sl.startLoad();
-            GameModel loaded = sl.loadObject(GameModel.class);
-            Gdx.app.log("", loaded.getHero().getName());
-            int a = 0;
-            sl.stopLoad();*/
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+//        SaveLoadHelper sl = new SaveLoadHelper();
+//
+//        try {
+//        /*    sl.startLoad();
+//            GameModel loaded = sl.loadObject(GameModel.class);
+//            Gdx.app.log("", loaded.getHero().getName());
+//            int a = 0;
+//            sl.stopLoad();*/
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
 	}
 
     @Override

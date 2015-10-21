@@ -11,9 +11,13 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
+import com.esotericsoftware.kryo.serializers.DefaultSerializers;
+import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
+import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameMaster;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
@@ -50,6 +54,8 @@ import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by gio on 17/10/15.
@@ -84,7 +90,52 @@ public class SaveLoadHelper {
     public void startSave() {
         this.kryo = new Kryo();
 
-        CollectionSerializer collecionSerializer = new CollectionSerializer();
+        Serializer<ArrayList> listSerializer = new Serializer<ArrayList>() {
+            {
+                setAcceptsNull(true);
+            }
+
+            private Class genericType;
+
+            public void setGenerics(Kryo kryo, Class[] generics) {
+                if (kryo.isFinal(generics[0])) genericType = generics[0];
+            }
+
+            @Override
+            public void write(Kryo kryo, Output output, ArrayList list) {
+                int length = list.size();
+                output.writeInt(length, true);
+                if (length == 0) return;
+                if (genericType != null) {
+                    Serializer serializer = kryo.getSerializer(genericType);
+                    genericType = null;
+                    for (Object element : list)
+                        kryo.writeObjectOrNull(output, element, serializer);
+                } else {
+                    for (Object element : list)
+                        kryo.writeClassAndObject(output, element);
+                }
+            }
+
+            @Override
+            public ArrayList read(Kryo kryo, Input input, Class<ArrayList> type) {
+                ArrayList array = new ArrayList();
+                kryo.reference(array);
+                int length = input.readInt(true);
+                array.ensureCapacity(length);
+                if (genericType != null) {
+                    Class elementClass = genericType;
+                    Serializer serializer = kryo.getSerializer(genericType);
+                    genericType = null;
+                    for (int i = 0; i < length; i++)
+                        array.add(kryo.readObjectOrNull(input, elementClass, serializer));
+                } else {
+                    for (int i = 0; i < length; i++)
+                        array.add(kryo.readClassAndObject(input));
+                }
+                return array;
+            }
+        };
 
 //        try {
             this.output = new Output(Gdx.files.local(saveFile).write(false));
@@ -239,7 +290,7 @@ public class SaveLoadHelper {
         kryo.register(HeroController.class, 25);
         kryo.register(HeroInputManager.class, 26);
         kryo.register(ActionResult.class, 27);
-        kryo.register(ArrayList.class, collecionSerializer,28);
+        kryo.register(ArrayList.class, listSerializer,28);
         kryo.register(IAction.class, 29);
         kryo.register(ActionChosenEvent.class, 30);
         kryo.register(ActionResult.class, 31);
@@ -348,4 +399,15 @@ public class SaveLoadHelper {
     public boolean isLoading() {
         return this.kryo != null && this.input != null;
     }
+
+    public void saveGame() {
+        Gdx.app.log(GameController.class.toString(), "Inizio salvataggio");
+        this.startSave();
+        this.saveObject(GameModel.get());
+        this.saveObject(GameController.getGm());
+        this.stopSave();
+        Gdx.app.log(GameController.class.toString(), "Salvataggio completato correttamente");
+    }
+
+//    public void loadGame() ?
 }

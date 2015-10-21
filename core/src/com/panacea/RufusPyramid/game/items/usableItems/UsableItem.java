@@ -12,9 +12,9 @@ import java.util.List;
 public abstract class UsableItem extends Item {
 
     private String itemName; //item name that will be shown in the diary.
-    private ArrayList<Effect> effects; //effects of the item on the creature.
+    private List<Effect> effects; //effects of the item on the creature.
 
-    public UsableItem(String type, ArrayList<Effect> effects, String itemName){
+    public UsableItem(String type, List<Effect> effects, String itemName){
         super(type);
         this.itemName = itemName;
         this.effects = effects;

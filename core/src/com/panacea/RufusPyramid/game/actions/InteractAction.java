@@ -18,6 +18,7 @@ import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lux on 13/09/2015.
@@ -49,7 +50,7 @@ public class InteractAction implements IAction {
             return false;
         }
 
-        ArrayList<Item> items = GameModel.get().getItems();
+        List<Item> items = GameModel.get().getItems();
         if(itemToInteract instanceof ChestItem){
 
             Item itemStored = ((ChestItem) itemToInteract).getItemStored();
