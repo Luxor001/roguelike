@@ -60,14 +60,14 @@
 	</UsableItem>
 	<ChestItem>
 		<path>Items/chest.png</path>
-		<ChestItem>
+		<CHEST>
 			<TexturePosition>0</TexturePosition>
-		</ChestItem>
+		</CHEST>
 	</ChestItem>
 	<GoldItem>
 		<path>Items/misc.png</path>
-		<GoldItem>
+		<GOLD>
 			<TexturePosition>0</TexturePosition>
-		</GoldItem>
+		</GOLD>
 	</GoldItem>
 </item>

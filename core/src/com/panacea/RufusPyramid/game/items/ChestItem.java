@@ -11,15 +11,15 @@ import java.util.List;
 public class ChestItem extends Item{
 
     private Item itemStored;
-    private List<OpenedChestListener> openChestListeners;
+//    private List<OpenedChestListener> openChestListeners;
 
     public ChestItem(Item itemStored){
-        super("ChestItem");
+        super(ItemType.CHEST);
         this.itemStored=itemStored;
     }
 
     public ChestItem(){
-        super("ChestItem");
+        super(ItemType.CHEST);
 
         int seed=(int)System.nanoTime();
         int randInt = Utilities.randInt(0, 3, seed); //FIXME: andrebbe fatto con un db.. ma vedremo se avremo tempo

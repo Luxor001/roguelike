@@ -14,13 +14,13 @@ public abstract class UsableItem extends Item {
     private String itemName; //item name that will be shown in the diary.
     private List<Effect> effects; //effects of the item on the creature.
 
-    public UsableItem(String type, List<Effect> effects, String itemName){
+    public UsableItem(IItemType type, List<Effect> effects, String itemName){
         super(type);
         this.itemName = itemName;
         this.effects = effects;
     }
 
-    public UsableItem(String type, Effect effect, String itemName){
+    public UsableItem(IItemType type, Effect effect, String itemName){
         super(type);
         this.itemName = itemName;
         this.effects = new ArrayList<Effect>();

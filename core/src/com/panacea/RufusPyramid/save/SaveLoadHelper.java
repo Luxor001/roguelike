@@ -2,11 +2,13 @@ package com.panacea.RufusPyramid.save;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Registration;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -41,6 +43,7 @@ import com.panacea.RufusPyramid.game.items.ChestItem;
 import com.panacea.RufusPyramid.game.items.GoldItem;
 import com.panacea.RufusPyramid.game.items.IItem;
 import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.IItemType;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
@@ -106,15 +109,17 @@ public class SaveLoadHelper {
                 int length = list.size();
                 output.writeInt(length, true);
                 if (length == 0) return;
-                if (genericType != null) {
-                    Serializer serializer = kryo.getSerializer(genericType);
-                    genericType = null;
-                    for (Object element : list)
-                        kryo.writeObjectOrNull(output, element, serializer);
-                } else {
-                    for (Object element : list)
+//                if (genericType != null) {
+//                    Serializer serializer = kryo.getSerializer(genericType);
+//                    genericType = null;
+//                    for (Object element : list)
+//                        kryo.writeObjectOrNull(output, element, serializer);
+//                } else {
+                Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", list.get(0) + " ma genericType è " + this.genericType);
+                    for (Object element : list) {
                         kryo.writeClassAndObject(output, element);
-                }
+                    }
+//                }
             }
 
             @Override
@@ -123,16 +128,18 @@ public class SaveLoadHelper {
                 kryo.reference(array);
                 int length = input.readInt(true);
                 array.ensureCapacity(length);
-                if (genericType != null) {
-                    Class elementClass = genericType;
-                    Serializer serializer = kryo.getSerializer(genericType);
-                    genericType = null;
-                    for (int i = 0; i < length; i++)
-                        array.add(kryo.readObjectOrNull(input, elementClass, serializer));
-                } else {
-                    for (int i = 0; i < length; i++)
+//                if (genericType != null) {
+//                    Class elementClass = genericType;
+//                    Serializer serializer = kryo.getSerializer(genericType);
+//                    genericType = null;
+//                    for (int i = 0; i < length; i++)
+//                        array.add(kryo.readObjectOrNull(input, elementClass, serializer));
+//                } else {
+                Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", "genericType è " + this.genericType);
+                    for (int i = 0; i < length; i++) {
                         array.add(kryo.readClassAndObject(input));
-                }
+                    }
+//                }
                 return array;
             }
         };
@@ -249,6 +256,64 @@ public class SaveLoadHelper {
             }
         });
 
+//        Serializer<ChestItem> chestItemSerializer =  new Serializer<ChestItem>() {
+//
+//            @Override
+//            public void write(Kryo kryo, Output output, ChestItem object) {
+//                GridPoint2 pos = object.getPosition();
+//                Item storedItem = object.getItemStored();
+//
+//                kryo.writeClassAndObject(output, pos);
+//                kryo.writeClassAndObject(output, storedItem);
+//            }
+//
+//            @Override
+//            public ChestItem read(Kryo kryo, Input input, Class<ChestItem> type) {
+//                GridPoint2 pos = kryo.readObject(input, GridPoint2.class);
+//                Item storedItem = kryo.readObject(input, Item.class);
+//
+//                ChestItem chest = new ChestItem(storedItem);
+//                chest.setPosition(pos);
+//                return chest;
+//            }
+//        };
+
+        Serializer<Item> itemSerializer =  new Serializer<Item>() {
+
+            @Override
+            public void write(Kryo kryo, Output output, Item object) {
+                IItemType itemType = object.getItemType();
+                GridPoint2 pos = object.getPosition();
+
+                kryo.writeObject(output, itemType);
+                kryo.writeObjectOrNull(output, pos, GridPoint2.class);
+
+                if (object instanceof ChestItem) {
+                    Item storedItem = ((ChestItem)object).getItemStored();
+                    kryo.writeObject(output, storedItem, this);
+                } //else...
+            }
+
+            @Override
+            public Item read(Kryo kryo, Input input, Class<Item> type) {
+                IItemType itemType = kryo.readObject(input, IItemType.class);
+                GridPoint2 pos = kryo.readObjectOrNull(input, GridPoint2.class);
+
+                Item readItem;
+
+                if (itemType.equals(Item.ItemType.CHEST)) {
+                    Item storedItem = kryo.readObject(input, Item.class);
+                    readItem = new ChestItem(storedItem);
+                } else {
+                    readItem = null;
+                    Gdx.app.debug(SaveLoadHelper.class.toString(), "Item boh: " + itemType);
+                }
+
+                readItem.setPosition(pos);
+                return readItem;
+            }
+        };
+
         kryo.register(com.badlogic.gdx.scenes.scene2d.ui.Value.Fixed.class, new Serializer() {
             @Override
             public void write(Kryo kryo, Output output, Object object) {
@@ -271,9 +336,9 @@ public class SaveLoadHelper {
         kryo.register(Stats.class, 6);
         kryo.register(Effect.class, 7);
         kryo.register(TemporaryEffect.class, 8);
-        kryo.register(IItem.class, 9);
-        kryo.register(Item.class, 10);
-        kryo.register(ChestItem.class, 11);
+        kryo.register(IItem.class, itemSerializer, 9);
+        kryo.register(Item.class, itemSerializer, 10);
+        kryo.register(ChestItem.class, itemSerializer, 11);
         kryo.register(GoldItem.class, 12);
         kryo.register(MiscItem.class, 13);
         kryo.register(UsableItem.class, 14);

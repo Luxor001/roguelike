@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class MiscItem extends UsableItem{
 
-    public enum MiscItemType{
+    public enum MiscItemType implements IItemType{
         INVINCIBILITY_POTION,
         HEALTH_POTION,
         RAW_MEAT
@@ -18,11 +18,11 @@ public class MiscItem extends UsableItem{
 
     private MiscItemType type;
     public MiscItem(MiscItemType type, List<Effect> effects, String itemName){
-        super(type.name(), effects, itemName);
+        super(type, effects, itemName);
         this.type=type;
     }
     public MiscItem(MiscItemType type, Effect effect, String itemName){
-        super(type.name(), effect, itemName);
+        super(type, effect, itemName);
         this.type=type;
     }
 }

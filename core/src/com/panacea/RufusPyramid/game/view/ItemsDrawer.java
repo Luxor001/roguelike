@@ -64,14 +64,14 @@ public class ItemsDrawer extends ViewObject {
     }
 
     private String getKey(Item item){
-        String type = item.getItemType();
+        String type = item.getItemType().toString();
         String className = item.getClass().getSimpleName();
         return className+type;
     }
 
     public TextureRegion loadTexture(Item item,String key){
         TextureRegion itemText=null;
-        String type = item.getItemType();
+        String type = item.getItemType().toString();
         try {
 
             XmlReader xml = new XmlReader();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
+import com.panacea.RufusPyramid.game.items.usableItems.IItemType;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
 
@@ -17,17 +18,19 @@ public abstract class Item {
 
     private GridPoint2 position; //refers to a Relative position, not absolute!
 
-    private String itemType;
+    private IItemType itemType;
 
-    public Item(String itemType){
+    public Item(IItemType itemType){
         this.itemType = itemType;
     }
+
+    public Item() { };
 
     public GridPoint2 getPosition(){
         return this.position;
     }
 
-    public String getItemType(){ //HACK: every subclass of item register to Item it's own type (typically an ENUM, such as AXE, DAGGER ecc.ecc.). This way, a collection of items (as shown in ItemsDrawer) can get immediately the type of the Item WITHOUT the conversion to the correct subclass.
+    public IItemType getItemType(){ //HACK: every subclass of item register to Item it's own type (typically an ENUM, such as AXE, DAGGER ecc.ecc.). This way, a collection of items (as shown in ItemsDrawer) can get immediately the type of the Item WITHOUT the conversion to the correct subclass.
         return itemType;
     }
     public void setPosition(GridPoint2 position){ //perchè esiste setPosition e non viene messa la position nel costruttore? nel caso di chestItem, ad esempio, l'oggetto non ha position
@@ -78,4 +81,9 @@ public abstract class Item {
         return null;
     }
 
+
+    public enum ItemType implements IItemType {
+        CHEST,
+        GOLD
+    }
 }

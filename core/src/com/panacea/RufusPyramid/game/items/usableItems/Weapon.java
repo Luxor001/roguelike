@@ -10,7 +10,9 @@ import java.util.List;
  */
 public class Weapon extends UsableItem {
 
-    public enum WeaponType{ /*FIXME: si dovrebbe usare questo ma è un casino:http://blog.pengyifan.com/how-to-extend-enum-in-java/*/
+    public enum WeaponType implements IItemType{
+        //Non dovrebbe essercene più bisogno, usando un'interfaccia, ma...
+        /*FIXME: si dovrebbe usare questo ma è un casino:http://blog.pengyifan.com/how-to-extend-enum-in-java/*/
         SWORD,
         AXE,
         DAGGER,
@@ -21,7 +23,7 @@ public class Weapon extends UsableItem {
     private WeaponType type;
 
     public Weapon(WeaponType type, List<Effect> effects, String itemName){
-        super(type.name(), effects, itemName);
+        super(type, effects, itemName);
         this.type = type;
     }
 

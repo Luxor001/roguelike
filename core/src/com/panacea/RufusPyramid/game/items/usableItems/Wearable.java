@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Lux on 17/09/2015.
  */
 public class Wearable extends UsableItem {
-    public static enum WearableType{
+    public static enum WearableType implements IItemType{
         ARMOR,
         BOOTS,
         HELM,
@@ -19,7 +19,7 @@ public class Wearable extends UsableItem {
 
     private WearableType type;
     public Wearable(WearableType type, List<Effect> effects, String itemName){
-        super(type.name(), effects, itemName);
+        super(type, effects, itemName);
         this.type = type;
     }
 
