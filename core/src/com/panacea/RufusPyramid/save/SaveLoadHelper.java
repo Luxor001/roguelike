@@ -15,6 +15,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.esotericsoftware.kryo.serializers.DefaultSerializers;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
+import com.panacea.RufusPyramid.game.Diary;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
 import com.panacea.RufusPyramid.game.GameController;
@@ -56,6 +57,7 @@ import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,19 +80,14 @@ public class SaveLoadHelper {
     private Output output;
     private Input input;
     private Kryo kryo;
+    private static SaveLoadHelper SINGLETON;
 
-    public SaveLoadHelper() {}
-
-    /**
-     * Controlla se c'è un gioco salvato caricabile e ritorna true o false rispettivamente.
-     * @return true se c'è un gioco precedentemente salvato caricabile, false altrimenti.
-     */
-    public boolean existsSavedGame() {
-        return Gdx.files.local(saveFile).exists();
+    public static SaveLoadHelper getIstance(){
+        if(SINGLETON == null)
+            SINGLETON = new SaveLoadHelper();
+        return SINGLETON;
     }
-
-    /********** Save methods ***********/
-    public void startSave() {
+    private SaveLoadHelper() {
         this.kryo = new Kryo();
 
         Serializer<ArrayList> listSerializer = new Serializer<ArrayList>() {
@@ -101,7 +98,9 @@ public class SaveLoadHelper {
             private Class genericType;
 
             public void setGenerics(Kryo kryo, Class[] generics) {
-                if (kryo.isFinal(generics[0])) genericType = generics[0];
+                if(generics != null) {
+                    if (kryo.isFinal(generics[0])) genericType = generics[0];
+                }
             }
 
             @Override
@@ -116,14 +115,16 @@ public class SaveLoadHelper {
 //                        kryo.writeObjectOrNull(output, element, serializer);
 //                } else {
                 Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", list.get(0) + " ma genericType è " + this.genericType);
-                    for (Object element : list) {
-                        kryo.writeClassAndObject(output, element);
-                    }
+                for (Object element : list) {
+                    kryo.writeClassAndObject(output, element);
+                }
+                output.flush();
 //                }
             }
 
             @Override
             public ArrayList read(Kryo kryo, Input input, Class<ArrayList> type) {
+
                 ArrayList array = new ArrayList();
                 kryo.reference(array);
                 int length = input.readInt(true);
@@ -136,16 +137,16 @@ public class SaveLoadHelper {
 //                        array.add(kryo.readObjectOrNull(input, elementClass, serializer));
 //                } else {
                 Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", "genericType è " + this.genericType);
-                    for (int i = 0; i < length; i++) {
-                        array.add(kryo.readClassAndObject(input));
-                    }
+                for (int i = 0; i < length; i++) {
+                    array.add(kryo.readClassAndObject(input));
+                }
 //                }
                 return array;
             }
         };
 
 //        try {
-            this.output = new Output(Gdx.files.local(saveFile).write(false));
+        this.output = new Output(Gdx.files.local(saveFile).write(false));
 //        } catch (FileNotFoundException e) {
 //            Gdx.app.error(SaveLoadHelper.class.toString(), "Errore nella lettura del file " + saveFile);
 //            e.printStackTrace();
@@ -308,8 +309,8 @@ public class SaveLoadHelper {
                     readItem = null;
                     Gdx.app.debug(SaveLoadHelper.class.toString(), "Item boh: " + itemType);
                 }
-
-                readItem.setPosition(pos);
+                if(pos != null && readItem != null) //FIXMEABSOLUTELY: Qui è strano, a volte il readItem è null. che sia colpa del serializzatore di IItemType?
+                    readItem.setPosition(pos);
                 return readItem;
             }
         };
@@ -327,6 +328,24 @@ public class SaveLoadHelper {
             }
         });
 
+        kryo.register(IItemType.class, new Serializer() {
+            @Override
+            public void write(Kryo kryo, Output output, Object object) {
+
+            }
+
+            @Override
+            public Object read(Kryo kryo, Input input, Class type) {
+                return new IItemType() {
+                    @Override
+                    public int hashCode() {
+                        return super.hashCode();//FIXMEABSOLUTELY: serializzatore sparato a caso.
+                    }
+                };
+            }
+        });
+
+        kryo.register(GameModel.class, 0);
         kryo.register(AbstractCreature.class, 1);
         kryo.register(CreatureAI.class, 2);
         kryo.register(DefaultHero.class, 3);
@@ -365,13 +384,35 @@ public class SaveLoadHelper {
         kryo.register(OpenedChestListener.class, 35);
         kryo.register(PassAction.class, 36);
         kryo.register(GameMaster.class, 37);
+        kryo.register(GridPoint2.class, 38);
+        kryo.register(HealthBar.class, 39);
+        kryo.register(ICreature.CreatureType.class, 40);
+        kryo.register(Diary.class, 41);
+        kryo.register(AbstractList.class, 42);
+        kryo.register(IItemType.class, 43);
+
+
+
+        this.input = new Input(Gdx.files.local(saveFile).read());
+    }
+
+    /**
+     * Controlla se c'è un gioco salvato caricabile e ritorna true o false rispettivamente.
+     * @return true se c'è un gioco precedentemente salvato caricabile, false altrimenti.
+     */
+    public boolean existsSavedGame() {
+        return Gdx.files.local(saveFile).exists();
+    }
+
+    /********** Save methods ***********/
+    public void startSave() {
 
     }
 
     public void stopSave() {
         this.output.close();
         this.output = null;
-        this.kryo = null;
+    //    this.kryo = null;
     }
 
     /**
@@ -406,6 +447,7 @@ public class SaveLoadHelper {
         }
         Gdx.app.log(SaveLoadHelper.class.toString(), "Si sta salvando un oggetto completo! Usare il meno possibile e solo con pojo.");
         this.kryo.writeObject(this.output, toSave);
+        output.flush();
     }
 
     public boolean isSaving() {
@@ -414,9 +456,10 @@ public class SaveLoadHelper {
 
     /*********** Load methods ***********/
     public void startLoad() {
-        this.kryo = new Kryo();
+
+        com.esotericsoftware.minlog.Log.TRACE();
+
 //        try {
-            this.input = new Input(Gdx.files.local(saveFile).read());
 //        } catch (FileNotFoundException e) {
 //            Gdx.app.error(SaveLoadHelper.class.toString(), "Errore nella lettura del file " + saveFile);
 //            e.printStackTrace();
@@ -426,7 +469,7 @@ public class SaveLoadHelper {
     public void stopLoad() {
         this.input.close();
         this.input = null;
-        this.kryo = null;
+      //  this.kryo = null;
 
         //Cancello il file in quanto il gioco è stato caricato
 //        Gdx.files.local(saveFile).delete();
@@ -458,6 +501,7 @@ public class SaveLoadHelper {
      * @return l'oggetto letto.
      */
     public <T> T loadObject(Class<T> classe) {
+
         return kryo.readObject(input, classe);
     }
 

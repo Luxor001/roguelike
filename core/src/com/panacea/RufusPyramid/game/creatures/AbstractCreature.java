@@ -44,7 +44,7 @@ public abstract class AbstractCreature implements ICreature {
     public static int DEFAULT_HEALTHBAR_WIDTH = 20;
     private ArrayList<Effect> effects;
     private Stats baseStats;
-    private transient HealthBar healthBar;
+    private HealthBar healthBar;
     private GridPoint2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
 
     private boolean flipX;

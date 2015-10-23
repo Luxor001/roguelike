@@ -17,6 +17,10 @@ public class Tile {
         this.type=type;
     }
 
+    private Tile(){
+
+    }
+
     public TileType getType(){
         return type;
     }

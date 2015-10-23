@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface ICreature extends IAgent {
 
-    enum CreatureType{
+        enum CreatureType{
         HERO,
         ORC,
         SKELETON,

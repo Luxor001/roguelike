@@ -33,9 +33,9 @@ public class GameModel {
     /* Static methods */
     
     private static GameModel SINGLETON = null;
-    private ArrayList<ICreature> creatures;
+    private transient ArrayList<ICreature> creatures; //FIXMEABSOLUTELY: togliere transient
     private Diary diary;
-    private ArrayList<Item> items;
+    private transient ArrayList<Item> items; //FIXMEABSOLUTELY: togliere transient
 
     public static final double[] extractedItem = new double[]      { 00, 01, 02, 03}; //0 = golditem, 1 = miscitem, 2= weapon, 3=wearable //TODO: DA METTERE SU DB!
     public static final double[] itemProb = new double[]          { 0.6, 0.2, 0.1, 0.1}; //probabilità
@@ -48,7 +48,9 @@ public class GameModel {
         return SINGLETON;
     }
 
-    public static void set(GameModel instance) { SINGLETON = instance; }
+    public static void set(GameModel instance) {
+        SINGLETON = instance;
+    }
     
     public static void createInstance() {
         SINGLETON = new GameModel();
@@ -56,7 +58,7 @@ public class GameModel {
     
 
     /* Instance methods */
-    private DefaultHero hero;
+    private transient DefaultHero hero;
     private ArrayList<Map> maps;
     private int currentMapIndex;
     

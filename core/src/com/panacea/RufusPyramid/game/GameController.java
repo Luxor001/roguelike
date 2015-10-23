@@ -32,6 +32,7 @@ public class GameController {
     public static Array<String> permissionsPublish = new Array<String>();
     public static String facebook_APPID = "1343627892330664"; //FIXME: va messo nei res!
 
+
     public static void initializeGame() {
         GameController.gameInPlay = true;
         GameController.resetAll();
@@ -59,7 +60,7 @@ public class GameController {
 
 
 //        if(GameModel.get() != null){
-            SaveLoadHelper sl = new SaveLoadHelper();
+            SaveLoadHelper sl = SaveLoadHelper.getIstance();
             Gdx.app.log(GameController.class.toString(), "Inizio caricamento");
             sl.startLoad();
             GameModel.set(sl.loadObject(GameModel.class));
@@ -70,7 +71,7 @@ public class GameController {
 //        }
 //        if(GameModel.get() != null){
 //            SaveLoadHelper sl = new SaveLoadHelper();
-//            Gdx.app.log(GameController.class.toString(), "Inizio salvataggio");
+//            Gdx.app.log(GameControl ler.class.toString(), "Inizio salvataggio");
 //            sl.startSave();
 //            sl.saveObject(gm);
 //            sl.stopSave();

@@ -401,7 +401,7 @@ public class UIDrawer extends ViewObject {
                     @Override
                     public void run() {
                         if(GameModel.get() != null){
-                            SaveLoadHelper sl = new SaveLoadHelper();
+                            SaveLoadHelper sl = SaveLoadHelper.getIstance();
                             sl.saveGame();
                         }
                         ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?

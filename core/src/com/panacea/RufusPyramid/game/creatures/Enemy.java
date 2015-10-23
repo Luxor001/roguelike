@@ -12,7 +12,7 @@ import java.util.Set;
  * Created by gio on 22/07/15.
  */
 public class Enemy extends AbstractCreature {
-    private CreatureAI creatureAI;
+    private transient CreatureAI creatureAI;
     private static final Set<CreatureAI.State> displayHealthBarStates = new HashSet<CreatureAI.State>(Arrays.asList(CreatureAI.State.ATTACKING, CreatureAI.State.FOLLOWING));
     public Enemy(String name, String description, int maximumHP, double attack, double defence, double speed, CreatureType type) {
         super(name, description, maximumHP, attack, defence, speed);

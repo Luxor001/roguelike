@@ -17,7 +17,7 @@ import com.panacea.RufusPyramid.map.Tile;
  */
 public class HeroController {
 
-    private DefaultHero hero;
+    private transient DefaultHero hero;
 
     public HeroController(DefaultHero hero) {
         this.hero = hero;
@@ -33,6 +33,10 @@ public class HeroController {
     public HeroController(DefaultHero hero, MapContainer spawnMap, Tile startingPosition) {
         this(hero);
         hero.setPosition(startingPosition);
+    }
+    public HeroController() {
+        this(null);
+        //hero.setPosition(new GridPoint2(0,0));
     }
 
     public void moveToPosition(GridPoint2 finalPosition) {

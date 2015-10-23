@@ -20,6 +20,10 @@ public class MapContainer {
         cursor=new GridPoint2(0,0);
     }
 
+    private MapContainer(){
+
+    }
+
     public void insertTile(Tile tile, int row, int column){
         tiles[row][column]=tile;
     }

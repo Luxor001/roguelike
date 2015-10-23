@@ -30,6 +30,10 @@ public class AttackAction implements IAction {
         boolean success = this.attack();
         return new ActionResult(success);
     }
+    private AttackAction(){
+        attacker = null;
+        attacked = null;
+    }
 
     private boolean attack() {
         // - Controllo che l'attacco sia possibile

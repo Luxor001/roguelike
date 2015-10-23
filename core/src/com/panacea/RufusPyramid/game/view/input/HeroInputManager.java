@@ -16,7 +16,7 @@ public class HeroInputManager extends InputAdapter {
     private int screenWidth = Gdx.graphics.getWidth();
     private int screenHeight = Gdx.graphics.getHeight();
 
-    private HeroController hero;
+    private transient HeroController hero;
 
     private boolean isPaused = false;
 

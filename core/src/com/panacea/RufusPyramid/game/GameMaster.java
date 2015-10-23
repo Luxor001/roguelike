@@ -41,18 +41,18 @@ import java.util.List;
 public class GameMaster{
     private static final int BASE_ENERGY_AT_EVERY_TURN = 200;
     private static final int MIN_ENERGY_TO_ACT = 1000;
-    private transient final ActionChosenListener commonActionPerformedListener;
-    private transient final CreatureDeadListener removeFromTurnWhenDeadListener;
+    private final ActionChosenListener commonActionPerformedListener;
+    private final CreatureDeadListener removeFromTurnWhenDeadListener;
     public static final int DEFAULT_ACTION_COST = 200;
     /**
      * Lista ordinata delle agent che prendono parte alla turnazione.
      */
-    private transient final ArrayList<IAgent> agentsPlaying;
+    private transient final ArrayList<IAgent> agentsPlaying;    //FIXMEABSOLUTELY: togliere transient
     private int currentAgent;
     private boolean someoneIsPlaying;
 
-    private transient HeroController heroController;
-    public transient HeroInputManager heroInput;
+    private transient HeroController heroController; //FIXMEABSOLUTELY: togliere transient
+    public transient HeroInputManager heroInput;    //FIXMEABSOLUTELY: togliere transient
 
     private transient ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
   //  private SaveLoadHelper sl;
@@ -69,18 +69,20 @@ public class GameMaster{
 
     private void init() {
 
-        for(ICreature creature : GameModel.get().getCreatures()){
-            if(creature instanceof Enemy) {
-                this.addAgent(creature);
+        if(GameModel.get() != null) {
+            for (ICreature creature : GameModel.get().getCreatures()) {
+                if (creature instanceof Enemy) {
+                    this.addAgent(creature);
+                }
             }
+
+
+            DefaultHero hero = GameModel.get().getHero();
+            this.addAgent(hero);
+
+            this.heroController = new HeroController(hero);
+            this.heroInput = new HeroInputManager(this.heroController);
         }
-
-        DefaultHero hero = GameModel.get().getHero();
-        this.addAgent(hero);
-
-        this.heroController = new HeroController(hero);
-        this.heroInput = new HeroInputManager(this.heroController);
-
     }
 
     public void addAgent(IAgent newAgent) {
