@@ -266,6 +266,7 @@ public class UIDrawer extends ViewObject {
                 resumeButton.setVisible(GameController.gameInUI);
                 postButton.setVisible(GameController.gameInUI);
                 exitButton.setVisible(GameController.gameInUI);
+
                 return true;
             }
         });

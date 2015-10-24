@@ -50,8 +50,8 @@ public class GameMaster{
     private int currentAgent;
     private boolean someoneIsPlaying;
 
-    private transient HeroController heroController; //FIXMEABSOLUTELY: togliere transient
-    public transient HeroInputManager heroInput;    //FIXMEABSOLUTELY: togliere transient
+    private HeroController heroController;
+    public transient HeroInputManager heroInput;
 
     private transient ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
   //  private SaveLoadHelper sl;

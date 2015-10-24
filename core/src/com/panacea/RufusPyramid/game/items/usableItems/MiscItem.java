@@ -15,6 +15,9 @@ public class MiscItem extends UsableItem{
         HEALTH_POTION,
         RAW_MEAT
     }
+    private MiscItem(){
+        super();
+    }
 
     private MiscItemType type;
     public MiscItem(MiscItemType type, List<Effect> effects, String itemName){

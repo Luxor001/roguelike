@@ -23,6 +23,10 @@ public class MoveAction implements IAction {
         this.model = modelToMove;
         this.direction = direction;
     }
+    private MoveAction(){
+        direction = null;
+        model=null;
+    }
 
     @Override
     public ActionResult perform() {

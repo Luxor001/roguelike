@@ -34,7 +34,7 @@ public class GameModel {
     
     private static GameModel SINGLETON = null;
     private ArrayList<ICreature> creatures; //FIXMEABSOLUTELY: togliere transient
-    private Diary diary;
+    private transient Diary diary;
     private transient ArrayList<Item> items; //FIXMEABSOLUTELY: togliere transient
 
     public static final double[] extractedItem = new double[]      { 00, 01, 02, 03}; //0 = golditem, 1 = miscitem, 2= weapon, 3=wearable //TODO: DA METTERE SU DB!

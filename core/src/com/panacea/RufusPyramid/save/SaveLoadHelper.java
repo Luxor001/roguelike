@@ -222,7 +222,6 @@ public class SaveLoadHelper {
                 for (Object element : list) {
                     kryo.writeClassAndObject(output, element);
                 }
-                output.flush();
 //                }
             }
 
@@ -437,22 +436,20 @@ public class SaveLoadHelper {
             }
         });
 
-        kryo.register(IItemType.class, new Serializer() {
+        kryo.register(IItemType.class, new Serializer<IItemType>() {
             @Override
-            public void write(Kryo kryo, Output output, Object object) {
-
+            public void write(Kryo kryo, Output output, IItemType itemType) {
+                kryo.writeObject(output,itemType);
             }
 
             @Override
-            public Object read(Kryo kryo, Input input, Class type) {
-                return new IItemType() {
-                    @Override
-                    public int hashCode() {
-                        return super.hashCode();//FIXMEABSOLUTELY: serializzatore sparato a caso.
-                    }
-                };
+            public IItemType read(Kryo kryo, Input input, Class type) {
+                IItemType asd=kryo.readObject(input,IItemType.class);
+                return asd;
             }
-        });
+        },1001);
+
+
 
         kryo.register(GameModel.class, 0);
         kryo.register(AbstractCreature.class, creatureSerializer, 1);
@@ -464,7 +461,6 @@ public class SaveLoadHelper {
         kryo.register(Stats.class, 6);
         kryo.register(Effect.class, 7);
         kryo.register(TemporaryEffect.class, 8);
-        kryo.register(IItem.class, itemSerializer, 9);
         kryo.register(Item.class, itemSerializer, 10);
         kryo.register(ChestItem.class, itemSerializer, 11);
         kryo.register(GoldItem.class, 12);
@@ -498,7 +494,6 @@ public class SaveLoadHelper {
         kryo.register(ICreature.CreatureType.class, 40);
         kryo.register(Diary.class, 41);
         kryo.register(AbstractList.class, 42);
-        kryo.register(IItemType.class, 43);
         kryo.register(Diary.class, 44);
         kryo.register(LinkedHashMap.class, hashMapSerializer, 45);
 
