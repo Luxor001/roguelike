@@ -146,7 +146,7 @@ public class SaveLoadHelper {
         };
 
 //        try {
-        this.output = new Output(Gdx.files.local(saveFile).write(false));
+//        this.output = new Output(Gdx.files.local(saveFile).write(false));
 //        } catch (FileNotFoundException e) {
 //            Gdx.app.error(SaveLoadHelper.class.toString(), "Errore nella lettura del file " + saveFile);
 //            e.printStackTrace();
@@ -406,7 +406,7 @@ public class SaveLoadHelper {
 
     /********** Save methods ***********/
     public void startSave() {
-
+        this.output = new Output(Gdx.files.local(saveFile).write(false));
     }
 
     public void stopSave() {
@@ -456,7 +456,7 @@ public class SaveLoadHelper {
 
     /*********** Load methods ***********/
     public void startLoad() {
-
+        this.input = new Input(Gdx.files.local(saveFile).read());
         com.esotericsoftware.minlog.Log.TRACE();
 
 //        try {
