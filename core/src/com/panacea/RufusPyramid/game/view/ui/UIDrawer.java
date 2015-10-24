@@ -405,7 +405,10 @@ public class UIDrawer extends ViewObject {
                             sl.saveGame();
                         }
                         ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
-                        GameModel.get().disposeAll();
+                        if (GameModel.get() != null) {  //FIXME dopo il caricamento non viene impostato?
+
+                            GameModel.get().disposeAll();
+                        }
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
                     }
                 }, 0.5f        //    delay per fare vedere la selezione utente..

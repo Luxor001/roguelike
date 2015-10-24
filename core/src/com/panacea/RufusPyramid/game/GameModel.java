@@ -58,7 +58,7 @@ public class GameModel {
     
 
     /* Instance methods */
-    private transient DefaultHero hero;
+    private DefaultHero hero;
     private ArrayList<Map> maps;
     private int currentMapIndex;
     

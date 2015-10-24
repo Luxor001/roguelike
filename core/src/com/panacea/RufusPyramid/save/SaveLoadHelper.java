@@ -60,6 +60,8 @@ import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -90,6 +92,39 @@ public class SaveLoadHelper {
     }
     private SaveLoadHelper() {
         this.kryo = new Kryo();
+
+        Serializer<HashMap> hashMapSerializer = new Serializer<HashMap>() {
+            @Override
+            public void write(Kryo kryo, Output output, HashMap object) {
+                kryo.writeClass(output, object.getClass());
+                kryo.writeObject(output, new Integer(object.size()));
+
+                for (Object k : object.keySet()) {
+                    kryo.writeClassAndObject(output, k);
+                    kryo.writeClassAndObject(output, object.get(k));
+                }
+
+            }
+
+            @Override
+            public HashMap read(Kryo kryo, Input input, Class<HashMap> type) {
+                HashMap map = null;
+
+                Class classe = kryo.readClass(input).getType();
+                int size = kryo.readObject(input, Integer.class).intValue();
+                if (classe.equals(LinkedHashMap.class)) {
+                    map = new LinkedHashMap();
+                }
+
+                for (int i = 0; i < size; i++) {
+                    Object key = kryo.readClassAndObject(input);
+                    Object value = kryo.readClassAndObject(input);
+                    map.put(key, value);
+                }
+
+                return map;
+            }
+        };
 
         Serializer<ICreature> creatureSerializer = new Serializer<ICreature>() {
             @Override
@@ -420,7 +455,7 @@ public class SaveLoadHelper {
         });
 
         kryo.register(GameModel.class, 0);
-        kryo.register(AbstractCreature.class, 1);
+        kryo.register(AbstractCreature.class, creatureSerializer, 1);
         kryo.register(CreatureAI.class, 2);
         kryo.register(DefaultHero.class, creatureSerializer, 3);
         kryo.register(Enemy.class, creatureSerializer, 3);
@@ -465,6 +500,7 @@ public class SaveLoadHelper {
         kryo.register(AbstractList.class, 42);
         kryo.register(IItemType.class, 43);
         kryo.register(Diary.class, 44);
+        kryo.register(LinkedHashMap.class, hashMapSerializer, 45);
 
 
 
