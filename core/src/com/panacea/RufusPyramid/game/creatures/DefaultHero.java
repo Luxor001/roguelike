@@ -23,8 +23,15 @@ public class DefaultHero extends AbstractCreature {
     }
 
 //    TODO aggiungere il livello con l'oggetto Level
+    public DefaultHero(String name, int goldAmount, int id) {
+        super(name, DESCRIPTION, new Stats(MAX_HP, ATTACK, DEFENCE, SPEED), id);
+        this.getHealthBar().setVisible(true);
+        this.setCreatureType(CreatureType.HERO);
+        this.goldAmount = goldAmount;
+    }
+
     public DefaultHero(String name, int goldAmount) {
-        super(name, DESCRIPTION, MAX_HP, ATTACK, DEFENCE, SPEED);
+        super(name, DESCRIPTION, new Stats(MAX_HP, ATTACK, DEFENCE, SPEED));
         this.getHealthBar().setVisible(true);
         this.setCreatureType(CreatureType.HERO);
         this.goldAmount = goldAmount;

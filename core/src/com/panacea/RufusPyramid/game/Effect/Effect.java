@@ -18,6 +18,9 @@ public class Effect {
 
     private float coefficient;
     private EffectType type;
+
+    private Effect() {};
+
     public Effect(EffectType type, float coefficient){
         this.coefficient=coefficient;
         this.type = type;

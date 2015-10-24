@@ -27,7 +27,6 @@ import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -81,7 +80,7 @@ public class GameMaster{
             this.addAgent(hero);
 
             this.heroController = new HeroController(hero);
-            this.heroInput = new HeroInputManager(this.heroController);
+            this.heroInput = new HeroInputManager(heroController);
         }
     }
 
@@ -140,7 +139,6 @@ public class GameMaster{
     /* Turnazioni - vers. ad eventi */
     private ActionChosenListener getActionChosenListener() {
         PerformAndPayActionChosenListener listener = new PerformAndPayActionChosenListener();
-        listener.setGameMaster(this);
         return listener;
     }
 
@@ -151,7 +149,6 @@ public class GameMaster{
      */
     private CreatureDeadListener getDeadListener() {
         RemoveOnDeathListener listener = new RemoveOnDeathListener();
-        listener.setGameMaster(this);
         return listener;
     }
 
@@ -245,18 +242,18 @@ public class GameMaster{
         this.agentsPlaying.clear();
     }
 
+//    public HeroController getHeroController() {
+//        return this.heroController;
+//    }
+
     private static class PerformAndPayActionChosenListener implements ActionChosenListener {
-        private GameMaster gm;
 
         public PerformAndPayActionChosenListener() {}
 
-        public void setGameMaster(GameMaster gameMaster) {
-            this.gm = gameMaster;
-        }
-
         public void performed(ActionChosenEvent event, IAgent source) {
             /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
-            if (!source.equals(this.gm.agentsPlaying.get(this.gm.currentAgent))
+            GameMaster gm = GameController.getGm();
+            if (!source.equals(gm.agentsPlaying.get(gm.currentAgent))
                     || (source instanceof ICreature && ((ICreature)source).getHPCurrent() <= 0)) {
                 Gdx.app.error(
                         this.getClass().getName(),
@@ -269,11 +266,11 @@ public class GameMaster{
             }
 
             if (source instanceof DefaultHero) {
-                this.gm.heroInput.setPaused(true);
+                gm.heroInput.setPaused(true);
             }
 
             if(source instanceof AbstractCreature)
-                this.gm.checkEffects((AbstractCreature) source);
+                gm.checkEffects((AbstractCreature) source);
 
             IAgent agentOnTurn = source;
             IAction actionChosen = event.getChosenAction();
@@ -285,32 +282,27 @@ public class GameMaster{
 
             if (result.hasSuccess()) {
                 //La creatura "paga" il prezzo per l'azione effettuata
-                this.gm.payForAction(agentOnTurn, actionChosen);
+                gm.payForAction(agentOnTurn, actionChosen);
             }
 
             //Fine del ciclo di controllo
-            this.gm.lastResult = result;
-            this.gm.someoneIsPlaying = false;
+            gm.lastResult = result;
+            gm.someoneIsPlaying = false;
 
             if (!GameController.isGameEnded()) {
                 //TODO questa funzione dovrebbe essere lanciata solo subito prima di passare il turno all'eroe
                 //altrimenti viene lanciata ad ogni turno di una creatura!
-                this.gm.checkEnemiesNearby();
+                gm.checkEnemiesNearby();
             }
         }
     }
 
     private static class RemoveOnDeathListener implements CreatureDeadListener {
-        private GameMaster gm;
-
-        public void setGameMaster(GameMaster gm) {
-            this.gm = gm;
-        }
 
         @Override
         public void changed(CreatureDeadEvent event, Object source) {
             if (source instanceof IAgent) {
-                this.gm.removeAgent((IAgent) source);
+                GameController.getGm().removeAgent((IAgent) source);
             }
         }
     }

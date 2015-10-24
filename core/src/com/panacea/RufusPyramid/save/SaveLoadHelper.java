@@ -32,6 +32,7 @@ import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.actions.OpenedChestListener;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
+import com.panacea.RufusPyramid.game.creatures.Backpack;
 import com.panacea.RufusPyramid.game.creatures.CreatureAI;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
@@ -90,6 +91,74 @@ public class SaveLoadHelper {
     private SaveLoadHelper() {
         this.kryo = new Kryo();
 
+        Serializer<ICreature> creatureSerializer = new Serializer<ICreature>() {
+            @Override
+            public void write(Kryo kryo, Output output, ICreature object) {
+                kryo.writeObject(output, object.getCreatureType());
+                kryo.writeObject(output, new Integer(object.getID()));
+                kryo.writeObject(output, object.getPosition());
+                kryo.writeObject(output, object.getName());
+                kryo.writeObject(output, object.getDescription());
+                kryo.writeObjectOrNull(output, object.getAbsoluteTickPosition(), GridPoint2.class);
+                kryo.writeObject(output, object.getBaseStats());
+                kryo.writeObject(output, object.getCurrentStats());
+                kryo.writeObject(output, new Integer(object.getHPCurrent()));
+                kryo.writeObject(output, new Integer(object.getEnergy()));
+                kryo.writeObject(output, object.getEquipment());
+                kryo.writeObject(output, object.getEffects());
+
+                switch (object.getCreatureType()) {
+                    case HERO:
+                        DefaultHero hero = (DefaultHero)object;
+                        kryo.writeObject(output, new Integer(hero.getGoldAmount()));
+                        break;
+                    case ORC:
+                    case SKELETON:
+                    case UGLYYETI:
+                    case WRAITH:
+                        break;
+                }
+            }
+
+            @Override
+            public ICreature read(Kryo kryo, Input input, Class<ICreature> type) {
+                ICreature.CreatureType creatureType = kryo.readObject(input, ICreature.CreatureType.class);
+                int id = kryo.readObject(input, Integer.class).intValue();
+                Tile tile = kryo.readObject(input, Tile.class);
+                String name = kryo.readObject(input, String.class);
+                String description = kryo.readObject(input, String.class);
+                GridPoint2 absTickPos = kryo.readObjectOrNull(input, GridPoint2.class);
+                Stats baseStats = kryo.readObject(input, Stats.class);
+                Stats currStats = kryo.readObject(input, Stats.class);
+                int hpCurrent = kryo.readObject(input, Integer.class).intValue();
+                int energy = kryo.readObject(input, Integer.class).intValue();
+                Backpack backpack = kryo.readObject(input, Backpack.class);
+                ArrayList<Effect> effects = kryo.readObject(input, ArrayList.class);
+
+                ICreature creature = null;
+                switch(creatureType) {
+                    case HERO:
+                        int gold = kryo.readObject(input, Integer.class).intValue();
+                        creature = new DefaultHero(name, gold, id);
+                        break;
+                    case ORC:
+                    case SKELETON:
+                    case UGLYYETI:
+                    case WRAITH:
+                        creature = new Enemy(name, description, baseStats, creatureType, id);
+                        break;
+                }
+
+                creature.setAbsoluteTickPosition(absTickPos);
+                creature.setDescription(description);
+                creature.setEnergy(energy);
+                creature.setHPCurrent(hpCurrent);
+                creature.setPosition(tile);
+
+                return creature;
+            }
+        };
+
         Serializer<ArrayList> listSerializer = new Serializer<ArrayList>() {
             {
                 setAcceptsNull(true);
@@ -138,7 +207,12 @@ public class SaveLoadHelper {
 //                } else {
                 Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", "genericType è " + this.genericType);
                 for (int i = 0; i < length; i++) {
-                    array.add(kryo.readClassAndObject(input));
+                    try {
+                        Object obj = kryo.readClassAndObject(input);
+                        array.add(obj);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 //                }
                 return array;
@@ -348,9 +422,9 @@ public class SaveLoadHelper {
         kryo.register(GameModel.class, 0);
         kryo.register(AbstractCreature.class, 1);
         kryo.register(CreatureAI.class, 2);
-        kryo.register(DefaultHero.class, 3);
-        kryo.register(Enemy.class, 3);
-        kryo.register(ICreature.class, 4);
+        kryo.register(DefaultHero.class, creatureSerializer, 3);
+        kryo.register(Enemy.class, creatureSerializer, 3);
+        kryo.register(ICreature.class, creatureSerializer, 4);
         kryo.register(Level.class, 5);
         kryo.register(Stats.class, 6);
         kryo.register(Effect.class, 7);
@@ -390,6 +464,7 @@ public class SaveLoadHelper {
         kryo.register(Diary.class, 41);
         kryo.register(AbstractList.class, 42);
         kryo.register(IItemType.class, 43);
+        kryo.register(Diary.class, 44);
 
 
 

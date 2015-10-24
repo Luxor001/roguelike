@@ -37,8 +37,8 @@ public class CreaturesDrawer extends ViewObject {
     private AbstractCreature.PositionChangeListener posChangeListener;
 
     ////////////////////////
-    private HeroController heroController;
-    private com.panacea.RufusPyramid.game.view.input.HeroInputManager heroInput;
+//    private HeroController heroController;
+//    private com.panacea.RufusPyramid.game.view.input.HeroInputManager heroInput;
     ///////////////////////
 
     //TODO creare un oggetto che contenga Texture, creaturestate e animations in modo da usare una sola hashmap?
@@ -81,7 +81,7 @@ public class CreaturesDrawer extends ViewObject {
             this.setStanding(creature.getID());
         }
 
-        this.heroInput = InputManager.get().getHeroProcessor();
+//        this.heroInput = InputManager.get().getHeroProcessor();
     }
 
     private static TextureRegion getSprite(ICreature creature) {

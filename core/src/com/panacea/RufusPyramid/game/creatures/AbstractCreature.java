@@ -44,7 +44,7 @@ public abstract class AbstractCreature implements ICreature {
     public static int DEFAULT_HEALTHBAR_WIDTH = 20;
     private ArrayList<Effect> effects;
     private Stats baseStats;
-    private HealthBar healthBar;
+    private transient HealthBar healthBar;
     private GridPoint2 absoluteTickPosition; //absolute position for the current "tick" cycle, useful for camera centering.
 
     private boolean flipX;
@@ -52,9 +52,10 @@ public abstract class AbstractCreature implements ICreature {
 
     private CreatureType creatureType;
 
-    public AbstractCreature(String name, String description, Stats stats) {
+    public AbstractCreature(String name, String description, Stats stats, int id) {
         this.effects = new ArrayList<Effect>();
-        this.idCreature = getUniqueCreatureId();
+
+        this.idCreature = id;
         this.setName(name);
         this.setDescription(description);
         this.baseStats = stats;
@@ -75,6 +76,10 @@ public abstract class AbstractCreature implements ICreature {
         this.healthBar.setWidth(DEFAULT_HEALTHBAR_WIDTH );
         this.healthBar.setVisible(false);
         this.flipX = false;
+    }
+
+    public AbstractCreature(String name, String description, Stats stats) {
+        this(name, description, stats, getUniqueCreatureId());
     }
 
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
@@ -219,7 +224,7 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     @Override
-    public List<Effect> getEffects(){
+    public ArrayList<Effect> getEffects(){
         return effects;
     } //The effects (+ATTACK, -DEFENCE ecc.ecc.) this creatures currently has.
     @Override

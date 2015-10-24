@@ -33,7 +33,7 @@ public class GameModel {
     /* Static methods */
     
     private static GameModel SINGLETON = null;
-    private transient ArrayList<ICreature> creatures; //FIXMEABSOLUTELY: togliere transient
+    private ArrayList<ICreature> creatures; //FIXMEABSOLUTELY: togliere transient
     private Diary diary;
     private transient ArrayList<Item> items; //FIXMEABSOLUTELY: togliere transient
 

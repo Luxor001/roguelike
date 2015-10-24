@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameController;
+import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.InteractAction;
@@ -17,25 +18,22 @@ import com.panacea.RufusPyramid.map.Tile;
  */
 public class HeroController {
 
-    private transient DefaultHero hero;
+    private DefaultHero hero;
 
     public HeroController(DefaultHero hero) {
         this.hero = hero;
-        hero.addCreatureDeadListener(new CreatureDeadListener() {
-            @Override
-            public void changed(CreatureDeadEvent event, Object source) {
-                Gdx.app.log("BANANA", "IS REALLY DEAD");
-                HeroController.this.endGame();
-            }
-        });
+        EndGameOnCreatureDeathListener deadListener = new EndGameOnCreatureDeathListener();
+        hero.addCreatureDeadListener(deadListener);
     }
 
     public HeroController(DefaultHero hero, MapContainer spawnMap, Tile startingPosition) {
         this(hero);
         hero.setPosition(startingPosition);
     }
-    public HeroController() {
-        this(null);
+
+
+    private HeroController() {
+//        this(null);
         //hero.setPosition(new GridPoint2(0,0));
     }
 
@@ -119,5 +117,17 @@ public class HeroController {
     private void endGame() {
         //TODO gameOver
         GameController.endGame();
+    }
+
+    private static class EndGameOnCreatureDeathListener implements CreatureDeadListener {
+
+        private EndGameOnCreatureDeathListener() {};
+
+        @Override
+        public void changed(CreatureDeadEvent event, Object source) {
+            Gdx.app.log(HeroController.class.toString(), "RUFUS IS REALLY DEAD");
+//            GameController.getGm().getHeroController().endGame();
+            GameController.endGame();
+        }
     }
 }

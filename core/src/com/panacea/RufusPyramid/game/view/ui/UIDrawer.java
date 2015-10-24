@@ -74,8 +74,8 @@ public class UIDrawer extends ViewObject {
     private ImageButton resumeButton;
     private ImageButton postButton;
     private ImageButton exitButton;
-    private HealthBar healthBar;
-    private HealthBar manaBar;
+    private transient HealthBar healthBar;
+    private transient HealthBar manaBar;
 //    private Sound inventoryOpenSound;
 //    private Sound inventoryCloseSound;
 //    private Sound pickSound;

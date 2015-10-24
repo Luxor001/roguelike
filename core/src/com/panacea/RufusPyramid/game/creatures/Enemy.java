@@ -18,6 +18,10 @@ public class Enemy extends AbstractCreature {
         super(name, description, maximumHP, attack, defence, speed);
         this.setCreatureType(type);
     }
+    public Enemy(String name, String description, Stats stats, CreatureType type, int id) {
+        super(name, description, stats, id);
+        this.setCreatureType(type);
+    }
     public Enemy(String name, String description, Stats stats, CreatureType type) {
         super(name, description, stats.getMaximumHP(), stats.getAttack(), stats.getDefence(),stats.getSpeed());
         this.setCreatureType(type);

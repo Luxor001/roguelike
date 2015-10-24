@@ -8,6 +8,7 @@ import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 import com.panacea.RufusPyramid.map.Tile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public interface ICreature extends IAgent {
     public int getEnergy();
     public void setEnergy(int currentEnergy);
 
-    List<Effect> getEffects();
+    ArrayList<Effect> getEffects();
     void addEffect(Effect effect);
     void addEffects(List<Effect> effect);
 
