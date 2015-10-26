@@ -46,7 +46,7 @@ public class GameMaster{
     /**
      * Lista ordinata delle agent che prendono parte alla turnazione.
      */
-    private transient final ArrayList<IAgent> agentsPlaying;    //FIXMEABSOLUTELY: togliere transient
+    private transient final ArrayList<IAgent> agentsPlaying;    //FIXMEABSOLUTELY: togliere transient? Sembra andare
     private int currentAgent;
     private boolean someoneIsPlaying;
 

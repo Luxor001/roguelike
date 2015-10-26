@@ -67,7 +67,7 @@ public class MenuScreen implements Screen {
         skin.getFont("default-font").getData().setScale(scale);
 
         buttonResume = new TextButton("Resume", skin);
-        buttonPlay = new TextButton("Play", skin);
+        buttonPlay = new TextButton("New Game", skin);
         buttonExit = new TextButton("Exit", skin);
 
 //        title = new Label("Game Title", skin);

@@ -50,6 +50,10 @@ public class GameModel {
 
     public static void set(GameModel instance) {
         SINGLETON = instance;
+        instance.creatureDeadListener.setGameModel(instance);
+        for (ICreature creature: instance.creatures) {
+            creature.addCreatureDeadListener(instance.creatureDeadListener);
+        }
     }
     
     public static void createInstance() {

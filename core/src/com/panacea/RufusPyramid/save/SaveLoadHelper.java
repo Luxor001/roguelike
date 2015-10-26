@@ -496,10 +496,6 @@ public class SaveLoadHelper {
         kryo.register(AbstractList.class, 42);
         kryo.register(Diary.class, 44);
         kryo.register(LinkedHashMap.class, hashMapSerializer, 45);
-
-
-
-        this.input = new Input(Gdx.files.local(saveFile).read());
     }
 
     /**
