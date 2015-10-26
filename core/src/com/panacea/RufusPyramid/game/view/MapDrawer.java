@@ -159,6 +159,7 @@ public class MapDrawer extends ViewObject {
         TextureRegion textRegion = null;
         Texture text=null;
         switch(tile.getType()){
+            case MapBorder:
             case Solid:
                 textRegion = walls[Utilities.randInt(0,walls.length-1,(int) System.nanoTime())];
                 break;

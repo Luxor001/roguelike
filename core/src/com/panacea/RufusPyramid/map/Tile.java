@@ -31,7 +31,8 @@ public class Tile {
         Door,
         Destructible,
         Hidden,
-        NextLevel
+        NextLevel,
+        MapBorder
     }
 
     public GridPoint2 getPosition() {
@@ -61,5 +62,9 @@ public class Tile {
     }
     public void setDoorState(boolean value){ //FIXME: non è un gran chè, forse è meglio astrarre la porta come "object" della mappa?
         isOpen=value;
+    }
+
+    public void setType(TileType type){
+        this.type = type;
     }
 }

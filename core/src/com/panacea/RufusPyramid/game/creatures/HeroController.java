@@ -100,6 +100,7 @@ public class HeroController {
 
     public void openDoor(Tile doorTile){
         doorTile.setDoorState(true);
+        GameModel.get().getCurrentMap().getPathGrid()[doorTile.getPosition().x][doorTile.getPosition().y].setWalkable(doorTile.getDoorState()); //FIXME: va bene, ma d'altro canto no. Bisogna rendere l'ai più intelligente, che si basi sul raggio visivo.
     }
 
     protected boolean isTileWalkable(Tile tileToCheck) {

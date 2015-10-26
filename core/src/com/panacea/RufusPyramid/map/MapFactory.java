@@ -61,10 +61,14 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
             for(int j=0; j < mapContainer.rLenght(); j++){
                 GridCell newCell = new GridCell(i,j);
                 Tile currTile = mapContainer.getTile(j,i);
-                if(currTile.getType() == Tile.TileType.Walkable || currTile.getType() == Tile.TileType.Door )
+                if(currTile.getType() == Tile.TileType.Walkable)
                     newCell.setWalkable(true);
-                else
-                    newCell.setWalkable(false);
+                else {
+                    if(currTile.getType() == Tile.TileType.Door && currTile.getDoorState() == true)
+                        newCell.setWalkable(true);
+                    else
+                        newCell.setWalkable(false);
+                }
                 grid[i][j] = newCell;
             }
         }
@@ -78,6 +82,10 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         for(int row=0; row < mapContainer.rLenght();row++)
             for(int column=0; column < mapContainer.cLenght();column++)
                 mapContainer.insertTile(new Tile(new GridPoint2(column,row), Tile.TileType.Solid));
+
+        ArrayList<BorderCord> mapborders = extractBordersCoords(new Rectangle(0, 0, mapContainer.cLenght(), mapContainer.rLenght()));
+        for(BorderCord borderTile: mapborders)
+            mapContainer.getTile(borderTile.getCoord()).setType(Tile.TileType.MapBorder);
 
 
         /*step 2, creazione di uno square iniziale, probabilmente da mettere sotto metodo*/
@@ -142,7 +150,7 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
                     for(int y=startPosition.y; y < (startPosition.y+room.height);y++){
                         if(x < 0 || x > mapContainer.cLenght() || y > mapContainer.rLenght())
                             throw new IndexOutOfBoundsException();
-                        if(mapContainer.getTile(y,x).getType() == Tile.TileType.Walkable)
+                        if(mapContainer.getTile(y,x).getType() == Tile.TileType.Walkable || mapContainer.getTile(y,x).getType() == Tile.TileType.MapBorder)
                             throw new UnsupportedOperationException();
                         else
                             newMap.insertTile(new Tile(new GridPoint2(x,y), Tile.TileType.Walkable), y,x); //insert new tiles of the new room

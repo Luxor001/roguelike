@@ -266,7 +266,6 @@ public class UIDrawer extends ViewObject {
                 resumeButton.setVisible(GameController.gameInUI);
                 postButton.setVisible(GameController.gameInUI);
                 exitButton.setVisible(GameController.gameInUI);
-
                 return true;
             }
         });
@@ -410,6 +409,7 @@ public class UIDrawer extends ViewObject {
 
                             GameModel.get().disposeAll();
                         }
+                        GameController.gameInUI = false;
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
                     }
                 }, 0.5f        //    delay per fare vedere la selezione utente..
