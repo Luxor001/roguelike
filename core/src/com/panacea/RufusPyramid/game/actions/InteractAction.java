@@ -18,9 +18,7 @@ import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
 import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
-import com.panacea.RufusPyramid.game.view.SoundsProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +28,6 @@ public class InteractAction implements IAction {
 
     private Item itemToInteract;
     private ICreature creature;
-    private Sound goldPickSound;
 
     public InteractAction(Item itemToInteract, ICreature creature){
         this.itemToInteract = itemToInteract;
@@ -69,7 +66,7 @@ public class InteractAction implements IAction {
             items.remove(convItem);         
             ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
             if(result.hasSuccess()){
-                if (convItem instanceof MiscItem) {
+                if (convItem instanceof MiscItem || convItem instanceof Wearable || convItem instanceof Weapon) {
                     //TODO anche se è una Weapon o un Wearable dovrebbe essere aggiunto all'inventario..?
                     hero.getEquipment().addItemToStorage(convItem);
                 } else {
@@ -86,9 +83,6 @@ public class InteractAction implements IAction {
                 int goldAmount = convItem.getGoldAmount();
                 hero.addGold(goldAmount);
                 GameDrawer.get().getCreaturesDrawer().displayInfo(hero.getPosition().getPosition(), "+" + goldAmount, Color.YELLOW);
-//                int randSound = Utilities.randInt(0, SoundsProvider.Sounds.GOLD_PICKUP.getValue() - 1);
-//                goldPickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.GOLD_PICKUP)[randSound];
-//                goldPickSound.play(1f);
                 MusicPlayer.playSound(MusicPlayer.SoundType.GOLD_PICK, this.creature.getCreatureType(), this.creature.getID());
             }        
             items.remove(convItem);

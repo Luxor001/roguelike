@@ -7,9 +7,14 @@ import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
+import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.InteractAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
+import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
+import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
+import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.Tile;
 
@@ -68,16 +73,17 @@ public class HeroController {
 
         //Altrimenti semplicemente mi sposto lì
 
-        if(nextPos.getType() == Tile.TileType.Walkable)
+        if (nextPos.getType() == Tile.TileType.Walkable)
            this.moveOneStep(direction);
 
-        if(nextPos.getType() == Tile.TileType.Door)
-            if(!nextPos.getDoorState())
+        if (nextPos.getType() == Tile.TileType.Door) {
+            if (!nextPos.getDoorState())
                 this.openDoor(nextPos);
             else
                 this.moveOneStep(direction);
-
         }
+
+    }
 
     public void attack(ICreature attacked) {
         AttackAction action = new AttackAction(this.hero, attacked);
@@ -103,10 +109,18 @@ public class HeroController {
         GameModel.get().getCurrentMap().getPathGrid()[doorTile.getPosition().x][doorTile.getPosition().y].setWalkable(doorTile.getDoorState()); //FIXME: va bene, ma d'altro canto no. Bisogna rendere l'ai più intelligente, che si basi sul raggio visivo.
     }
 
-    protected boolean isTileWalkable(Tile tileToCheck) {
-        //TODO
-        //return tileToCheck.isWalkable();
-        return true;
+    public void use(UsableItem item) {
+        IAction action = null;
+        if (item instanceof MiscItem) {
+            Gdx.app.log(HeroController.class.toString(), "MiscItem: " + item.getItemType());
+            //TODO crea l'action useItemAction
+//            action = ;
+        } else if (item instanceof Weapon || item instanceof Wearable) {
+            Gdx.app.log(HeroController.class.toString(), "Weapon or Wearable: " + item.getItemType());
+            //TODO crea l'action equipItemAction
+//            action = ;
+        }
+//        this.hero.fireActionChosenEvent(action);
     }
 
 

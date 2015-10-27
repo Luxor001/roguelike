@@ -16,20 +16,25 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.panacea.RufusPyramid.game.GameController;
+import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.items.IItem;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.view.GameCamera;
@@ -37,10 +42,12 @@ import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.ItemsDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.ViewObject;
+import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +79,7 @@ public class UIDrawer extends ViewObject {
     private Image background;
     private Image attackBackground;
     private Image lifeStats;
-    private Image inventory;
+    private Stack inventory;
     private Table itemsTable;
 
 
@@ -276,20 +283,23 @@ public class UIDrawer extends ViewObject {
             }
         });
 
+        inventory = new Stack();
+
         imageTexture = new Texture(Gdx.files.internal("data/ui/inventory.png"));
-        inventory = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
-        inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
-        inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-        inventory.setVisible(false);
+        Image inventoryBackground = new Image(imageTexture);
+        inventoryBackground.setFillParent(true);
 
         itemsTable = new Table();
-        itemsTable.setVisible(true);
-//        itemsTable.padLeft(13);
-//        itemsTable.padTop(76);
-        itemsTable.setSize(imageTexture.getWidth(), imageTexture.getHeight());
-        itemsTable.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
-        itemsTable.debug();
+        itemsTable.setFillParent(true);
+        itemsTable.align(Align.topLeft);
+        itemsTable.padTop(76);
+        itemsTable.padLeft(13);
 
+        inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
+        inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
+        inventory.add(inventoryBackground);
+        inventory.add(itemsTable);
+        inventory.setVisible(false);
 
         Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
         options = new com.badlogic.gdx.scenes.scene2d.ui.Image(optionsTexture);
@@ -446,7 +456,7 @@ public class UIDrawer extends ViewObject {
         stage.addActor(exitButton);
         stage.addActor(lifeStats);
         stage.addActor(inventory);
-        stage.addActor(itemsTable);
+//        stage.addActor(itemsTable);
         stage.addActor(healthBar);
         stage.addActor(manaBar);
         stage.addActor(attackBackground);
@@ -470,8 +480,20 @@ public class UIDrawer extends ViewObject {
 
         if (itemsTable.getCells().size != GameModel.get().getHero().getEquipment().getStorage().size()) {
             itemsTable.clearChildren();
-            for (UsableItem item : GameModel.get().getHero().getEquipment().getStorage()) {
-                itemsTable.add(new Image(GameDrawer.get().getItemsDrawer().getTexture(item))).row();
+            int i = 0;
+            for (final UsableItem item : GameModel.get().getHero().getEquipment().getStorage()) {
+                Image itemImage = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+                itemImage.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        super.clicked(event, x, y);
+                        InputManager.get().getHeroProcessor().useItem(item);
+                    }
+                });
+                itemsTable.add(itemImage).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+                i++;
+                if (i % 6 == 0)
+                    itemsTable.row();
             }
         }
 

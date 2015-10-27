@@ -9,6 +9,7 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
+import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 
 public class HeroInputManager extends InputAdapter {
     //TODO estendere GestureDetector?
@@ -31,7 +32,7 @@ public class HeroInputManager extends InputAdapter {
         if (isPaused) return false;
         if (hasBeenDragged(this.touchDownPosition, new Vector2(screenX, screenY))) return false;
 
-       GridPoint2 inputCoords = new GridPoint2(screenX,screenY);
+        GridPoint2 inputCoords = new GridPoint2(screenX,screenY);
         GridPoint2 oldHeroPos= GameModel.get().getHero().getPosition().getPosition();
         Utilities.Directions inputDirections = getInputDirections(inputCoords);
         Utilities.Directions slackDirections = getSlackPredominance(inputCoords);
@@ -162,5 +163,9 @@ public class HeroInputManager extends InputAdapter {
                 return false;
         }
         return true && super.keyDown(keycode);
+    }
+
+    public void useItem(UsableItem item) {
+        this.hero.use(item);
     }
 }

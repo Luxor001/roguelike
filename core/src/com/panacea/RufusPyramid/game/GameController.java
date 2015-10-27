@@ -56,9 +56,6 @@ public class GameController {
         GameController.gameInPlay = true;
         GameController.resetAll();
 
-//        GameModel.createInstance(); //temporary
-
-
 //        if(GameModel.get() != null){
             SaveLoadHelper sl = SaveLoadHelper.getIstance();
             Gdx.app.log(GameController.class.toString(), "Inizio caricamento");
@@ -68,14 +65,6 @@ public class GameController {
             sl.stopLoad();
 //           model.addAllAgents(GameModel.get().getCreatures());
             Gdx.app.log(GameController.class.toString(), "Caricamento completato correttamente");
-//        }
-//        if(GameModel.get() != null){
-//            SaveLoadHelper sl = new SaveLoadHelper();
-//            Gdx.app.log(GameControl ler.class.toString(), "Inizio salvataggio");
-//            sl.startSave();
-//            sl.saveObject(gm);
-//            sl.stopSave();
-//            Gdx.app.log(GameController.class.toString(), "Salvataggio completato correttamente");
 //        }
     }
 
