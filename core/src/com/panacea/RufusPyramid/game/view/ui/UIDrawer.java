@@ -284,9 +284,11 @@ public class UIDrawer extends ViewObject {
 
         itemsTable = new Table();
         itemsTable.setVisible(true);
-        itemsTable.padLeft(13);
-        itemsTable.padTop(76);
+//        itemsTable.padLeft(13);
+//        itemsTable.padTop(76);
+        itemsTable.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         itemsTable.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
+        itemsTable.debug();
 
 
         Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
@@ -469,7 +471,7 @@ public class UIDrawer extends ViewObject {
         if (itemsTable.getCells().size != GameModel.get().getHero().getEquipment().getStorage().size()) {
             itemsTable.clearChildren();
             for (UsableItem item : GameModel.get().getHero().getEquipment().getStorage()) {
-                itemsTable.add(new Image(GameDrawer.get().getItemsDrawer().getTexture(item)));
+                itemsTable.add(new Image(GameDrawer.get().getItemsDrawer().getTexture(item))).row();
             }
         }
 
