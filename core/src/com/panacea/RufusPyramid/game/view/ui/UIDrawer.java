@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -29,7 +30,11 @@ import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
+import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.view.GameCamera;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.ItemsDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
@@ -64,10 +69,11 @@ public class UIDrawer extends ViewObject {
     private ImageButton inventoryButton;
     private ImageButton optionsButton;
     private ImageButton attackButton;
-    private com.badlogic.gdx.scenes.scene2d.ui.Image background;
-    private com.badlogic.gdx.scenes.scene2d.ui.Image attackBackground;
-    private com.badlogic.gdx.scenes.scene2d.ui.Image lifeStats;
-    private com.badlogic.gdx.scenes.scene2d.ui.Image inventory;
+    private Image background;
+    private Image attackBackground;
+    private Image lifeStats;
+    private Image inventory;
+    private Table itemsTable;
 
 
     private com.badlogic.gdx.scenes.scene2d.ui.Image options;
@@ -276,6 +282,12 @@ public class UIDrawer extends ViewObject {
         inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         inventory.setVisible(false);
 
+        itemsTable = new Table();
+        itemsTable.setVisible(true);
+        itemsTable.padLeft(13);
+        itemsTable.padTop(76);
+        itemsTable.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
+
 
         Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
         options = new com.badlogic.gdx.scenes.scene2d.ui.Image(optionsTexture);
@@ -432,6 +444,7 @@ public class UIDrawer extends ViewObject {
         stage.addActor(exitButton);
         stage.addActor(lifeStats);
         stage.addActor(inventory);
+        stage.addActor(itemsTable);
         stage.addActor(healthBar);
         stage.addActor(manaBar);
         stage.addActor(attackBackground);
@@ -452,6 +465,14 @@ public class UIDrawer extends ViewObject {
         for (int i = 0; i < diaryLastLines.size(); i++) {
             this.labels.get(i).setText(diaryLastLines.get(i));
         }
+
+        if (itemsTable.getCells().size != GameModel.get().getHero().getEquipment().getStorage().size()) {
+            itemsTable.clearChildren();
+            for (UsableItem item : GameModel.get().getHero().getEquipment().getStorage()) {
+                itemsTable.add(new Image(GameDrawer.get().getItemsDrawer().getTexture(item)));
+            }
+        }
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 

@@ -61,7 +61,7 @@ public abstract class AbstractCreature implements ICreature {
         this.baseStats = stats;
         this.setHPCurrent(this.baseStats.getMaximumHP());
         this.setPosition(null);
-        this.backpack = new com.panacea.RufusPyramid.game.creatures.Backpack();
+        this.backpack = new Backpack();
 
         this.changeListeners = new ArrayList<PositionChangeListener>();
         this.actionChosenListeners = new ArrayList<ActionChosenListener>(1);
@@ -176,7 +176,7 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     @Override
-    public com.panacea.RufusPyramid.game.creatures.Backpack getEquipment() {
+    public Backpack getEquipment() {
         return this.backpack;
     }
 

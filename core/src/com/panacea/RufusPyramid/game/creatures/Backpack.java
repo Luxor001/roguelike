@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.panacea.RufusPyramid.game.items.IItem;
+import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,12 +14,12 @@ import java.util.List;
 public class Backpack {
     private static int MAX_STORAGE_CAPACITY = 12;
 
-    private List<IItem> storage;
+    private List<UsableItem> storage;
     private LinkedHashMap<Backpack.EquippableType, IItem> equippedItems;
 
     public Backpack() {
         this.equippedItems = new LinkedHashMap<Backpack.EquippableType, IItem>(EquippableType.values().length);
-        this.storage = null;
+        this.storage = new ArrayList<UsableItem>(MAX_STORAGE_CAPACITY);
     }
 
     public IItem getEquippedItem(Backpack.EquippableType itemToRetrieve) {
@@ -29,10 +30,10 @@ public class Backpack {
      *  Add item to backpack storage.
      *  Returns true if the item has been added successfully, false otherwise.
      */
-    public boolean addItemToStorage(IItem newItem) {
+    public boolean addItemToStorage(UsableItem newItem) {
         if (this.storage == null) {
             //Lazy initialization of storage arraylist (most creatures will not use this)
-            this.storage = new ArrayList<IItem>(MAX_STORAGE_CAPACITY);
+            this.storage = new ArrayList<UsableItem>(MAX_STORAGE_CAPACITY);
         }
         if (this.storage.size() == MAX_STORAGE_CAPACITY) {
             //Storage full
@@ -49,6 +50,10 @@ public class Backpack {
      */
     public IItem setEquipItem(EquippableType position, IItem newItem) {
         return this.equippedItems.put(position, newItem);
+    }
+
+    public List<UsableItem> getStorage() {
+        return this.storage;
     }
 
 

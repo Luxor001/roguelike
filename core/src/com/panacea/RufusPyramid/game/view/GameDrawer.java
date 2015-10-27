@@ -140,4 +140,8 @@ public class GameDrawer extends ViewObject {
     }
 
     public UIDrawer getUIDrawer(){ return this.uiDrawer;}
+
+    public ItemsDrawer getItemsDrawer() {
+        return this.itemsDrawer;
+    }
 }

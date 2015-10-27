@@ -12,7 +12,10 @@ import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.items.ChestItem;
 import com.panacea.RufusPyramid.game.items.GoldItem;
 import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
+import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
+import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
@@ -66,7 +69,12 @@ public class InteractAction implements IAction {
             items.remove(convItem);         
             ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
             if(result.hasSuccess()){
-                hero.addEffects(((UsableItem) itemToInteract).getEffects());
+                if (convItem instanceof MiscItem) {
+                    //TODO anche se è una Weapon o un Wearable dovrebbe essere aggiunto all'inventario..?
+                    hero.getEquipment().addItemToStorage(convItem);
+                } else {
+                    hero.addEffects(((UsableItem) itemToInteract).getEffects());
+                }
 
                 diario.addLine("Hai raccolto " + convItem.getItemName() + "!");
             }

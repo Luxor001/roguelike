@@ -13,7 +13,7 @@ import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
 /**
  * Created by Lux on 13/09/2015.
  */
-public abstract class Item {
+public abstract class Item implements IItem {
     private static int ITEMS_TYPES = 4; //1 = gold, 2 = UsableItem, 3 = Weapon, 4 = Wearable
 
     private GridPoint2 position; //refers to a Relative position, not absolute!
