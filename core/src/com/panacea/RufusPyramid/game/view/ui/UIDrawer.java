@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,9 +34,11 @@ import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
+import com.panacea.RufusPyramid.game.creatures.Backpack;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.items.IItem;
 import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
@@ -89,7 +92,9 @@ public class UIDrawer extends ViewObject {
     private ImageButton exitButton;
     private transient HealthBar healthBar;
     private transient HealthBar manaBar;
-//    private Sound inventoryOpenSound;
+    private int itemsRendered;
+
+    //    private Sound inventoryOpenSound;
 //    private Sound inventoryCloseSound;
 //    private Sound pickSound;
     public UIDrawer() {
@@ -294,6 +299,7 @@ public class UIDrawer extends ViewObject {
         itemsTable.align(Align.topLeft);
         itemsTable.padTop(76);
         itemsTable.padLeft(13);
+        itemsTable.debug();
 
         inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
         inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
@@ -478,16 +484,26 @@ public class UIDrawer extends ViewObject {
             this.labels.get(i).setText(diaryLastLines.get(i));
         }
 
-        if (itemsTable.getCells().size != GameModel.get().getHero().getEquipment().getStorage().size()) {
+        int itemsInStorage = GameModel.get().getHero().getEquipment().getStorage().size();
+        if (this.itemsRendered != itemsInStorage) {
+            this.itemsRendered = itemsInStorage;
             itemsTable.clearChildren();
             int i = 0;
-            for (final UsableItem item : GameModel.get().getHero().getEquipment().getStorage()) {
+
+            //TODO migliora la parte di disegno, dai!
+            //Disegno gli oggetti in inventario
+            Backpack backpack = GameModel.get().getHero().getEquipment();
+            for (final UsableItem item : backpack.getStorage()) {
                 Image itemImage = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
                 itemImage.addListener(new ClickListener(){
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         super.clicked(event, x, y);
-                        InputManager.get().getHeroProcessor().useItem(item);
+                        if (item instanceof Equippable) {
+                            InputManager.get().getHeroProcessor().equipItem((Equippable)item);
+                        } else {
+                            InputManager.get().getHeroProcessor().useItem(item);
+                        }
                     }
                 });
                 itemsTable.add(itemImage).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
@@ -495,6 +511,66 @@ public class UIDrawer extends ViewObject {
                 if (i % 6 == 0)
                     itemsTable.row();
             }
+
+            //Riempio il resto con degli actor vuoti
+            for (; i < backpack.getMaxStorageCapacity();) {
+                itemsTable.add(new Actor()).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+                i++;
+                if (i % 6 == 0)
+                    itemsTable.row();
+            }
+
+            //Disegno gli oggetti equipaggiati
+            Equippable item;
+            Actor itemActor;
+            item = backpack.getEquippedItem(Backpack.EquippableType.HEAD);
+            if (item == null) {
+                itemActor = new Actor();
+            } else {
+                itemActor = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+            }
+            itemsTable.add(itemActor).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+
+            item = backpack.getEquippedItem(Backpack.EquippableType.LEFT_HAND);
+            if (item == null) {
+                itemActor = new Actor();
+            } else {
+                itemActor = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+            }
+            itemsTable.add(itemActor).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+
+            item = backpack.getEquippedItem(Backpack.EquippableType.RIGHT_HAND);
+            if (item == null) {
+                itemActor = new Actor();
+            } else {
+                itemActor = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+            }
+            itemsTable.add(itemActor).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+
+            item = backpack.getEquippedItem(Backpack.EquippableType.GAUNTLETS);
+            if (item == null) {
+                itemActor = new Actor();
+            } else {
+                itemActor = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+            }
+            itemsTable.add(itemActor).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+
+            item = backpack.getEquippedItem(Backpack.EquippableType.CHEST);
+            if (item == null) {
+                itemActor = new Actor();
+            } else {
+                itemActor = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+            }
+            itemsTable.add(itemActor).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+
+            item = backpack.getEquippedItem(Backpack.EquippableType.FEET);
+            if (item == null) {
+                itemActor = new Actor();
+            } else {
+                itemActor = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+            }
+            itemsTable.add(itemActor).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+
         }
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

@@ -9,6 +9,7 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
+import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 
 public class HeroInputManager extends InputAdapter {
@@ -20,59 +21,24 @@ public class HeroInputManager extends InputAdapter {
     private transient HeroController hero;
 
     private boolean isPaused = false;
-
-    private Vector2 touchDownPosition;
+    private boolean isTouchPressed = false;
+    private GridPoint2 touchDownPosition;
 
     public HeroInputManager(HeroController hero) {
         this.hero = hero;
     }
 
     @Override
-    public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown (int screenX, int screenY, int pointer, int button) {
+        this.isTouchPressed = true;
+        this.touchDownPosition = new GridPoint2(screenX, screenY);
         if (isPaused) return false;
-        if (hasBeenDragged(this.touchDownPosition, new Vector2(screenX, screenY))) return false;
 
-        GridPoint2 inputCoords = new GridPoint2(screenX,screenY);
-        GridPoint2 oldHeroPos= GameModel.get().getHero().getPosition().getPosition();
-        Utilities.Directions inputDirections = getInputDirections(inputCoords);
-        Utilities.Directions slackDirections = getSlackPredominance(inputCoords);
-
-        switch(inputDirections){
-            case NORTH_EAST:
-                if(slackDirections == Utilities.Directions.HORIZONTAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.EAST);
-                else if(slackDirections == Utilities.Directions.VERTICAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
-                break;
-
-            case SOUTH_EAST:
-                if(slackDirections == Utilities.Directions.HORIZONTAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.EAST);
-                else if(slackDirections == Utilities.Directions.VERTICAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
-                break;
-
-            case SOUTH_WEST:
-                if(slackDirections == Utilities.Directions.HORIZONTAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.WEST);
-                else if(slackDirections == Utilities.Directions.VERTICAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
-                break;
-
-            case NORTH_WEST:
-                if(slackDirections == Utilities.Directions.HORIZONTAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.WEST);
-                else if(slackDirections == Utilities.Directions.VERTICAL)
-                    this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
-                break;
-        }
-
-
-
-        return true;
+        return this.actOnTouch(this.touchDownPosition);
     }
+
     private Utilities.Directions getSlackPredominance(GridPoint2 clickCoords){ //this method tells which direction (vertical or horizontal) of the user input is more significant
-        int screenX=clickCoords.x;
+        int screenX = clickCoords.x;
         int screenY = clickCoords.y;
 
         int verticalSlack;
@@ -118,14 +84,22 @@ public class HeroInputManager extends InputAdapter {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        this.isTouchPressed = false;
+        this.touchDownPosition = null;
         if (isPaused) return false;
-        this.touchDownPosition = new Vector2(screenX, screenY);
+//        if (hasBeenDragged(this.touchDownPosition, new Vector2(screenX, screenY))) return false;
         return false;
     }
 
     public void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
+
+        if (!isPaused && this.isTouchPressed) {
+            //L'utente sta tenendo premuta la direzione
+            this.actOnTouch(this.touchDownPosition);
+        }
+//        Gdx.app.log(HeroInputManager.class.toString(), "Paused: " + isPaused);
     }
 
     private boolean hasBeenDragged(Vector2 touchDownPosition, Vector2 touchUpPosition) {
@@ -163,6 +137,47 @@ public class HeroInputManager extends InputAdapter {
                 return false;
         }
         return true && super.keyDown(keycode);
+    }
+
+    private boolean actOnTouch(GridPoint2 inputCoords) {
+        Utilities.Directions inputDirections = getInputDirections(inputCoords);
+        Utilities.Directions slackDirections = getSlackPredominance(inputCoords);
+
+        switch(inputDirections){
+            case NORTH_EAST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.EAST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
+                break;
+
+            case SOUTH_EAST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.EAST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
+                break;
+
+            case SOUTH_WEST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.WEST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.SOUTH);
+                break;
+
+            case NORTH_WEST:
+                if(slackDirections == Utilities.Directions.HORIZONTAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.WEST);
+                else if(slackDirections == Utilities.Directions.VERTICAL)
+                    this.hero.chooseTheRightAction(Utilities.Directions.NORTH);
+                break;
+        }
+
+        return true;
+    }
+
+    public void equipItem(Equippable item) {
+        this.hero.equip(item);
     }
 
     public void useItem(UsableItem item) {

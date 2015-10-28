@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.XmlReader;
 import com.panacea.RufusPyramid.common.Utilities;
+import com.panacea.RufusPyramid.game.items.IItem;
 import com.panacea.RufusPyramid.game.items.Item;
 
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class ItemsDrawer extends ViewObject {
         batch.end();
     }
 
-    public TextureRegion getTexture(Item item) { //get the item Texture. if it's not in the cache, load it
+    public TextureRegion getTexture(IItem item) { //get the item Texture. if it's not in the cache, load it
         String key;
         key = getKey(item);
         try {
@@ -63,13 +64,13 @@ public class ItemsDrawer extends ViewObject {
         return textures.get(key);
     }
 
-    private String getKey(Item item){
+    private String getKey(IItem item){
         String type = item.getItemType().toString();
         String className = item.getClass().getSimpleName();
         return className+type;
     }
 
-    public TextureRegion loadTexture(Item item,String key){
+    public TextureRegion loadTexture(IItem item,String key){
         TextureRegion itemText=null;
         String type = item.getItemType().toString();
         try {

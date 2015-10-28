@@ -1,7 +1,5 @@
 package com.panacea.RufusPyramid.game;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
@@ -19,12 +17,8 @@ import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.HeroController;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
-import com.panacea.RufusPyramid.game.creatures.Stats;
-import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
-import com.panacea.RufusPyramid.game.view.input.InputManager;
-import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +41,7 @@ public class GameMaster{
      * Lista ordinata delle agent che prendono parte alla turnazione.
      */
     private transient final ArrayList<IAgent> agentsPlaying;    //FIXMEABSOLUTELY: togliere transient? Sembra andare
-    private int currentAgent;
+    private int currentAgentIndex;
     private boolean someoneIsPlaying;
 
     private HeroController heroController;
@@ -61,7 +55,7 @@ public class GameMaster{
         this.commonActionPerformedListener = getActionChosenListener();
         this.removeFromTurnWhenDeadListener = getDeadListener();
         this.someoneIsPlaying = false;
-        this.currentAgent = -1;
+        this.currentAgentIndex = -1;
 
         this.init();
     }
@@ -120,7 +114,7 @@ public class GameMaster{
 
 
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
-            //Al primo avvio this.currentAgent == -1, viene inizializzata dalla prima chiamata a turnToNextAgent
+            //Al primo avvio this.currentAgentIndex == -1, viene inizializzata dalla prima chiamata a turnToNextAgent
 
             IAgent agentOnTurn;
             do {
@@ -128,11 +122,10 @@ public class GameMaster{
                 agentOnTurn = turnToNextAgent();
             } while (agentOnTurn.getEnergy() < MIN_ENERGY_TO_ACT);
 
-
+            agentsPlaying.get(currentAgentIndex).chooseNextAction(lastResult);
             if (agentOnTurn instanceof DefaultHero) {
                 this.heroInput.setPaused(false);
             }
-            agentsPlaying.get(currentAgent).chooseNextAction(lastResult);
         }
     }
 
@@ -160,8 +153,8 @@ public class GameMaster{
     private IAgent turnToNextAgent() {
         this.lastResult = null;
         //Mi sposto alla creatura successiva, in ordine
-        this.currentAgent = (this.currentAgent+1) % this.agentsPlaying.size();
-        IAgent agentOnTurn = agentsPlaying.get(currentAgent);
+        this.currentAgentIndex = (this.currentAgentIndex +1) % this.agentsPlaying.size();
+        IAgent agentOnTurn = agentsPlaying.get(currentAgentIndex);
 
         //Controllo che la nuova creatura dei turno non dovrebbe essere già morta (e quindi rimmossa dalla turnazione)
         if (agentOnTurn instanceof ICreature && ((ICreature)agentOnTurn).getHPCurrent() <= 0) {
@@ -238,7 +231,7 @@ public class GameMaster{
 
     public void disposeGame() {
         //TODO
-//        this.currentAgent = -100;
+//        this.currentAgentIndex = -100;
         this.agentsPlaying.clear();
     }
 
@@ -253,12 +246,12 @@ public class GameMaster{
         public void performed(ActionChosenEvent event, IAgent source) {
             /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
             GameMaster gm = GameController.getGm();
-            if (!source.equals(gm.agentsPlaying.get(gm.currentAgent))
+            if (!source.equals(gm.agentsPlaying.get(gm.currentAgentIndex))
                     || (source instanceof ICreature && ((ICreature)source).getHPCurrent() <= 0)) {
                 Gdx.app.error(
                         this.getClass().getName(),
                         "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
-                                "CurrentAgentIndex: " + gm.currentAgent + "\n" +
+                                "CurrentAgentIndex: " + gm.currentAgentIndex + "\n" +
                                 "wtfAgentIndex: " + gm.agentsPlaying.indexOf(source) + "\n" +
                                 "wtfAgentToString: " + source.toString() + "\n"
                 );

@@ -7,10 +7,12 @@ import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
+import com.panacea.RufusPyramid.game.actions.EquipItemAction;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.InteractAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
@@ -112,12 +114,8 @@ public class HeroController {
     public void use(UsableItem item) {
         IAction action = null;
         if (item instanceof MiscItem) {
-            Gdx.app.log(HeroController.class.toString(), "MiscItem: " + item.getItemType());
+            Gdx.app.log(HeroController.class.toString(), "Using item: " + item.getItemType());
             //TODO crea l'action useItemAction
-//            action = ;
-        } else if (item instanceof Weapon || item instanceof Wearable) {
-            Gdx.app.log(HeroController.class.toString(), "Weapon or Wearable: " + item.getItemType());
-            //TODO crea l'action equipItemAction
 //            action = ;
         }
 //        this.hero.fireActionChosenEvent(action);
@@ -132,6 +130,13 @@ public class HeroController {
     private void endGame() {
         //TODO gameOver
         GameController.endGame();
+    }
+
+    public void equip(Equippable item) {
+        Gdx.app.log(HeroController.class.toString(), "Equipping item: " + item.getItemType());
+        IAction action = new EquipItemAction(this.hero, item);
+        //TODO crea l'action equipItemAction
+        this.hero.fireActionChosenEvent(action);
     }
 
     private static class EndGameOnCreatureDeathListener implements CreatureDeadListener {

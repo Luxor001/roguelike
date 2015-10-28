@@ -19,8 +19,8 @@ public abstract class UsableItem extends Item {
         this.itemName = itemName;
         this.effects = effects;
     }
-    public UsableItem(){
 
+    protected UsableItem(){
     }
 
     public UsableItem(IItemType type, Effect effect, String itemName){

@@ -1,5 +1,6 @@
 package com.panacea.RufusPyramid.game.actions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
@@ -63,17 +64,25 @@ public class InteractAction implements IAction {
         DefaultHero hero = GameModel.get().getHero();
         if (UsableItem.class.isAssignableFrom(itemToInteract.getClass())) {
             UsableItem convItem = (UsableItem)itemToInteract;
-            items.remove(convItem);         
             ActionResult result = new MoveAction(hero, Utilities.getDirectionFromCoords(hero.getPosition().getPosition(), convItem.getPosition())).perform();
             if(result.hasSuccess()){
+                String diaryText = "";
                 if (convItem instanceof MiscItem || convItem instanceof Wearable || convItem instanceof Weapon) {
                     //TODO anche se è una Weapon o un Wearable dovrebbe essere aggiunto all'inventario..?
-                    hero.getEquipment().addItemToStorage(convItem);
+                    boolean success = hero.getEquipment().addItemToStorage(convItem);
+                    if (success) {
+                        items.remove(convItem);
+                        diaryText = "Hai raccolto " + convItem.getItemName() + "!";
+                    } else {
+                        diaryText = "Non hai più spazio nell'inventario!";
+                    }
                 } else {
+                    Gdx.app.error(InteractAction.class.toString(), "Non so cosa fare con l'oggetto: " + convItem);
                     hero.addEffects(((UsableItem) itemToInteract).getEffects());
+                    items.remove(convItem);
                 }
 
-                diario.addLine("Hai raccolto " + convItem.getItemName() + "!");
+                diario.addLine(diaryText);
             }
         }
         if(itemToInteract instanceof GoldItem){
