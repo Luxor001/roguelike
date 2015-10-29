@@ -20,14 +20,14 @@ public class EquipItemAction implements IAction {
 
     @Override
     public ActionResult perform() {
-        if (creature.getEquipment().getStorage().contains(itemToEquip)) {
+//        if (creature.getEquipment().getStorage().contains(itemToEquip) || equipaggiato        ) {
             Equippable itemThatWasEquipped = creature.getEquipment().setEquipItem(itemToEquip);
             creature.getEquipment().getStorage().remove(itemToEquip);
             if (itemThatWasEquipped != null) {
                 //FIXME c'è qualcosa che non va! Unchecked cast, anche se per ora funziona sempre...
                 creature.getEquipment().addItemToStorage((UsableItem)itemThatWasEquipped);
             }
-        }
+//        }
         return new ActionResult(true);
     }
 

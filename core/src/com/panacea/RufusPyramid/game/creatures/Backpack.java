@@ -21,10 +21,12 @@ public class Backpack {
 
     private List<UsableItem> storage;
     private LinkedHashMap<Backpack.EquippableType, Equippable> equippedItems;
+    private List<EquippedItemListener> equippedItemListeners;
 
     public Backpack() {
         this.equippedItems = new LinkedHashMap<Backpack.EquippableType, Equippable>(EquippableType.values().length);
         this.storage = new ArrayList<UsableItem>(MAX_STORAGE_CAPACITY);
+        this.equippedItemListeners = new ArrayList<EquippedItemListener>();
 //        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
         this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
         this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
@@ -79,8 +81,16 @@ public class Backpack {
      * Put an item in an equippable position.
      * Returns old equipped Item, if there is, null otherwise.
      */
-    public IItem setEquipItem(EquippableType position, Equippable newItem) {
-        return this.equippedItems.put(position, newItem);
+    public Equippable setEquipItem(EquippableType position, Equippable newItem) {
+        List<Equippable> oldItems = new ArrayList<Equippable>();
+        if (newItem != null && newItem.equals(this.equippedItems.get(position))) {
+            newItem = null;
+        }
+        Equippable oldItem = this.equippedItems.put(position, newItem);
+        oldItems.add(oldItem);
+        EquippedItemEvent event = new EquippedItemEvent(newItem, oldItems, position);
+        fireEquippedItemEvent(event);
+        return oldItem;
     }
 
     /**
@@ -112,7 +122,7 @@ public class Backpack {
         }
 
         if (position != null) {
-            return this.equippedItems.put(position, newItem);
+            return this.setEquipItem(position, newItem);
         } else {
             return null;
         }
@@ -136,5 +146,15 @@ public class Backpack {
 //        LEFT_RING,
 //        RIGHT_RING,
         FEET
+    }
+
+    public void addEquippedItemListener(EquippedItemListener listener) {
+        this.equippedItemListeners.add(listener);
+    }
+
+    private void fireEquippedItemEvent(EquippedItemEvent event) {
+        for (EquippedItemListener listener : this.equippedItemListeners) {
+            listener.equippedItem(event, this);
+        }
     }
 }
