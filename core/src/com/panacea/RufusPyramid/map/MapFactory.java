@@ -34,12 +34,12 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
     private List<Rectangle> rooms;
     public MapFactory(){}
 
-    public Map generateMap(int seed){
+    public Map generateMap(int seed, int level){
         rooms=new ArrayList<Rectangle>();
         this.seed=seed;
         random=new Random(seed);
         int randType = Utilities.randInt(0,Map.MapType.values().length-1, seed);
-        Map newMap=new Map(1, Map.MapType.DUNGEON_COBBLE);
+        Map newMap=new Map(level, Map.MapType.DUNGEON_COBBLE);
         mapContainer =new MapContainer(MAX_MAP_HEIGHT,MAX_MAP_WIDTH);
         initializeMap();
 
