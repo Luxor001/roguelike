@@ -6,6 +6,7 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.actions.ActiveItemAction;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.EquipItemAction;
 import com.panacea.RufusPyramid.game.actions.IAction;
@@ -115,10 +116,9 @@ public class HeroController {
         IAction action = null;
         if (item instanceof MiscItem) {
             Gdx.app.log(HeroController.class.toString(), "Using item: " + item.getItemType());
-            //TODO crea l'action useItemAction
-//            action = ;
+            action = new ActiveItemAction(item, this.hero);
         }
-//        this.hero.fireActionChosenEvent(action);
+        this.hero.fireActionChosenEvent(action);
     }
 
 
@@ -135,7 +135,6 @@ public class HeroController {
     public void equip(Equippable item) {
         Gdx.app.log(HeroController.class.toString(), "Equipping item: " + item.getItemType());
         IAction action = new EquipItemAction(this.hero, item);
-        //TODO crea l'action equipItemAction
         this.hero.fireActionChosenEvent(action);
     }
 

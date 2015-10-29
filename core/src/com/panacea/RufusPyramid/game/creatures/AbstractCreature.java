@@ -233,7 +233,7 @@ public abstract class AbstractCreature implements ICreature {
     }
     public void addEffects(List<Effect> effects){
         for (Effect currEffect: effects) {
-            this.effects.add(currEffect);
+            this.addEffect(currEffect);
         }
     }
 

@@ -33,6 +33,6 @@ public class EquipItemAction implements IAction {
 
     @Override
     public int getCost() {
-        return GameMaster.DEFAULT_ACTION_COST;
+        return 0;
     }
 }

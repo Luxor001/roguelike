@@ -1,9 +1,11 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.panacea.RufusPyramid.game.Effect.Effect;
+import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
 import com.panacea.RufusPyramid.game.items.IItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.IItemType;
+import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
 import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
@@ -30,6 +32,7 @@ public class Backpack {
 //        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
         this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
         this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
+        this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 100, 1), "Superpozione"));
 //        this.setEquipItem(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
 //        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
 //        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
