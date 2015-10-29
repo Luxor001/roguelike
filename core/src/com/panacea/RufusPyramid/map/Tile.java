@@ -32,7 +32,7 @@ public class Tile {
         Destructible,
         Hidden,
         NextLevel,
-        MapBorder
+        MapBorder,
     }
 
     public GridPoint2 getPosition() {

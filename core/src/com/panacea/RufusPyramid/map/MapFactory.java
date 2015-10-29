@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.common.Utilities.Directions;
 
+import org.w3c.dom.css.Rect;
 import org.xguzm.pathfinding.grid.GridCell;
 
 import java.util.ArrayList;
@@ -53,8 +54,16 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         int randY=Utilities.randInt((int)rooms.get(0).getY(), (int)(rooms.get(0).getY()+ rooms.get(0).height - 1),seed);
         spawnPoint = mapContainer.getTile(randY,randX);
 
+        if(rooms.size() > 1){
+            int randRoom=Utilities.randInt(1, rooms.size()-1); //primo parametro = 1 : esclusione della stanza originale, non posso mettere il nextlevel nella stessa stanza in cui si è generato l'eroe!
+            Rectangle room = rooms.get(randRoom);
+            Tile randomTile = this.mapContainer.getRandomTile(Tile.TileType.Walkable, room);
+            randomTile.setType(Tile.TileType.NextLevel);
+            newMap.setNextLevelPoint(randomTile);
+        }
         newMap.setMapContainer(mapContainer);
         newMap.setSpawnPoint(spawnPoint);
+        newMap.setNextLevelPoint(null);
 
         GridCell[][] grid = new GridCell[mapContainer.cLenght()][ mapContainer.rLenght()];
         for(int i=0; i < mapContainer.cLenght(); i++){
@@ -162,7 +171,7 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
                     for(int y=(int)(startPosition.y - room.height + 1); y <= startPosition.y;y++) {
                         if (x < 0 || x > mapContainer.cLenght() || y < 0)
                             throw new IndexOutOfBoundsException();
-                        if (mapContainer.getTile(y, x).getType() == Tile.TileType.Walkable)
+                        if (mapContainer.getTile(y, x).getType() == Tile.TileType.Walkable || mapContainer.getTile(y,x).getType() == Tile.TileType.MapBorder)
                             throw new UnsupportedOperationException();
                         else
                             newMap.insertTile(new Tile(new GridPoint2(x, y), Tile.TileType.Walkable), y,x); //insert new tiles of the new room
@@ -173,7 +182,7 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
                     for(int y=(int)(startPosition.y - (room.height/2)); y < (room.height/2)+startPosition.y;y++) {
                         if (x > mapContainer.cLenght() || y < 0 || y > mapContainer.rLenght())
                             throw new IndexOutOfBoundsException();
-                        if (mapContainer.getTile(y, x).getType() == Tile.TileType.Walkable)
+                        if (mapContainer.getTile(y, x).getType() == Tile.TileType.Walkable || mapContainer.getTile(y,x).getType() == Tile.TileType.MapBorder)
                             throw new UnsupportedOperationException();
                         else
                             newMap.insertTile(new Tile(new GridPoint2(x, y), Tile.TileType.Walkable), y,x); //insert new tiles of the new room
@@ -184,7 +193,7 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
                     for(int y=(int)(startPosition.y - (room.height/2)); y < (room.height/2)+startPosition.y;y++) {
                         if (x < 0 || y < 0 || y > mapContainer.rLenght())
                             throw new IndexOutOfBoundsException();
-                        if (mapContainer.getTile(y, x).getType() == Tile.TileType.Walkable)
+                        if (mapContainer.getTile(y, x).getType() == Tile.TileType.Walkable || mapContainer.getTile(y,x).getType() == Tile.TileType.MapBorder)
                             throw new UnsupportedOperationException();
                         else
                             newMap.insertTile(new Tile(new GridPoint2(x, y), Tile.TileType.Walkable), y,x); //insert new tiles of the new room

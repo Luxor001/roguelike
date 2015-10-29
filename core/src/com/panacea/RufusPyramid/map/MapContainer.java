@@ -1,6 +1,7 @@
 package com.panacea.RufusPyramid.map;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Rectangle;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.common.Utilities.Directions;
 import com.panacea.RufusPyramid.map.Tile.TileType;
@@ -91,6 +92,7 @@ public class MapContainer {
         return m;
     }
 
+
     public Tile getRandomTile(TileType type){
 
         if(getTilesNumber(type) != 0){ //TODO: non è efficiente, lo so, ma non abbiamo molto tempo! probabilmente è meglio fare un "getTilesbyType" ed ottenere tutte le tiles di un certo tipo, e poi randomizzare su quello
@@ -102,11 +104,31 @@ public class MapContainer {
                 if(getTile(randy,randx).getType() == type)
                     randomTile=getTile(randy,randx);
                 tries++;
-            }while(randomTile == null || tries < 1000);
+            }while(randomTile == null && tries < 1000);
             return randomTile;
         }
         else
             return null;
+    }
+
+    //0,0 of the room referers to north-west corner, sliding down
+    public Tile getRandomTile(TileType type, Rectangle room){
+        int x = (int)room.getX();
+        int y = (int)room.getY();
+        if(x+room.width > this.cLenght() || y+room.height > this.rLenght())
+            return null;
+
+        Tile randomTile = null;
+        int tries=0;
+        do {
+            int randx = Utilities.randInt(x,(int)(x+room.width));
+            int randy = Utilities.randInt(y,(int)(y+room.height));
+            if(getTile(randy,randx).getType() == type)
+                randomTile=getTile(randy,randx);
+            tries++;
+        }while(randomTile == null && tries < 1000);
+
+        return randomTile;
     }
 
     public void printMap(String fileName){
