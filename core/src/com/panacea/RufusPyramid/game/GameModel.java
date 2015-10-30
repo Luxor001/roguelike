@@ -1,6 +1,8 @@
 package com.panacea.RufusPyramid.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.StaticDataProvider;
@@ -18,6 +20,11 @@ import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
 import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.MapDrawer;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.game.view.screens.GameScreen;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
@@ -69,7 +76,7 @@ public class GameModel {
     /* Instance methods */
     private DefaultHero hero;
     private ArrayList<Map> maps;
-    private int currentMapIndex;
+    public int currentMapIndex;
     
     private RemoveOnDeathListener creatureDeadListener;
 
@@ -82,9 +89,8 @@ public class GameModel {
         this.items = new ArrayList<Item>();
 
         for(int i=0; i < 3; i++){
-            Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt(), 1);
+            Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt(), i);
             this.maps.add(newMap);
-            GridPoint2 spawnpoint=newMap.getSpawnPoint().getPosition();
         }
 
         this.hero = new DefaultHero("Rufus", 50);
@@ -156,8 +162,12 @@ public class GameModel {
         }
     }
     public void changeMap(){
-        if(currentMapIndex+1 < maps.size()){
-            currentMapIndex = 1;
+
+    //    DefaultHero hero = new DefaultHero();
+  //      Map prova = maps.get(1);
+       if(currentMapIndex+1 < maps.size()){
+         //   GameController.initializeGame();
+            currentMapIndex += 1;
             Iterator<ICreature> e = creatures.iterator();
             while (e.hasNext()) {
                 if(e.next().getCreatureType() != ICreature.CreatureType.HERO)
@@ -165,7 +175,17 @@ public class GameModel {
             }
             items.clear();
             initializeMap();
+            this.hero.setPosition(getCurrentMap().getSpawnPoint());
+            GameDrawer.reset();
+            GameDrawer.get().create();
+            GameController.gm = new GameMaster();
+
         }
+            //    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(false));
+        //this.hero = hero;
+    //    this.currentMapIndex = 1;
+      //  this.maps.set(1, prova);
+
     }
 
     public DefaultHero getHero() {

@@ -3,6 +3,7 @@ package com.panacea.RufusPyramid.game.actions;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameMaster;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.map.Tile;
@@ -76,7 +77,7 @@ public class MoveAction implements IAction {
 
     private static Tile getNextTile(Tile startingTile, Utilities.Directions direction) {
         GridPoint2 pos = Utilities.Directions.adjCoords(new GridPoint2(startingTile.getPosition()), direction);
-        return new Tile(pos, Tile.TileType.Solid);
+        return GameModel.get().getCurrentMap().getMapContainer().getTile(pos);
     }
 
 }

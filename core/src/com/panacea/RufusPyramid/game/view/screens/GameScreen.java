@@ -25,9 +25,9 @@ public class GameScreen implements Screen {
     }
 
     public void show() {
-        if (loadSavedGame) {
-            GameController.resumeGame();
-        } else {
+       if (loadSavedGame) {
+           GameController.resumeGame();
+       } else {
             GameController.initializeGame();
         }
         GameDrawer.reset();
