@@ -8,14 +8,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
  * Created by gio on 30/07/15.
  */
 public class SplashScreen implements Screen {
-    private Texture texture = new Texture(Gdx.files.internal("data/title.png"));
-    private Image splashImage = new Image(texture);
-    private Stage stage = new Stage();
+    private Stage stage;
+    private Skin skin;
+
+    public SplashScreen() {
+    }
 
     @Override
     public void render(float delta) {
@@ -23,7 +27,6 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
-
     }
 
     @Override
@@ -32,15 +35,14 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
-        stage.addActor(splashImage);
+        float fontScale = 1;
 
-        splashImage.addAction(Actions.sequence(Actions.alpha(0)
-                ,Actions.fadeIn(0.5f),Actions.delay(2),Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new SplashScreen());
-            }
-        })));
+        this.stage = new Stage();
+        this.skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        skin.getAtlas().getTextures().iterator().next().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        skin.getFont("default-font").getData().markupEnabled = true;
+        skin.getFont("default-font").getData().setScale(fontScale);
+        this.stage.addActor(new Label("Please wait...", skin));
     }
 
     @Override
@@ -58,7 +60,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
+        skin.dispose();
         stage.dispose();
     }
 

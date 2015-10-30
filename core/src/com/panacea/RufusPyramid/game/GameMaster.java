@@ -21,6 +21,7 @@ import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -182,16 +183,20 @@ public class GameMaster{
     }
 
     private void checkEffects(AbstractCreature creature){ //remove or updates temporary effects
-         for(Effect effect: creature.getEffects()){
-             if(effect instanceof TemporaryEffect){
-                 TemporaryEffect tempEffect = (TemporaryEffect)effect;
-                 if(tempEffect.getTurns() == 0){
-                     creature.getEffects().remove(effect);
-                 }
-                 else
-                    tempEffect.setTurns(tempEffect.getTurns()-1);
-             }
-         }
+        Iterator<Effect> it = creature.getEffects().iterator();
+        Effect effect;
+        while(it.hasNext()) {
+            effect = it.next();
+            if(effect instanceof TemporaryEffect){
+                TemporaryEffect tempEffect = (TemporaryEffect)effect;
+                if(tempEffect.getTurns() == 0){
+                    it.remove();
+                }
+                else {
+                    tempEffect.setTurns(tempEffect.getTurns() - 1);
+                }
+            }
+        }
     }
 
     public void checkEnemiesNearby(ICreature currCreature, DefaultHero hero){ //check if there is an enemy near hte player bounds, so we can active the quick attack button
