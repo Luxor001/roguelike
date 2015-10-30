@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
 import com.panacea.RufusPyramid.map.Map;
@@ -23,7 +24,7 @@ import de.tomgrill.gdxfacebook.core.SignInResult;
  */
 public class GameController {
 
-    private static GameMaster gm;
+    public static GameMaster gm;
     private static boolean gameInPlay;
     public static boolean gameInUI;
 
@@ -66,6 +67,14 @@ public class GameController {
 //           model.addAllAgents(GameModel.get().getCreatures());
             Gdx.app.log(GameController.class.toString(), "Caricamento completato correttamente");
 //        }
+    }
+
+    public static void changeLevel(int level){
+
+        GameModel.get().currentMapIndex = level;
+        GameModel.get().createInstance();
+        gm = new GameMaster();
+
     }
 
     private static void resetAll() {

@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class GameDrawer extends ViewObject {
     private static GameDrawer SINGLETON = new GameDrawer();
-    private final UIDrawer uiDrawer;
+    private transient final UIDrawer uiDrawer;
 
     private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
     private MapDrawer mapDrawer;
