@@ -15,6 +15,7 @@ public class Map {
     private int level;
     private MapContainer mapcontainer;
     private Tile spawnPosition;
+    private Tile nextLevelPosition;
     private MapType type;
     private List<Item> itemsInMap;
 
@@ -63,6 +64,12 @@ public class Map {
         return this.spawnPosition;
     }
 
+    public void setNextLevelPoint(Tile nextLevelposition){
+        this.nextLevelPosition = nextLevelposition;
+    }
+    public Tile getNextLevelPoint(){
+        return this.nextLevelPosition;
+    }
     public List<Item> getItems(){
         return itemsInMap;
     }

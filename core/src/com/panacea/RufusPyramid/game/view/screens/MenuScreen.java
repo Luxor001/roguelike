@@ -125,12 +125,12 @@ public class MenuScreen implements Screen {
 
         Animation animation = new Animation(0.05f, frames);
         AnimatedImage animImg = new AnimatedImage(animation);
-        animImg.setPosition(20, VIEWPORT_HEIGHT - 140);
+        animImg.setPosition(20, VIEWPORT_HEIGHT - 110);
         stage.addActor(animImg);
 
 //        Animation animation2 = new Animation(0.05f, frames);
         AnimatedImage animImg2 = new AnimatedImage(animation);
-        animImg2.setPosition(stage.getWidth() - 80, VIEWPORT_HEIGHT - 140);
+        animImg2.setPosition(stage.getWidth() - 80, VIEWPORT_HEIGHT - 110);
         stage.addActor(animImg2);
 
         //Pulsanti per attivare/disattivare il muto

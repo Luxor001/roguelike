@@ -86,6 +86,9 @@ public class HeroController {
                 this.moveOneStep(direction);
         }
 
+        if(nextPos.getType() == Tile.TileType.NextLevel){
+            GameModel.get().changeMap();
+        }
     }
 
     public void attack(ICreature attacked) {
