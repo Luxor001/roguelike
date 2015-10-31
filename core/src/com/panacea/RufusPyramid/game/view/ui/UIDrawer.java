@@ -6,17 +6,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -29,25 +28,23 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.panacea.RufusPyramid.game.GameController;
-import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.PassAction;
+import com.panacea.RufusPyramid.game.creatures.Backpack;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
-import com.panacea.RufusPyramid.game.items.IItem;
-import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.creatures.EquippedItemEvent;
+import com.panacea.RufusPyramid.game.creatures.EquippedItemListener;
+import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
-import com.panacea.RufusPyramid.game.view.ItemsDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.ViewObject;
-import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
-import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,37 +79,37 @@ public class UIDrawer extends ViewObject {
     private Stack inventory;
     private Table itemsTable;
 
-
     private com.badlogic.gdx.scenes.scene2d.ui.Image options;
     private ImageButton resumeButton;
     private ImageButton postButton;
     private ImageButton exitButton;
     private transient HealthBar healthBar;
     private transient HealthBar manaBar;
-//    private Sound inventoryOpenSound;
-//    private Sound inventoryCloseSound;
-//    private Sound pickSound;
+
+    private BitmapFont goldAmountText;
+    private boolean notificationTextVisible;
+    private BitmapFont notificationText;
+    private boolean itemsNeedUpdate;
+    private int storageItemsRendered = 0;
+
     public UIDrawer() {
         this.labels = new ArrayList<Label>(3);
     }
 
-    private BitmapFont goldAmountText;
-    private BitmapFont notificationText;
-    private  boolean notificationTextVisible;
     private int notificationTextWidth;
     @Override
     public void create() {
         super.create();
 
-        float w = (float)Gdx.graphics.getWidth();
-        float h = (float)Gdx.graphics.getHeight();
+//        float w = (float)Gdx.graphics.getWidth();
+//        float h = (float)Gdx.graphics.getHeight();
 
         batch = new SpriteBatch();
         renderer = new ShapeRenderer();
 //        OrthographicCamera camera = new OrthographicCamera();
 //        camera.setToOrtho(false, (w / h) * 350, 350);
 //        camera.update();
-        OrthographicCamera camera = new OrthographicCamera();
+//        OrthographicCamera camera = new OrthographicCamera();
 
 //
 //        SoundsProvider.get().loadSound(SoundsProvider.Sounds.INVENTORY);
@@ -143,8 +140,6 @@ public class UIDrawer extends ViewObject {
         table.add(this.labels.get(0)).minWidth(Gdx.graphics.getWidth() - 20).fill();
         table.pack();
 
-
-
         Texture imageTexture = new Texture(Gdx.files.internal("data/ui/quickback3.png"));
         background = new com.badlogic.gdx.scenes.scene2d.ui.Image(imageTexture);
         background.setPosition(maxX / 2 - 50, 0);
@@ -158,7 +153,6 @@ public class UIDrawer extends ViewObject {
         goldAmountText = new BitmapFont();
         goldAmountText.setColor(Color.YELLOW);
         goldAmountText.getData().setScale(Gdx.graphics.getHeight() / 640f);
-
 
         notificationText = new BitmapFont();
         notificationText.setColor(Color.WHITE);
@@ -212,13 +206,10 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 GameModel.get().getHero().fireActionChosenEvent(new PassAction(GameModel.get().getHero()));
-//                if (pickSound == null)
-//                    pickSound = SoundsProvider.get().getSound(SoundsProvider.Sounds.CLICK)[0];
                 MusicPlayer.playSound(MusicPlayer.SoundType.ITEM_PICK);
                 return true;
             }
         });
-
 
         currX +=imageTexture.getWidth()+5;
         imageTexture = new Texture(Gdx.files.internal("data/ui/spell2.png"));
@@ -272,7 +263,6 @@ public class UIDrawer extends ViewObject {
         optionsButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
                 GameController.gameInUI = !GameController.gameInUI;
                 InputManager.get().getHeroProcessor().setPaused(GameController.gameInUI);
                 options.setVisible(GameController.gameInUI);
@@ -294,12 +284,21 @@ public class UIDrawer extends ViewObject {
         itemsTable.align(Align.topLeft);
         itemsTable.padTop(76);
         itemsTable.padLeft(13);
+//        itemsTable.debug();
 
         inventory.setPosition((maxX / 2) - (imageTexture.getWidth() / 2), (maxY / 2) - (imageTexture.getHeight() / 2) + 200);
         inventory.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         inventory.add(inventoryBackground);
         inventory.add(itemsTable);
         inventory.setVisible(false);
+
+        this.itemsNeedUpdate = true;
+        GameModel.get().getHero().getEquipment().addEquippedItemListener(new EquippedItemListener() {
+            @Override
+            public void equippedItem(EquippedItemEvent event, Object source) {
+                UIDrawer.this.itemsNeedUpdate = true;
+            }
+        });
 
         Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
         options = new com.badlogic.gdx.scenes.scene2d.ui.Image(optionsTexture);
@@ -317,15 +316,16 @@ public class UIDrawer extends ViewObject {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Timer.schedule(new Timer.Task() {  //    delay per fare vedere la selezione utente..
-                                   @Override
-                                   public void run() {
-                                       GameController.gameInUI = false;
-                                       InputManager.get().getHeroProcessor().setPaused(false);
-                                       options.setVisible(false);
-                                       resumeButton.setVisible(false);
-                                       postButton.setVisible(false); exitButton.setVisible(false);
-                                   }
-                               }, 0.2f
+                       @Override
+                       public void run() {
+                           GameController.gameInUI = false;
+                           InputManager.get().getHeroProcessor().setPaused(false);
+                           options.setVisible(false);
+                           resumeButton.setVisible(false);
+                           postButton.setVisible(false);
+                           exitButton.setVisible(false);
+                       }
+                   }, 0.2f
                 );
                 return true;
             }
@@ -341,7 +341,6 @@ public class UIDrawer extends ViewObject {
         postButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
                 if (Gdx.app.getType() == Application.ApplicationType.Android) {
                     GDXFacebook facebook = GameController.facebook;
                     if (!facebook.isSignedIn()) {
@@ -477,22 +476,48 @@ public class UIDrawer extends ViewObject {
             this.labels.get(i).setText(diaryLastLines.get(i));
         }
 
-        if (itemsTable.getCells().size != GameModel.get().getHero().getEquipment().getStorage().size()) {
+        int storageSize = GameModel.get().getHero().getEquipment().getStorage().size();
+        if (storageSize != this.storageItemsRendered) {
+            this.storageItemsRendered = storageSize;
+            this.itemsNeedUpdate = true;
+        }
+
+        if (this.itemsNeedUpdate) {
+            this.itemsNeedUpdate = false;
             itemsTable.clearChildren();
             int i = 0;
-            for (final UsableItem item : GameModel.get().getHero().getEquipment().getStorage()) {
+
+            //Disegno gli oggetti in inventario
+            Backpack backpack = GameModel.get().getHero().getEquipment();
+            for (final UsableItem item : backpack.getStorage()) {
                 Image itemImage = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
-                itemImage.addListener(new ClickListener(){
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        super.clicked(event, x, y);
-                        InputManager.get().getHeroProcessor().useItem(item);
-                    }
-                });
+                itemImage.addListener(new ItemClickListener(item));
                 itemsTable.add(itemImage).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
                 i++;
                 if (i % 6 == 0)
                     itemsTable.row();
+            }
+
+            //Riempio il resto con degli actor vuoti
+            for (; i < backpack.getMaxStorageCapacity();) {
+                itemsTable.add(new Actor()).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
+                i++;
+                if (i % 6 == 0)
+                    itemsTable.row();
+            }
+
+            //Disegno gli oggetti equipaggiati
+            Equippable item;
+            Actor itemActor;
+            for (Backpack.EquippableType equipType : Backpack.EquippableType.values()) {
+                item = backpack.getEquippedItem(equipType);
+                if (item == null) {
+                    itemActor = new Actor();
+                } else {
+                    itemActor = new Image(GameDrawer.get().getItemsDrawer().getTexture(item));
+                    itemActor.addListener(new ItemClickListener((UsableItem)item));
+                }
+                itemsTable.add(itemActor).size(80,80).align(Align.topLeft).padBottom(10).padRight(8);
             }
         }
 
@@ -548,5 +573,22 @@ public class UIDrawer extends ViewObject {
     }
     public void setManaBarValue(float value){
         this.manaBar.setValue(value);
+    }
+
+    private class ItemClickListener extends ClickListener {
+        private final UsableItem item;
+
+        public ItemClickListener(UsableItem item) {
+            this.item = item;
+        }
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                super.clicked(event, x, y);
+                if (item instanceof Equippable) {
+                    InputManager.get().getHeroProcessor().equipItem((Equippable) item);
+                } else {
+                    InputManager.get().getHeroProcessor().useItem(item);
+                }
+            }
     }
 }

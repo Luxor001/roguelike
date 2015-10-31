@@ -6,11 +6,14 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameController;
 import com.panacea.RufusPyramid.game.GameMaster;
 import com.panacea.RufusPyramid.game.GameModel;
+import com.panacea.RufusPyramid.game.actions.ActiveItemAction;
 import com.panacea.RufusPyramid.game.actions.AttackAction;
+import com.panacea.RufusPyramid.game.actions.EquipItemAction;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.InteractAction;
 import com.panacea.RufusPyramid.game.actions.MoveAction;
 import com.panacea.RufusPyramid.game.items.Item;
+import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
@@ -83,6 +86,10 @@ public class HeroController {
                 this.moveOneStep(direction);
         }
 
+        if(nextPos.getType() == Tile.TileType.NextLevel){
+        //    GameController.changeLevel(GameModel.get().currentMapIndex+1);
+            GameModel.get().changeMap();
+        }
     }
 
     public void attack(ICreature attacked) {
@@ -112,15 +119,10 @@ public class HeroController {
     public void use(UsableItem item) {
         IAction action = null;
         if (item instanceof MiscItem) {
-            Gdx.app.log(HeroController.class.toString(), "MiscItem: " + item.getItemType());
-            //TODO crea l'action useItemAction
-//            action = ;
-        } else if (item instanceof Weapon || item instanceof Wearable) {
-            Gdx.app.log(HeroController.class.toString(), "Weapon or Wearable: " + item.getItemType());
-            //TODO crea l'action equipItemAction
-//            action = ;
+            Gdx.app.log(HeroController.class.toString(), "Using item: " + item.getItemType());
+            action = new ActiveItemAction(item, this.hero);
         }
-//        this.hero.fireActionChosenEvent(action);
+        this.hero.fireActionChosenEvent(action);
     }
 
 
@@ -132,6 +134,12 @@ public class HeroController {
     private void endGame() {
         //TODO gameOver
         GameController.endGame();
+    }
+
+    public void equip(Equippable item) {
+        Gdx.app.log(HeroController.class.toString(), "Equipping item: " + item.getItemType());
+        IAction action = new EquipItemAction(this.hero, item);
+        this.hero.fireActionChosenEvent(action);
     }
 
     private static class EndGameOnCreatureDeathListener implements CreatureDeadListener {

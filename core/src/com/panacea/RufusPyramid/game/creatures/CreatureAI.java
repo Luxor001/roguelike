@@ -50,6 +50,7 @@ public class CreatureAI {
     }
 
     public IAction chooseNextAction(){
+        State oldState = currentState;
         GridPoint2 absoluteDistance = Utilities.absoluteDistance(creature.getPosition().getPosition(),hero.getPosition().getPosition());
 
         IAction chosenAction = new PassAction(creature);
@@ -58,7 +59,7 @@ public class CreatureAI {
             if (path != null) { //se il giocatore è raggiungibile..
                 int distance = path.size();
                 if (path.size() < creature.sigthLength) {
-                    if (currentState == State.FOLLOWING || currentState == State.STANDING || currentState == State.ROAMING || currentState == State.ATTACKING) {
+                    if (oldState == State.FOLLOWING || oldState == State.STANDING || oldState == State.ROAMING || oldState == State.ATTACKING) {
                         if (distance <= 1) {
                             currentState = State.ATTACKING;
                             chosenAction = new AttackAction(creature, hero);
@@ -69,7 +70,12 @@ public class CreatureAI {
                         }
                     }
                 } else {
-                    //currentState = State.LOSTSIGHT;
+                     if(oldState == State.FOLLOWING) {//se il giocatore era inseguito..
+                         currentState = State.LOSTSIGHT; //ricerca il giocatore non sapendo dove sia..
+                     }
+                    if(oldState == State.ROAMING){
+                        //chose random position to "roam"..
+                    }
                 }
             }
         }
@@ -89,8 +95,10 @@ public class CreatureAI {
             NavigationGrid<GridCell> grid = new  NavigationGrid<GridCell>(gridcells, true);
             pathToEnd = finder.findPath(startingCreaturePos.x, startingCreaturePos.y, arrivalCreaturePos.x, arrivalCreaturePos.y, grid);
 
-             if (pathToEnd == null)
-                System.out.println("FALLITO!");
+             if (pathToEnd == null){
+                 reinitializeNeighbors(grid.getCell(arrivalCreaturePos.x,arrivalCreaturePos.y),grid);
+                 System.out.println("FALLITO!");
+             }
             else {
                  GridCell currCell;
                  for (int i = 0; i < pathToEnd.size(); i++) { /*rinizializzazione della grid! riporto tutto allo stato originario, sennò stà libreria mi scasina tutto secondo calcoli suoi!*/

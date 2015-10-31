@@ -1,11 +1,14 @@
 package com.panacea.RufusPyramid.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.StaticDataProvider;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
+import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
@@ -18,11 +21,17 @@ import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
 import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
+import com.panacea.RufusPyramid.game.view.MapDrawer;
+import com.panacea.RufusPyramid.game.view.MusicPlayer;
+import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.game.view.screens.GameScreen;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapFactory;
 import com.panacea.RufusPyramid.map.Tile;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -39,6 +48,10 @@ public class GameModel {
 
     public static final double[] extractedItem = new double[]      { 00, 01, 02, 03}; //0 = golditem, 1 = miscitem, 2= weapon, 3=wearable //TODO: DA METTERE SU DB!
     public static final double[] itemProb = new double[]          { 0.6, 0.2, 0.1, 0.1}; //probabilità
+
+    public static final double[] extractedEnemy = new double[]      { 00, 01, 02, 03}; //0 = skeleton, 1 = ORC, 2= UGLYYETI, 3=WRAITH //TODO: DA METTERE SU DB!
+    public static final double[] enemyProb = new double[]          { 0.25, 0.25, 0.25, 0.25}; //probabilità nemici
+
 
     /**
      * Ritorna l'unica istanza (singleton) di GameModel.
@@ -64,7 +77,7 @@ public class GameModel {
     /* Instance methods */
     private DefaultHero hero;
     private ArrayList<Map> maps;
-    private int currentMapIndex;
+    public int currentMapIndex;
     
     private RemoveOnDeathListener creatureDeadListener;
 
@@ -76,51 +89,40 @@ public class GameModel {
         this.maps = new ArrayList<Map>();
         this.items = new ArrayList<Item>();
 
+        for(int i=0; i < 3; i++){
+            Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt(), i);
+            this.maps.add(newMap);
+        }
 
-        Map newMap = new MapFactory().generateMap(new Random(System.nanoTime()).nextInt());
-        this.maps.add(newMap);
         this.hero = new DefaultHero("Rufus", 50);
-        GridPoint2 spawnpoint=newMap.getSpawnPoint().getPosition();
-        this.hero.setPosition(new Tile(new GridPoint2(spawnpoint.x, spawnpoint.y), Tile.TileType.Solid));
-        GridPoint2 absolute = Utilities.convertToAbsolutePos(spawnpoint);
-        this.hero.setAbsoluteTickPosition(new GridPoint2(absolute));
         this.addCreature(this.hero);
+        this.diary = new Diary();
+        initializeMap();
+      }
+
+    public ArrayList<Map> getMaps() {
+        return this.maps;
+    }
+
+    public Map getCurrentMap() {
+        return this.maps.get(this.currentMapIndex);
+    }
+
+    private void initializeMap(){
+        this.hero.setPosition(new Tile(new GridPoint2(getCurrentMap().getSpawnPoint().getPosition().x, getCurrentMap().getSpawnPoint().getPosition().y), Tile.TileType.Solid));
+        GridPoint2 absolute = Utilities.convertToAbsolutePos(getCurrentMap().getSpawnPoint().getPosition());
+        this.hero.setAbsoluteTickPosition(new GridPoint2(absolute));
 
 
-       Enemy newEnemy = null;
+        Enemy newEnemy = null;
         for(int i=0; i < Utilities.randInt(7,13); i++) { //numero casuale di nemici da 7 a 13..
-            int randType = Utilities.randInt(0,30);
-//            Stats randStat;
-//            float minSpeed, maxSpeed, minHp, maxHp, minAttack, maxAttack, minDefence, maxDefence, minSight, maxSight;
-            if(randType <= 3){
-                newEnemy = StaticDataProvider.getEnemy(ICreature.CreatureType.SKELETON);
-//                randStat = Stats.generateRandom(6, 10, 3, 5, 5, 7, 5, 7);
-//                newEnemy = new Enemy("Crypt Skeleton", "A pile of bones.", randStat, ICreature.CreatureType.SKELETON);
-//                newEnemy.sigthLength = Utilities.randInt(4,7);
-            }
-            if (randType > 3 && randType <= 7) {
-                newEnemy = StaticDataProvider.getEnemy(ICreature.CreatureType.ORC);
-//                    randStat = new Stats(Utilities.randInt(8, 12), Utilities.randInt(4, 6), Utilities.randInt(4, 6), Utilities.randInt(3, 5));
-//                    newEnemy = new Enemy("Cave Orc", "It's ugly as hell!!", randStat, ICreature.CreatureType.ORC);
-//                    newEnemy.sigthLength = Utilities.randInt(4,7);
-            }
-            if (randType > 7 && randType <= 15) {
-                newEnemy = StaticDataProvider.getEnemy(ICreature.CreatureType.UGLYYETI);
-//                randStat = new Stats(Utilities.randInt(8, 12), Utilities.randInt(4, 6), Utilities.randInt(4, 6), Utilities.randInt(3, 5));
-//                newEnemy = new Enemy("Ugly Beast", "His parents aren't proud", randStat, ICreature.CreatureType.UGLYYETI);
-//                newEnemy.sigthLength = Utilities.randInt(4,7);
-            }
-            if (randType > 15 && randType <= 30) {
-                newEnemy = StaticDataProvider.getEnemy(ICreature.CreatureType.WRAITH);
-//                randStat = new Stats(Utilities.randInt(8, 12), Utilities.randInt(4, 6), Utilities.randInt(4, 6), Utilities.randInt(3, 5));
-//                newEnemy = new Enemy("Dark Shade", "Dark as barman.", randStat, ICreature.CreatureType.WRAITH);
-//                newEnemy.sigthLength = Utilities.randInt(4,7);
-            }
+            int index = (int)Utilities.randWithProb(extractedEnemy,enemyProb);//0 = skeleton, 1 = ORC, 2= UGLYYETI, 3=WRAITH
+            newEnemy = StaticDataProvider.getEnemy(ICreature.CreatureType.values()[index]);
             if (newEnemy != null) {
-                newEnemy.setPosition(newMap.getRandomEnemyPosition());
+                newEnemy.setPosition(getCurrentMap().getRandomEnemyPosition());
                 this.addCreature(newEnemy);
             } else {
-                Gdx.app.error(GameModel.class.toString(), "Variabile newEnemy is null, why?! randType is " + randType);
+                Gdx.app.error(GameModel.class.toString(), "Variabile newEnemy is null, why?! randType is " + index);
             }
         }
 
@@ -137,8 +139,8 @@ public class GameModel {
                     break;
                 }
                 case 1:{
-                    int goldAmount = Utilities.randInt(25,100);
-                    itemEffects.add(new Effect(Effect.EffectType.HEALTH, 0.5f));
+//                    int goldAmount = Utilities.randInt(25,100);
+                    itemEffects.add(new TemporaryEffect(Effect.EffectType.HEALTH, 15, 1));
                     newItem = new ChestItem(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION,itemEffects,"Health Potion"));
                     break;
                 }
@@ -154,22 +156,38 @@ public class GameModel {
                 }
             }
             randomPos = getCurrentMap().getRandomItemLocation();
-            if (randomPos != null && randomPos.getPosition() != spawnpoint) {
+            if (randomPos != null && randomPos.getPosition() != getCurrentMap().getSpawnPoint().getPosition()) {
                 newItem.setPosition(randomPos.getPosition());
                 this.addItem(newItem);
             }
         }
-        this.diary = new Diary();
-      }
-
-    public ArrayList<Map> getMaps() {
-        return this.maps;
     }
+    public void changeMap(){
 
-    public Map getCurrentMap() {
-        return this.maps.get(this.currentMapIndex);
+    //    DefaultHero hero = new DefaultHero();
+  //      Map prova = maps.get(1);
+       if(currentMapIndex+1 < maps.size()){
+         //   GameController.initializeGame();
+            currentMapIndex += 1;
+            Iterator<ICreature> e = creatures.iterator();
+            while (e.hasNext()) {
+                if(e.next().getCreatureType() != ICreature.CreatureType.HERO)
+                    e.remove();
+            }
+            items.clear();
+            initializeMap();
+            this.hero.setPosition(getCurrentMap().getSpawnPoint());
+            GameDrawer.reset();
+            GameDrawer.get().create();
+            GameController.gm = new GameMaster();
+
+        }
+            //    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(false));
+        //this.hero = hero;
+    //    this.currentMapIndex = 1;
+      //  this.maps.set(1, prova);
+
     }
-
 
     public DefaultHero getHero() {
         return this.hero;

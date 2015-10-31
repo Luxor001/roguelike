@@ -16,7 +16,6 @@ public class MiscItem extends UsableItem{
         RAW_MEAT
     }
     private MiscItem(){
-        super();
     }
 
     private MiscItemType type;

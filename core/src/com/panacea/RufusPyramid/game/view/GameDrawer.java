@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class GameDrawer extends ViewObject {
     private static GameDrawer SINGLETON = new GameDrawer();
-    private final UIDrawer uiDrawer;
+    private transient final UIDrawer uiDrawer;
 
     private List<com.panacea.RufusPyramid.game.view.ViewObject> viewList;
     private MapDrawer mapDrawer;
@@ -32,13 +32,13 @@ public class GameDrawer extends ViewObject {
         this.mapDrawer = new MapDrawer(GameModel.get().getCurrentMap());  //map.create richiamato automaticamente da ViewObject
         this.viewList = new LinkedList<com.panacea.RufusPyramid.game.view.ViewObject>();
         this.viewList.add(this.mapDrawer);
-        this.viewList.add(new Animator());
-
-        this.creaturesDrawer = new CreaturesDrawer(GameModel.get().getCreatures());
-        this.viewList.add(this.creaturesDrawer);
 
         this.itemsDrawer = new ItemsDrawer(GameModel.get().getItems());
         this.viewList.add(this.itemsDrawer);
+
+//        this.viewList.add(new Animator());
+        this.creaturesDrawer = new CreaturesDrawer(GameModel.get().getCreatures());
+        this.viewList.add(this.creaturesDrawer);
 
         this.uiDrawer = new UIDrawer();
         this.viewList.add(this.uiDrawer);

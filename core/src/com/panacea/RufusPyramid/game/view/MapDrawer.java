@@ -36,6 +36,7 @@ public class MapDrawer extends ViewObject {
     private static TextureRegion[] grounds;
     private static TextureRegion[] grounds_deco;
     private static TextureRegion[] doors; //doors consists in a 64x32 block, "closed" state in the first 32px
+    private static TextureRegion[] nextLevel;
 
     private ArrayList<Tile> dynamicMapTiles=new ArrayList<Tile>();
     private Map.MapType typeOfLoadedAssets = null;
@@ -97,7 +98,7 @@ public class MapDrawer extends ViewObject {
         walls = loadTextureRegion(ap.get("data/walls/"+path+".png", Texture.class));
         grounds = loadTextureRegion(ap.get("data/grounds/" + path + ".png", Texture.class));
         doors = loadTextureRegion(ap.get("data/mapObjects/doors_" + path + ".png", Texture.class));
-
+        nextLevel = loadTextureRegion(ap.get("data/mapObjects/stairs_"+path+".png",Texture.class));
 /*        if(new File("data/grounds/"+path+"_deco.png").exists())
           grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));*/
         grounds_deco = loadDecals(MapDrawer.decalsPath);
@@ -171,8 +172,12 @@ public class MapDrawer extends ViewObject {
                     textRegion =doors[1];
                 else
                     textRegion = doors[0];
-            }
                 break;
+            }
+            case NextLevel:{
+                textRegion = nextLevel[0];
+                break;
+            }
         }
         return textRegion;
     }
@@ -216,12 +221,14 @@ public class MapDrawer extends ViewObject {
         String wallsPath = "data/walls/" + path + ".png";
         String groundsPath = "data/grounds/" + path + ".png";
         String doorsPath = "data/mapObjects/doors_" + path + ".png";
+        String nextLevelPath = "data/mapObjects/stairs_" + path + ".png";
 
         //Requesting tiles to AssetsProvider
         AssetsProvider ap = AssetsProvider.get();
         ap.load(wallsPath, Texture.class);
         ap.load(groundsPath, Texture.class);
         ap.load(doorsPath, Texture.class);
+        ap.load(nextLevelPath, Texture.class);
         ap.finishLoading();
 
         walls = loadTextureRegion(new Texture(wallsPath));
@@ -230,6 +237,8 @@ public class MapDrawer extends ViewObject {
 /*        if(new File("data/grounds/"+path+"_deco.png").exists())
           grounds_deco = loadTextureRegion(new Texture("data/grounds/"+path+"_deco.png"));*/
         doors = loadTextureRegion(new Texture(doorsPath));
+        nextLevel = loadTextureRegion(new Texture(nextLevelPath));
+
 
         this.typeOfLoadedAssets = mapType;
     }

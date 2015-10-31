@@ -7,6 +7,8 @@ public class TemporaryEffect extends Effect {
 
     private int turns;
 
+    protected TemporaryEffect() {}
+
     public TemporaryEffect(EffectType type, float coefficient, int turns){
         super(type,coefficient);
         this.turns = turns;
