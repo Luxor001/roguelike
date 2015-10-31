@@ -39,6 +39,7 @@ public class AnimWalk extends AbstractCreatureAnimation {
 //        this.setSoundVolume(0.1f);
     }
 
+
     public void create() {
         super.create();
         if (this.creature.getClass() == DefaultHero.class) {

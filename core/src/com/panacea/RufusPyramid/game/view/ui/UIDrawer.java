@@ -42,6 +42,8 @@ import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.game.view.screens.GameScreen;
+import com.panacea.RufusPyramid.game.view.screens.LoadScreen;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
@@ -423,16 +425,27 @@ public class UIDrawer extends ViewObject {
                     @Override
                     public void run() {
                         if(GameModel.get() != null){
-                            SaveLoadHelper sl = SaveLoadHelper.getIstance();
-                            sl.saveGame();
-                        }
-                        ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
-                        if (GameModel.get() != null) {  //FIXME dopo il caricamento non viene impostato?
+                            final LoadScreen load= new LoadScreen();
 
-                            GameModel.get().disposeAll();
+                            ((Game) Gdx.app.getApplicationListener()).setScreen(load);
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SaveLoadHelper sl = SaveLoadHelper.getIstance();
+                                    sl.saveGame();
+                                    ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
+                                    GameModel.get().disposeAll();
+                                    GameController.gameInUI = false;
+                                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
+                                }
+                            });
                         }
-                        GameController.gameInUI = false;
-                        ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
+                        else{
+                            ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
+                            GameController.gameInUI = false;
+                            ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
+                        }
+
                     }
                 }, 0.5f        //    delay per fare vedere la selezione utente..
                 );

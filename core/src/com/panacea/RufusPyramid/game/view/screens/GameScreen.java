@@ -25,11 +25,14 @@ public class GameScreen implements Screen {
     }
 
     public void show() {
-       if (loadSavedGame) {
+     /*  if (loadSavedGame) {
            GameController.resumeGame();
        } else {
             GameController.initializeGame();
-        }
+        }*/
+
+        GameController.initializeGame();
+
         GameDrawer.reset();
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
@@ -45,6 +48,15 @@ public class GameScreen implements Screen {
             sl.saveObject(GameModel.get());
             sl.stopSave();
         }*/
+    }
+
+    public void initialize(boolean loadSavedGame){
+        if (loadSavedGame) {
+            GameController.resumeGame();
+        } else {
+            GameController.initializeGame();
+        }
+        //GameController.resumeGame();
     }
 
     public void render(float delta) {
@@ -71,7 +83,7 @@ public class GameScreen implements Screen {
     }
 
     public void hide() {
-        objectsDrawer.pause();
+      //  objectsDrawer.pause();
     }
 
     public void dispose() {
