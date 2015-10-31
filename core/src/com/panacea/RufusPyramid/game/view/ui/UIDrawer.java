@@ -323,8 +323,7 @@ public class UIDrawer extends ViewObject {
                                        InputManager.get().getHeroProcessor().setPaused(false);
                                        options.setVisible(false);
                                        resumeButton.setVisible(false);
-                                       postButton.setVisible(false);
-                                       exitButton.setVisible(false);
+                                       postButton.setVisible(false); exitButton.setVisible(false);
                                    }
                                }, 0.2f
                 );
