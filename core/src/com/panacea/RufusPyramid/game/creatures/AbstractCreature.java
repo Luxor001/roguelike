@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.panacea.RufusPyramid.common.AttributeChangeEvent;
 import com.panacea.RufusPyramid.common.AttributeChangeListener;
@@ -105,7 +104,12 @@ public abstract class AbstractCreature implements ICreature {
 
     @Override
     public void setHPCurrent(int currentHP) {
-        this.currentHP = currentHP;
+        if (currentHP >= this.getCurrentStats().getMaximumHP()) {
+            this.currentHP = this.getCurrentStats().getMaximumHP();
+        } else {
+            this.currentHP = currentHP;
+        }
+
         if (this.currentHP <= 0) {
             this.fireCreatureDeadEvent();
         } else if (this.currentHP < this.getCurrentStats().getMaximumHP()) {
@@ -285,7 +289,7 @@ public abstract class AbstractCreature implements ICreature {
         Stats currStats = new Stats(baseStats);
         for(Effect effect: effects){
             float value = effect.getCoefficient();
-            switch(effect.getTye()){
+            switch(effect.getType()){
                 case ATTACK:{
                     currStats.setAttack(baseStats.getAttack() + value);
                     break;

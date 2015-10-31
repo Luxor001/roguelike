@@ -34,7 +34,7 @@ public class Effect {
         return coefficient;
     }
 
-    public EffectType getTye(){
+    public EffectType getType(){
         return type;
     }
 }

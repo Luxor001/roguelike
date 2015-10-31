@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.common.StaticDataProvider;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
+import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadEvent;
 import com.panacea.RufusPyramid.game.creatures.CreatureDeadListener;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
@@ -138,8 +139,8 @@ public class GameModel {
                     break;
                 }
                 case 1:{
-                    int goldAmount = Utilities.randInt(25,100);
-                    itemEffects.add(new Effect(Effect.EffectType.HEALTH, 0.5f));
+//                    int goldAmount = Utilities.randInt(25,100);
+                    itemEffects.add(new TemporaryEffect(Effect.EffectType.HEALTH, 15, 1));
                     newItem = new ChestItem(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION,itemEffects,"Health Potion"));
                     break;
                 }
