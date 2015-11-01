@@ -48,6 +48,7 @@ public class Main extends Game implements ApplicationListener {
 //        catch (Exception e){
 //            e.printStackTrace();
 //        }
+        Gdx.input.setCatchBackKey(true);
 	}
 
     @Override
