@@ -1,9 +1,6 @@
 package com.panacea.RufusPyramid.game.items;
 
 import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.actions.OpenedChestListener;
-
-import java.util.List;
 
 /**
  * Created by Lux on 13/09/2015.

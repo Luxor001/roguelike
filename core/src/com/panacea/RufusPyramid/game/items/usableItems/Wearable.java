@@ -2,7 +2,6 @@ package com.panacea.RufusPyramid.game.items.usableItems;
 
 import com.panacea.RufusPyramid.game.Effect.Effect;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

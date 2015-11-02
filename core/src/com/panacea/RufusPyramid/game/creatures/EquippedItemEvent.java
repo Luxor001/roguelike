@@ -2,7 +2,6 @@ package com.panacea.RufusPyramid.game.creatures;
 
 import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

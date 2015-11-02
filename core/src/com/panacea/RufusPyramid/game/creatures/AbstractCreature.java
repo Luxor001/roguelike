@@ -34,7 +34,7 @@ public abstract class AbstractCreature implements ICreature {
     private String name, description;
     private int currentHP;
     private Tile position;
-    private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
+    private Backpack backpack;
     private int energy;
     private List<ActionChosenListener> actionChosenListeners;
     private List<CreatureDeadListener> creatureDeadListeners;

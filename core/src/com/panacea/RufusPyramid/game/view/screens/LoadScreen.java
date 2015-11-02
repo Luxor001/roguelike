@@ -7,24 +7,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.panacea.RufusPyramid.common.Utilities;
-import com.panacea.RufusPyramid.game.creatures.Enemy;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
-import com.panacea.RufusPyramid.game.view.CreaturesDrawer;
-import com.panacea.RufusPyramid.game.view.GameBatch;
 import com.panacea.RufusPyramid.game.view.GameCamera;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
-import com.panacea.RufusPyramid.game.view.animations.AnimDeath;
-import com.panacea.RufusPyramid.game.view.animations.AnimStrike;
-import com.panacea.RufusPyramid.game.view.animations.AnimWalk;
 import com.panacea.RufusPyramid.game.view.animations.AnimatedImage;
-import com.panacea.RufusPyramid.game.view.ui.HealthBar;
 
 /**
  * Created by gio on 30/07/15.
@@ -108,7 +99,9 @@ public class LoadScreen implements Screen {
     public void dispose() {
         try{
             skin.dispose();
-            stage.dispose();
+            try {
+                stage.dispose();
+            } catch (IllegalArgumentException ex) {}
         }
         catch (Exception e){
             e.printStackTrace();

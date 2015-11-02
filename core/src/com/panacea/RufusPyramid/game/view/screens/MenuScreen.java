@@ -96,7 +96,7 @@ public class MenuScreen implements Screen {
                 //We set it to new Splash because we got no other screens
                 //otherwise you put the screen there where you want to go
 
-               final LoadScreen load= new LoadScreen();
+               final LoadScreen load = new LoadScreen();
                final GameScreen game = new GameScreen(true);
 
                 game.hide();
