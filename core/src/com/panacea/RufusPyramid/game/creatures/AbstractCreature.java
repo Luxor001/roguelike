@@ -84,8 +84,8 @@ public abstract class AbstractCreature implements ICreature {
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this(name, description, new Stats(maximumHP, attack, defence, speed));
     }
-    public AbstractCreature(){
 
+    protected AbstractCreature(){
     }
 
     private static int getUniqueCreatureId() {
@@ -285,38 +285,35 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     public Stats getCurrentStats(){ //current stats calculated by the effects of the creature
-
         Stats currStats = new Stats(baseStats);
         Float attack = 0f, defence = 0f, speed = 0f;
         Integer hp = 0;
+
         for(Effect effect: effects){
             float value = effect.getCoefficient();
             switch(effect.getType()){
                 case ATTACK:{
                     attack += value;
-//                    currStats.setAttack(baseStats.getAttack() + value);
                     break;
                 }
                 case DEFENSE:{
                     defence += value;
-//                    currStats.setAttack(baseStats.getDefence() + value);
                     break;
                 }
                 case SPEED:{
                     speed += value;
-//                    currStats.setAttack(baseStats.getSpeed() + value);
                     break;
                 }
                 case MAX_HEALTH:{
                     hp += (int)value;
-//                    currStats.setMaximumHP(baseStats.getMaximumHP() + (int)value);
                     break;
                 }
             }
         }
+
         currStats.setAttack(baseStats.getAttack() + attack);
-        currStats.setAttack(baseStats.getDefence() + defence);
-        currStats.setAttack(baseStats.getSpeed() + speed);
+        currStats.setDefence(baseStats.getDefence() + defence);
+        currStats.setSpeed(baseStats.getSpeed() + speed);
         currStats.setMaximumHP(baseStats.getMaximumHP() + hp);
 
         return currStats;
