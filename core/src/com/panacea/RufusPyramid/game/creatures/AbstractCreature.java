@@ -287,26 +287,38 @@ public abstract class AbstractCreature implements ICreature {
     public Stats getCurrentStats(){ //current stats calculated by the effects of the creature
 
         Stats currStats = new Stats(baseStats);
+        Float attack = 0f, defence = 0f, speed = 0f;
+        Integer hp = 0;
         for(Effect effect: effects){
             float value = effect.getCoefficient();
             switch(effect.getType()){
                 case ATTACK:{
-                    currStats.setAttack(baseStats.getAttack() + value);
+                    attack += value;
+//                    currStats.setAttack(baseStats.getAttack() + value);
                     break;
                 }
                 case DEFENSE:{
-                    currStats.setAttack(baseStats.getDefence() + value);
+                    defence += value;
+//                    currStats.setAttack(baseStats.getDefence() + value);
                     break;
                 }
                 case SPEED:{
-                    currStats.setAttack(baseStats.getSpeed() + value);
+                    speed += value;
+//                    currStats.setAttack(baseStats.getSpeed() + value);
                     break;
                 }
                 case MAX_HEALTH:{
-                    currStats.setMaximumHP(baseStats.getMaximumHP() + (int)value);
+                    hp += (int)value;
+//                    currStats.setMaximumHP(baseStats.getMaximumHP() + (int)value);
+                    break;
                 }
             }
         }
+        currStats.setAttack(baseStats.getAttack() + attack);
+        currStats.setAttack(baseStats.getDefence() + defence);
+        currStats.setAttack(baseStats.getSpeed() + speed);
+        currStats.setMaximumHP(baseStats.getMaximumHP() + hp);
+
         return currStats;
     }
 
