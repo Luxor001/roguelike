@@ -47,6 +47,7 @@ import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
 import com.panacea.RufusPyramid.game.view.MapDrawer;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
+import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.MapFactory;
@@ -84,6 +85,17 @@ public class SaveLoadHelper {
     }
     private SaveLoadHelper() {
         this.kryo = new Kryo();
+
+        Serializer<UIDrawer> uiDrawerSerializer = new Serializer<UIDrawer>() {
+            @Override
+            public void write(Kryo kryo, Output output, UIDrawer object) {
+            }
+
+            @Override
+            public UIDrawer read(Kryo kryo, Input input, Class<UIDrawer> type) {
+                return new UIDrawer();
+            }
+        };
 
         Serializer<HashMap> hashMapSerializer = new Serializer<HashMap>() {
             @Override
@@ -488,6 +500,7 @@ public class SaveLoadHelper {
         kryo.register(AbstractList.class, 42);
         kryo.register(Diary.class, 44);
         kryo.register(LinkedHashMap.class, hashMapSerializer, 45);
+        kryo.register(UIDrawer.class, uiDrawerSerializer, 46);
     }
 
     /**

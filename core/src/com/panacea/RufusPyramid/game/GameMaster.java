@@ -256,15 +256,20 @@ public class GameMaster{
         public void performed(ActionChosenEvent event, IAgent source) {
             /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
             GameMaster gm = GameController.getGm();
-            if (!source.equals(gm.agentsPlaying.get(gm.currentAgentIndex))
-                    || (source instanceof ICreature && ((ICreature)source).getHPCurrent() <= 0)) {
-                Gdx.app.error(
-                        this.getClass().getName(),
-                        "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
-                                "CurrentAgentIndex: " + gm.currentAgentIndex + "\n" +
-                                "wtfAgentIndex: " + gm.agentsPlaying.indexOf(source) + "\n" +
-                                "wtfAgentToString: " + source.toString() + "\n"
-                );
+            try {
+                if (!source.equals(gm.agentsPlaying.get(gm.currentAgentIndex))
+                        || (source instanceof ICreature && ((ICreature) source).getHPCurrent() <= 0)) {
+                    Gdx.app.error(
+                            this.getClass().getName(),
+                            "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
+                                    "CurrentAgentIndex: " + gm.currentAgentIndex + "\n" +
+                                    "wtfAgentIndex: " + gm.agentsPlaying.indexOf(source) + "\n" +
+                                    "wtfAgentToString: " + source.toString() + "\n"
+                    );
+                    return;
+                }
+            } catch (IndexOutOfBoundsException ex) {
+                ex.printStackTrace();
                 return;
             }
 
