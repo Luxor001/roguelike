@@ -285,11 +285,17 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     public Stats getCurrentStats(){ //current stats calculated by the effects of the creature
+        List<Effect> allEffects = new ArrayList<Effect>();
+        allEffects.addAll(this.getEffects());
+        if (this.getEquipment() != null) {
+            allEffects.addAll(this.getEquipment().getEquipEffects());
+        }
+
         Stats currStats = new Stats(baseStats);
         Float attack = 0f, defence = 0f, speed = 0f;
         Integer hp = 0;
 
-        for(Effect effect: effects){
+        for(Effect effect: allEffects){
             float value = effect.getCoefficient();
             switch(effect.getType()){
                 case ATTACK:{

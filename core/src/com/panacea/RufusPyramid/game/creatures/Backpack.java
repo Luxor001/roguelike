@@ -33,8 +33,8 @@ public class Backpack {
         ArrayList<Effect> effectsList1 = new ArrayList<Effect>();
         effectsList1.add(new Effect(Effect.EffectType.ATTACK, 3));
         ArrayList<Effect> effectsList2 = new ArrayList<Effect>();
-        effectsList2.add(new Effect(Effect.EffectType.ATTACK, 2));
-        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, effectsList2, "GoldenAxe"));
+        effectsList2.add(new Effect(Effect.EffectType.ATTACK, 1));
+        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, effectsList2, "Neptuno's Trident"));
         this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, effectsList1, "GoldenAxe"));
         this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 50, 1), "Superpozione"));
 //        this.setEquipItem(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
@@ -64,6 +64,14 @@ public class Backpack {
 
     public Equippable getEquippedItem(Backpack.EquippableType itemToRetrieve) {
         return equippedItems.get(itemToRetrieve);
+    }
+
+    public List<Equippable> getAllEquippedItems() {
+        List<Equippable> items = new ArrayList<Equippable>();
+        for (EquippableType type : EquippableType.values()) {
+            items.add(this.getEquippedItem(type));
+        }
+        return items;
     }
 
     /**
@@ -175,5 +183,18 @@ public class Backpack {
         }
 
         GameModel.get().getDiary().addLine("" + GameModel.get().getHero().getCurrentStats().getAttack());
+    }
+
+    public List<Effect> getEquipEffects() {
+        List<Effect> allEffects = new ArrayList<Effect>();
+        for (Equippable item : this.getAllEquippedItems()) {
+            if (item != null) {
+                List<Effect> itemEffects = ((UsableItem) item).getEffects();
+                if (itemEffects != null) {
+                    allEffects.addAll(itemEffects);
+                }
+            }
+        }
+        return allEffects;
     }
 }

@@ -559,7 +559,7 @@ public class SaveLoadHelper {
     /*********** Load methods ***********/
     public void startLoad() {
         this.input = new Input(Gdx.files.local(saveFile).read());
-        com.esotericsoftware.minlog.Log.TRACE();
+//        com.esotericsoftware.minlog.Log.TRACE();
 
 //        try {
 //        } catch (FileNotFoundException e) {

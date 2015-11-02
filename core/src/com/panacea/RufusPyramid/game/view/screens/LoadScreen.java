@@ -107,7 +107,6 @@ public class LoadScreen implements Screen {
     @Override
     public void dispose() {
         try{
-
             skin.dispose();
             stage.dispose();
         }
