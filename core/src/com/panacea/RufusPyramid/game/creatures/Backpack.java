@@ -2,6 +2,7 @@ package com.panacea.RufusPyramid.game.creatures;
 
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.items.IItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.IItemType;
@@ -29,10 +30,13 @@ public class Backpack {
         this.equippedItems = new LinkedHashMap<Backpack.EquippableType, Equippable>(EquippableType.values().length);
         this.storage = new ArrayList<UsableItem>(MAX_STORAGE_CAPACITY);
         this.equippedItemListeners = new ArrayList<EquippedItemListener>();
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
-        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
-        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-        this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 100, 1), "Superpozione"));
+        ArrayList<Effect> effectsList1 = new ArrayList<Effect>();
+        effectsList1.add(new Effect(Effect.EffectType.ATTACK, 3));
+        ArrayList<Effect> effectsList2 = new ArrayList<Effect>();
+        effectsList2.add(new Effect(Effect.EffectType.ATTACK, 2));
+        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, effectsList2, "GoldenAxe"));
+        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, effectsList1, "GoldenAxe"));
+        this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 50, 1), "Superpozione"));
 //        this.setEquipItem(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
 //        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
 //        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
@@ -159,5 +163,17 @@ public class Backpack {
         for (EquippedItemListener listener : this.equippedItemListeners) {
             listener.equippedItem(event, this);
         }
+
+        UsableItem item;
+        String coefficent;
+        if (event.getEquippedItem() == null) {
+            item = (UsableItem)event.getUnequippedItem().get(0);
+            GameModel.get().getDiary().addLine(item.getItemName() + " unequipped (" + item.getEffects().get(0).getCoefficient() + ")");
+        } else {
+            item = (UsableItem)event.getEquippedItem();
+            GameModel.get().getDiary().addLine(item.getItemName() + " equipped (" + item.getEffects().get(0).getCoefficient() + ")");
+        }
+
+        GameModel.get().getDiary().addLine("" + GameModel.get().getHero().getCurrentStats().getAttack());
     }
 }

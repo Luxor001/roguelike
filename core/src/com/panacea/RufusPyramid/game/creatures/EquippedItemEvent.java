@@ -18,4 +18,16 @@ public class EquippedItemEvent {
         this.oldEquippedItems = oldEquippedItems;
         this.type = type;
     }
+
+    public Equippable getEquippedItem() {
+        return this.equippedItem;
+    }
+
+    public Backpack.EquippableType getEquippedType() {
+        return this.type;
+    }
+
+    public List<Equippable> getUnequippedItem() {
+        return this.oldEquippedItems;
+    }
 }
