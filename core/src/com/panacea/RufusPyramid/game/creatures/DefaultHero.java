@@ -18,7 +18,7 @@ public class DefaultHero extends AbstractCreature {
     private ICreature firstTarget;
     public HealthBar health;
 
-    public DefaultHero() {
+    private DefaultHero() {
         this("Awesome Awful Hero", 0);
     }
 
