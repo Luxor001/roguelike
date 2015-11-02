@@ -63,6 +63,7 @@ public interface ICreature extends IAgent {
     public void addCreatureDeadListener(CreatureDeadListener listener);
 
     public Backpack getEquipment();
+    public void setEquipment(Backpack backpack);
 
     public Stats getBaseStats();
 

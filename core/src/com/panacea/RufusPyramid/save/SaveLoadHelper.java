@@ -10,6 +10,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.panacea.RufusPyramid.game.Diary;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
@@ -130,6 +131,8 @@ public class SaveLoadHelper {
             }
         };
 
+//        final Serializer<Backpack> backpackSerializer = new FieldSerializer<Backpack>(kryo, Backpack.class);
+
         Serializer<ICreature> creatureSerializer = new Serializer<ICreature>() {
             @Override
             public void write(Kryo kryo, Output output, ICreature object) {
@@ -140,10 +143,10 @@ public class SaveLoadHelper {
                 kryo.writeObject(output, object.getDescription());
                 kryo.writeObjectOrNull(output, object.getAbsoluteTickPosition(), GridPoint2.class);
                 kryo.writeObject(output, object.getBaseStats());
-                kryo.writeObject(output, object.getCurrentStats());
+//                kryo.writeObject(output, object.getCurrentStats());
                 kryo.writeObject(output, new Integer(object.getHPCurrent()));
                 kryo.writeObject(output, new Integer(object.getEnergy()));
-                kryo.writeObject(output, object.getEquipment());
+                kryo.writeObjectOrNull(output, object.getEquipment(), Backpack.class);
                 kryo.writeObject(output, object.getEffects());
 
                 switch (object.getCreatureType()) {
@@ -168,10 +171,10 @@ public class SaveLoadHelper {
                 String description = kryo.readObject(input, String.class);
                 GridPoint2 absTickPos = kryo.readObjectOrNull(input, GridPoint2.class);
                 Stats baseStats = kryo.readObject(input, Stats.class);
-                Stats currStats = kryo.readObject(input, Stats.class);
+//                Stats currStats = kryo.readObject(input, Stats.class);
                 int hpCurrent = kryo.readObject(input, Integer.class).intValue();
                 int energy = kryo.readObject(input, Integer.class).intValue();
-                Backpack backpack = kryo.readObject(input, Backpack.class);
+                Backpack backpack = kryo.readObjectOrNull(input, Backpack.class);
                 ArrayList<Effect> effects = kryo.readObject(input, ArrayList.class);
 
                 ICreature creature = null;
@@ -193,6 +196,8 @@ public class SaveLoadHelper {
                 creature.setEnergy(energy);
                 creature.setHPCurrent(hpCurrent);
                 creature.setPosition(tile);
+                creature.setEquipment(backpack);
+                creature.addEffects(effects);
 
                 return creature;
             }
@@ -421,7 +426,7 @@ public class SaveLoadHelper {
                     readItem = null;
                     Gdx.app.debug(SaveLoadHelper.class.toString(), "Item boh: " + itemType);
                 }
-                if(pos != null && readItem != null) //FIXMEABSOLUTELY: Qui è strano, a volte il readItem è null. che sia colpa del serializzatore di IItemType?
+                if(pos != null && readItem != null) //FIXMEABSOLUTELY: Qui è so, a volte il readItem è null. che sia colpa del serializzatore di IItemType?
                     readItem.setPosition(pos);
                 return readItem;
             }
@@ -501,6 +506,7 @@ public class SaveLoadHelper {
         kryo.register(Diary.class, 44);
         kryo.register(LinkedHashMap.class, hashMapSerializer, 45);
         kryo.register(UIDrawer.class, uiDrawerSerializer, 46);
+        kryo.register(Backpack.class, /*backpackSerializer,*/ 47);
     }
 
     /**
@@ -608,7 +614,6 @@ public class SaveLoadHelper {
      * @return l'oggetto letto.
      */
     public <T> T loadObject(Class<T> classe) {
-
         return kryo.readObject(input, classe);
     }
 

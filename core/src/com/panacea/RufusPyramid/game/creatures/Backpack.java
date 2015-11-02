@@ -19,7 +19,7 @@ import java.util.List;
  * Contiene un enum pubblico con i tipi di oggetti equipaggiabili.
  */
 public class Backpack {
-    private static int MAX_STORAGE_CAPACITY = 18;
+    private final static int MAX_STORAGE_CAPACITY = 18;
 
     private List<UsableItem> storage;
     private LinkedHashMap<Backpack.EquippableType, Equippable> equippedItems;
@@ -36,29 +36,6 @@ public class Backpack {
         this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, effectsList2, "Neptuno's Trident"));
         this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, effectsList1, "GoldenAxe"));
         this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 50, 1), "Superpozione"));
-//        this.setEquipItem(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.PALETTE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.SWORD, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.SWORD, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.SWORD, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.DAGGER, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
     }
 
     public Equippable getEquippedItem(Backpack.EquippableType itemToRetrieve) {

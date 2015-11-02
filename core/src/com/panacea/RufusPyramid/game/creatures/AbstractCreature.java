@@ -184,6 +184,11 @@ public abstract class AbstractCreature implements ICreature {
         return this.backpack;
     }
 
+    @Override
+    public void setEquipment(Backpack backpack) {
+        this.backpack = backpack;
+    }
+
     public void addChangeListener(PositionChangeListener listener) {
         this.changeListeners.add(listener);
     }
