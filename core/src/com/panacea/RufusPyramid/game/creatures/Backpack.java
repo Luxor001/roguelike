@@ -97,7 +97,7 @@ public class Backpack {
         } else if (type instanceof Wearable.WearableType) {
             switch ((Wearable.WearableType)type) {
                 case ARMOR:
-                case ARMOR2:
+//                case ARMOR2:
                     position = EquippableType.CHEST;
                     break;
                 case BOOTS:
@@ -108,6 +108,9 @@ public class Backpack {
                     break;
                 case SHIELD:
                     position = EquippableType.RIGHT_HAND;
+                    break;
+                case GAUNTLETS:
+                    position = EquippableType.GAUNTLETS;
                     break;
             }
         }
@@ -157,8 +160,7 @@ public class Backpack {
             item = (UsableItem)event.getEquippedItem();
             GameModel.get().getDiary().addLine(item.getItemName() + " equipped (" + item.getEffects().get(0).getCoefficient() + ")");
         }
-
-        GameModel.get().getDiary().addLine("" + GameModel.get().getHero().getCurrentStats().getAttack());
+//        GameModel.get().getDiary().addLine("" + GameModel.get().getHero().getCurrentStats().getAttack());
     }
 
     public List<Effect> getEquipEffects() {
