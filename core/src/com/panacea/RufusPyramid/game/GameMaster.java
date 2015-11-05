@@ -95,7 +95,11 @@ public class GameMaster{
     }
 
     private void removeAgent(IAgent agent) {
-        this.agentsPlaying.remove(agent);
+        int indexToRemove = this.agentsPlaying.indexOf(agent);
+        this.agentsPlaying.remove(indexToRemove);
+        if (indexToRemove <= this.currentAgentIndex) {
+            this.currentAgentIndex--;
+        }
         Gdx.app.log(GameMaster.class.toString(), "Rimosso agente dalla turnazione: " + agent);
     }
 
@@ -252,7 +256,15 @@ public class GameMaster{
         if (this.currentAgentIndex < 0) {
             return this.turnToNextAgent();
         } else {
-            return this.agentsPlaying.get(this.currentAgentIndex);
+            try {
+                return this.agentsPlaying.get(this.currentAgentIndex);
+            } catch (IndexOutOfBoundsException ex) {
+                //TODO Workaround, fixata in removeAgent(). Verificare che non venga più lanciata.
+                Gdx.app.error(GameMaster.class.toString(), "Workaround in azione! Verificare metodo agentOnTurn()");
+                ex.printStackTrace();
+                this.currentAgentIndex--;
+                return this.getAgentOnTurn();
+            }
         }
     }
 

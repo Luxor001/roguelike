@@ -95,7 +95,7 @@ public class CreatureAI {
 
              if (pathToEnd == null){
                  reinitializeNeighbors(grid.getCell(arrivalCreaturePos.x,arrivalCreaturePos.y),grid);
-                 System.out.println("FALLITO!");
+//                 System.out.println("FALLITO!");
              }
             else {
                  GridCell currCell;

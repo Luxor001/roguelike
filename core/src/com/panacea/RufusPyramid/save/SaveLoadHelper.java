@@ -227,7 +227,7 @@ public class SaveLoadHelper {
 //                    for (Object element : list)
 //                        kryo.writeObjectOrNull(output, element, serializer);
 //                } else {
-                Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", list.get(0) + " ma genericType è " + this.genericType);
+//                Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", list.get(0) + " ma genericType è " + this.genericType);
                 for (Object element : list) {
                     kryo.writeClassAndObject(output, element);
                 }
@@ -248,7 +248,7 @@ public class SaveLoadHelper {
 //                    for (int i = 0; i < length; i++)
 //                        array.add(kryo.readObjectOrNull(input, elementClass, serializer));
 //                } else {
-                Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", "genericType è " + this.genericType);
+//                Gdx.app.log(SaveLoadHelper.class.toString()+"::ArrayListSerializer", "genericType è " + this.genericType);
                 for (int i = 0; i < length; i++) {
                     try {
                         Object obj = kryo.readClassAndObject(input);
