@@ -1,8 +1,6 @@
 package com.panacea.RufusPyramid.game.creatures;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.utils.PerformanceCounter;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.actions.AttackAction;

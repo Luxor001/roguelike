@@ -34,7 +34,7 @@ public abstract class AbstractCreature implements ICreature {
     private String name, description;
     private int currentHP;
     private Tile position;
-    private com.panacea.RufusPyramid.game.creatures.Backpack backpack;
+    private Backpack backpack;
     private int energy;
     private List<ActionChosenListener> actionChosenListeners;
     private List<CreatureDeadListener> creatureDeadListeners;
@@ -84,8 +84,8 @@ public abstract class AbstractCreature implements ICreature {
     public AbstractCreature(String name, String description, int maximumHP, double attack, double defence, double speed) {
         this(name, description, new Stats(maximumHP, attack, defence, speed));
     }
-    public AbstractCreature(){
 
+    protected AbstractCreature(){
     }
 
     private static int getUniqueCreatureId() {
@@ -182,6 +182,11 @@ public abstract class AbstractCreature implements ICreature {
     @Override
     public Backpack getEquipment() {
         return this.backpack;
+    }
+
+    @Override
+    public void setEquipment(Backpack backpack) {
+        this.backpack = backpack;
     }
 
     public void addChangeListener(PositionChangeListener listener) {
@@ -285,28 +290,43 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     public Stats getCurrentStats(){ //current stats calculated by the effects of the creature
+        List<Effect> allEffects = new ArrayList<Effect>();
+        allEffects.addAll(this.getEffects());
+        if (this.getEquipment() != null) {
+            allEffects.addAll(this.getEquipment().getEquipEffects());
+        }
 
         Stats currStats = new Stats(baseStats);
-        for(Effect effect: effects){
+        Float attack = 0f, defence = 0f, speed = 0f;
+        Integer hp = 0;
+
+        for(Effect effect: allEffects){
             float value = effect.getCoefficient();
             switch(effect.getType()){
                 case ATTACK:{
-                    currStats.setAttack(baseStats.getAttack() + value);
+                    attack += value;
                     break;
                 }
                 case DEFENSE:{
-                    currStats.setAttack(baseStats.getDefence() + value);
+                    defence += value;
                     break;
                 }
                 case SPEED:{
-                    currStats.setAttack(baseStats.getSpeed() + value);
+                    speed += value;
                     break;
                 }
                 case MAX_HEALTH:{
-                    currStats.setMaximumHP(baseStats.getMaximumHP() + (int)value);
+                    hp += (int)value;
+                    break;
                 }
             }
         }
+
+        currStats.setAttack(baseStats.getAttack() + attack);
+        currStats.setDefence(baseStats.getDefence() + defence);
+        currStats.setSpeed(baseStats.getSpeed() + speed);
+        currStats.setMaximumHP(baseStats.getMaximumHP() + hp);
+
         return currStats;
     }
 

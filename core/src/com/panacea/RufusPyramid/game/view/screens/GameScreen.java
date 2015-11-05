@@ -4,13 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.panacea.RufusPyramid.game.GameController;
-import com.panacea.RufusPyramid.game.GameMaster;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
-import com.panacea.RufusPyramid.map.Map;
-import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 public class GameScreen implements Screen {
     private boolean loadSavedGame;
@@ -25,11 +21,14 @@ public class GameScreen implements Screen {
     }
 
     public void show() {
-       if (loadSavedGame) {
+  if (loadSavedGame) {
            GameController.resumeGame();
        } else {
             GameController.initializeGame();
         }
+
+//        GameController.initializeGame();
+
         GameDrawer.reset();
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
@@ -45,6 +44,15 @@ public class GameScreen implements Screen {
             sl.saveObject(GameModel.get());
             sl.stopSave();
         }*/
+    }
+
+    public void initialize(boolean loadSavedGame){
+        if (loadSavedGame) {
+            GameController.resumeGame();
+        } else {
+            GameController.initializeGame();
+        }
+        //GameController.resumeGame();
     }
 
     public void render(float delta) {
@@ -71,7 +79,7 @@ public class GameScreen implements Screen {
     }
 
     public void hide() {
-        objectsDrawer.pause();
+      //  objectsDrawer.pause();
     }
 
     public void dispose() {

@@ -2,7 +2,6 @@ package com.panacea.RufusPyramid.game.creatures;
 
 import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,5 +16,17 @@ public class EquippedItemEvent {
         this.equippedItem = equippedItem;
         this.oldEquippedItems = oldEquippedItems;
         this.type = type;
+    }
+
+    public Equippable getEquippedItem() {
+        return this.equippedItem;
+    }
+
+    public Backpack.EquippableType getEquippedType() {
+        return this.type;
+    }
+
+    public List<Equippable> getUnequippedItem() {
+        return this.oldEquippedItems;
     }
 }

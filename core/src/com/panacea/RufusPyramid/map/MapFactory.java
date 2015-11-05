@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.common.Utilities.Directions;
 
-import org.w3c.dom.css.Rect;
 import org.xguzm.pathfinding.grid.GridCell;
 
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package com.panacea.RufusPyramid.game.creatures;
 
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
-import com.panacea.RufusPyramid.game.items.IItem;
+import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.items.usableItems.Equippable;
 import com.panacea.RufusPyramid.game.items.usableItems.IItemType;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
@@ -19,7 +19,7 @@ import java.util.List;
  * Contiene un enum pubblico con i tipi di oggetti equipaggiabili.
  */
 public class Backpack {
-    private static int MAX_STORAGE_CAPACITY = 18;
+    private final static int MAX_STORAGE_CAPACITY = 18;
 
     private List<UsableItem> storage;
     private LinkedHashMap<Backpack.EquippableType, Equippable> equippedItems;
@@ -29,37 +29,25 @@ public class Backpack {
         this.equippedItems = new LinkedHashMap<Backpack.EquippableType, Equippable>(EquippableType.values().length);
         this.storage = new ArrayList<UsableItem>(MAX_STORAGE_CAPACITY);
         this.equippedItemListeners = new ArrayList<EquippedItemListener>();
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
-        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, new ArrayList<Effect>(), "GoldenAxe"));
-        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-        this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 100, 1), "Superpozione"));
-//        this.setEquipItem(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.PALETTE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.SWORD, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.SWORD, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.SWORD, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.DAGGER, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
-//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, new ArrayList<Effect>(), "GoldenAxe"));
+        ArrayList<Effect> effectsList1 = new ArrayList<Effect>();
+        effectsList1.add(new Effect(Effect.EffectType.ATTACK, 3));
+        ArrayList<Effect> effectsList2 = new ArrayList<Effect>();
+        effectsList2.add(new Effect(Effect.EffectType.ATTACK, 1));
+        this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, effectsList2, "Neptuno's Trident"));
+        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, effectsList1, "GoldenAxe"));
+        this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 50, 1), "Superpozione"));
     }
 
     public Equippable getEquippedItem(Backpack.EquippableType itemToRetrieve) {
         return equippedItems.get(itemToRetrieve);
+    }
+
+    public List<Equippable> getAllEquippedItems() {
+        List<Equippable> items = new ArrayList<Equippable>();
+        for (EquippableType type : EquippableType.values()) {
+            items.add(this.getEquippedItem(type));
+        }
+        return items;
     }
 
     /**
@@ -109,7 +97,7 @@ public class Backpack {
         } else if (type instanceof Wearable.WearableType) {
             switch ((Wearable.WearableType)type) {
                 case ARMOR:
-                case ARMOR2:
+//                case ARMOR2:
                     position = EquippableType.CHEST;
                     break;
                 case BOOTS:
@@ -120,6 +108,9 @@ public class Backpack {
                     break;
                 case SHIELD:
                     position = EquippableType.RIGHT_HAND;
+                    break;
+                case GAUNTLETS:
+                    position = EquippableType.GAUNTLETS;
                     break;
             }
         }
@@ -159,5 +150,29 @@ public class Backpack {
         for (EquippedItemListener listener : this.equippedItemListeners) {
             listener.equippedItem(event, this);
         }
+
+        UsableItem item;
+        String coefficent;
+        if (event.getEquippedItem() == null) {
+            item = (UsableItem)event.getUnequippedItem().get(0);
+            GameModel.get().getDiary().addLine(item.getItemName() + " unequipped (" + item.getEffects().get(0).getCoefficient() + ")");
+        } else {
+            item = (UsableItem)event.getEquippedItem();
+            GameModel.get().getDiary().addLine(item.getItemName() + " equipped (" + item.getEffects().get(0).getCoefficient() + ")");
+        }
+//        GameModel.get().getDiary().addLine("" + GameModel.get().getHero().getCurrentStats().getAttack());
+    }
+
+    public List<Effect> getEquipEffects() {
+        List<Effect> allEffects = new ArrayList<Effect>();
+        for (Equippable item : this.getAllEquippedItems()) {
+            if (item != null) {
+                List<Effect> itemEffects = ((UsableItem) item).getEffects();
+                if (itemEffects != null) {
+                    allEffects.addAll(itemEffects);
+                }
+            }
+        }
+        return allEffects;
     }
 }

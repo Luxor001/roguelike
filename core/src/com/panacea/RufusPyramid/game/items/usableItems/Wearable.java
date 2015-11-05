@@ -2,7 +2,6 @@ package com.panacea.RufusPyramid.game.items.usableItems;
 
 import com.panacea.RufusPyramid.game.Effect.Effect;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +13,8 @@ public class Wearable extends UsableItem implements Equippable {
         BOOTS,
         HELM,
         SHIELD,
-        ARMOR2
+//        ARMOR2
+        GAUNTLETS
     }
 
     private WearableType type;

@@ -6,14 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.panacea.RufusPyramid.common.AssetsProvider;
 import com.panacea.RufusPyramid.common.Database;
 import com.panacea.RufusPyramid.common.StaticDataProvider;
-import com.panacea.RufusPyramid.game.GameMaster;
-import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import com.panacea.RufusPyramid.game.view.screens.SplashScreen;
-import com.panacea.RufusPyramid.map.Map;
-import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 /* "Game" permette di suddividere l'applicazione in più "Screen" (main menù, gioco, highscores, etc.) */
 public class Main extends Game implements ApplicationListener {
@@ -48,6 +44,7 @@ public class Main extends Game implements ApplicationListener {
 //        catch (Exception e){
 //            e.printStackTrace();
 //        }
+        Gdx.input.setCatchBackKey(true);
 	}
 
     @Override

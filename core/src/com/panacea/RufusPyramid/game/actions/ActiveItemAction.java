@@ -1,8 +1,6 @@
 package com.panacea.RufusPyramid.game.actions;
 
 import com.panacea.RufusPyramid.game.GameMaster;
-import com.panacea.RufusPyramid.game.GameModel;
-import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.items.usableItems.UsableItem;
 

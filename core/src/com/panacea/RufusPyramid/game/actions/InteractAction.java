@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.actions;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.common.Utilities;

@@ -41,9 +41,9 @@
 			<SHIELD>
 				<TexturePosition>3</TexturePosition>
 			</SHIELD>
-			<ARMOR2>
+			<GAUNTLETS>
 				<TexturePosition>4</TexturePosition>
-			</ARMOR2>
+			</GAUNTLETS>
 		</Wearable>
 		<MiscItem>
 			<path>Items/misc.png</path>

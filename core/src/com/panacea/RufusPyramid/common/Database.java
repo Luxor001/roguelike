@@ -1,11 +1,7 @@
 package com.panacea.RufusPyramid.common;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.panacea.RufusPyramid.game.creatures.ICreature;
-
-import java.io.File;
 
 /**
  * Created by gioele.masini on 09/10/2015.

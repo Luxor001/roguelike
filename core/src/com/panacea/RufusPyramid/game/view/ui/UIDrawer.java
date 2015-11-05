@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -42,6 +41,7 @@ import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
 import com.panacea.RufusPyramid.game.view.ViewObject;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
+import com.panacea.RufusPyramid.game.view.screens.LoadScreen;
 import com.panacea.RufusPyramid.game.view.screens.MenuScreen;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
@@ -64,7 +64,7 @@ public class UIDrawer extends ViewObject {
     private Skin skin;
     private Stage stage;
     private SpriteBatch batch;
-    private ShapeRenderer renderer;
+//    private ShapeRenderer renderer;
 
     private ArrayList<Label> labels;
 
@@ -82,7 +82,7 @@ public class UIDrawer extends ViewObject {
     private com.badlogic.gdx.scenes.scene2d.ui.Image options;
     private ImageButton resumeButton;
     private ImageButton postButton;
-    private ImageButton exitButton;
+    private transient ImageButton exitButton;
     private transient HealthBar healthBar;
     private transient HealthBar manaBar;
 
@@ -105,7 +105,7 @@ public class UIDrawer extends ViewObject {
 //        float h = (float)Gdx.graphics.getHeight();
 
         batch = new SpriteBatch();
-        renderer = new ShapeRenderer();
+//        renderer = new ShapeRenderer();
 //        OrthographicCamera camera = new OrthographicCamera();
 //        camera.setToOrtho(false, (w / h) * 350, 350);
 //        camera.update();
@@ -185,15 +185,7 @@ public class UIDrawer extends ViewObject {
         attackButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         attackButton.getStyle().imageDisabled = new SpriteDrawable(new Sprite(selectedTexture));
         attackButton.setDisabled(true);
-        attackButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                DefaultHero hero = GameModel.get().getHero();
-                if (hero.getFirstTarget() != null)
-                    hero.fireActionChosenEvent(new AttackAction(hero, hero.getFirstTarget()));
-                return true;
-            }
-        });
+        attackButton.addListener(new AttackButtonClickListener());
 
         float currX = (maxX/2 - 40)+10;
         imageTexture = new Texture(Gdx.files.internal("data/ui/pass2.png"));
@@ -202,14 +194,7 @@ public class UIDrawer extends ViewObject {
         passButton.setPosition(currX, 10);
         passButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         passButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
-        passButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                GameModel.get().getHero().fireActionChosenEvent(new PassAction(GameModel.get().getHero()));
-                MusicPlayer.playSound(MusicPlayer.SoundType.ITEM_PICK);
-                return true;
-            }
-        });
+        passButton.addListener(new PassButtonClickListener());
 
         currX +=imageTexture.getWidth()+5;
         imageTexture = new Texture(Gdx.files.internal("data/ui/spell2.png"));
@@ -218,14 +203,14 @@ public class UIDrawer extends ViewObject {
         spellButton.setPosition(currX, 10);
         spellButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         spellButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
-        spellButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-
-                return true;
-            }
-        });
+//        spellButton.addListener(new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//
+//
+//                return true;
+//            }
+//        });
 
         currX +=imageTexture.getWidth()+5;
         imageTexture = new Texture(Gdx.files.internal("data/ui/inventory2.png"));
@@ -234,23 +219,7 @@ public class UIDrawer extends ViewObject {
         inventoryButton.setPosition(currX, 10);
         inventoryButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         inventoryButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
-        inventoryButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (!GameController.gameInUI) {
-                    GameController.gameInUI = !GameController.gameInUI;
-                    inventory.setVisible(!inventory.isVisible());
-                    InputManager.get().getHeroProcessor().setPaused(true);
-                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_OPEN);
-                } else {
-                    GameController.gameInUI = false;
-                    inventory.setVisible(false);
-                    InputManager.get().getHeroProcessor().setPaused(false);
-                    MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_CLOSE);
-                }
-                return true;
-            }
-        });
+        inventoryButton.addListener(new InventoryButtonClickListener());
 
         currX +=imageTexture.getWidth() + 5;
         imageTexture = new Texture(Gdx.files.internal("data/ui/options2.png"));
@@ -260,18 +229,7 @@ public class UIDrawer extends ViewObject {
         optionsButton.setPosition(currX, 10);
         optionsButton.setSize(imageTexture.getWidth(), imageTexture.getHeight());
         optionsButton.getStyle().imageDown = new SpriteDrawable(new Sprite(selectedTexture));
-        optionsButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                GameController.gameInUI = !GameController.gameInUI;
-                InputManager.get().getHeroProcessor().setPaused(GameController.gameInUI);
-                options.setVisible(GameController.gameInUI);
-                resumeButton.setVisible(GameController.gameInUI);
-                postButton.setVisible(GameController.gameInUI);
-                exitButton.setVisible(GameController.gameInUI);
-                return true;
-            }
-        });
+        optionsButton.addListener(new OptionsButtonClickListener());
 
         inventory = new Stack();
 
@@ -293,12 +251,7 @@ public class UIDrawer extends ViewObject {
         inventory.setVisible(false);
 
         this.itemsNeedUpdate = true;
-        GameModel.get().getHero().getEquipment().addEquippedItemListener(new EquippedItemListener() {
-            @Override
-            public void equippedItem(EquippedItemEvent event, Object source) {
-                UIDrawer.this.itemsNeedUpdate = true;
-            }
-        });
+        GameModel.get().getHero().getEquipment().addEquippedItemListener(new EquippedItemClickListener());
 
         Texture optionsTexture = new Texture(Gdx.files.internal("data/ui/options_menu.png"));
         options = new com.badlogic.gdx.scenes.scene2d.ui.Image(optionsTexture);
@@ -423,16 +376,27 @@ public class UIDrawer extends ViewObject {
                     @Override
                     public void run() {
                         if(GameModel.get() != null){
-                            SaveLoadHelper sl = SaveLoadHelper.getIstance();
-                            sl.saveGame();
-                        }
-                        ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
-                        if (GameModel.get() != null) {  //FIXME dopo il caricamento non viene impostato?
+                            final LoadScreen load= new LoadScreen();
 
-                            GameModel.get().disposeAll();
+                            ((Game) Gdx.app.getApplicationListener()).setScreen(load);
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SaveLoadHelper sl = SaveLoadHelper.getIstance();
+                                    sl.saveGame();
+                                    ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
+                                    GameModel.get().disposeAll();
+                                    GameController.gameInUI = false;
+                                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
+                                }
+                            });
                         }
-                        GameController.gameInUI = false;
-                        ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
+                        else{
+                            ((Game) Gdx.app.getApplicationListener()).getScreen().dispose(); //basterà questo?
+                            GameController.gameInUI = false;
+                            ((Game) Gdx.app.getApplicationListener()).setScreen(new MenuScreen());//TODO: fare dispose!
+                        }
+
                     }
                 }, 0.5f        //    delay per fare vedere la selezione utente..
                 );
@@ -527,8 +491,9 @@ public class UIDrawer extends ViewObject {
         float maxY =  Gdx.graphics.getHeight();
         batch.begin();
         goldAmountText.draw(batch, GameModel.get().getHero().getGoldAmount() + "", 160, maxY - 7);
-        if(notificationTextVisible)
-            notificationText.draw(batch, "Score on facebook posted!",GameCamera.get().viewportWidth/2-notificationTextWidth/3, 250 );
+        if(notificationTextVisible) {
+            notificationText.draw(batch, "Score on facebook posted!", GameCamera.get().viewportWidth / 2 - notificationTextWidth / 3, 250);
+        }
         batch.end();
     }
 
@@ -575,20 +540,97 @@ public class UIDrawer extends ViewObject {
         this.manaBar.setValue(value);
     }
 
-    private class ItemClickListener extends ClickListener {
+    private static class ItemClickListener extends ClickListener {
         private final UsableItem item;
+
+        private ItemClickListener() {
+            this(null);
+        }
 
         public ItemClickListener(UsableItem item) {
             this.item = item;
         }
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                super.clicked(event, x, y);
-                if (item instanceof Equippable) {
-                    InputManager.get().getHeroProcessor().equipItem((Equippable) item);
-                } else {
-                    InputManager.get().getHeroProcessor().useItem(item);
-                }
+
+        @Override
+        public void clicked(InputEvent event, float x, float y){
+            super.clicked(event, x, y);
+            if (item instanceof Equippable) {
+                InputManager.get().getHeroProcessor().equipItem((Equippable) item);
+            } else {
+                InputManager.get().getHeroProcessor().useItem(item);
             }
+        }
+    }
+
+    private static class AttackButtonClickListener extends InputListener {
+        public AttackButtonClickListener() {
+        }
+
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            DefaultHero hero = GameModel.get().getHero();
+            if (hero.getFirstTarget() != null)
+                hero.fireActionChosenEvent(new AttackAction(hero, hero.getFirstTarget()));
+            return true;
+        }
+    }
+
+    private static class PassButtonClickListener extends InputListener {
+        public PassButtonClickListener() {
+        }
+
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            GameModel.get().getHero().fireActionChosenEvent(new PassAction(GameModel.get().getHero()));
+            MusicPlayer.playSound(MusicPlayer.SoundType.ITEM_PICK);
+            return true;
+        }
+    }
+
+    private static class InventoryButtonClickListener extends InputListener {
+        public InventoryButtonClickListener() {};
+
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            UIDrawer uid = GameDrawer.get().getUIDrawer();
+            if (!GameController.gameInUI) {
+                GameController.gameInUI = !GameController.gameInUI;
+                uid.inventory.setVisible(!uid.inventory.isVisible());
+                InputManager.get().getHeroProcessor().setPaused(true);
+                MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_OPEN);
+            } else {
+                GameController.gameInUI = false;
+                uid.inventory.setVisible(false);
+                InputManager.get().getHeroProcessor().setPaused(false);
+                MusicPlayer.playSound(MusicPlayer.SoundType.INVENTORY_CLOSE);
+            }
+            return true;
+        }
+    }
+
+    private static class OptionsButtonClickListener extends InputListener {
+
+        public OptionsButtonClickListener() {}
+
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            GameController.gameInUI = !GameController.gameInUI;
+            InputManager.get().getHeroProcessor().setPaused(GameController.gameInUI);
+            UIDrawer uid = GameDrawer.get().getUIDrawer();
+            uid.options.setVisible(GameController.gameInUI);
+            uid.resumeButton.setVisible(GameController.gameInUI);
+            uid.postButton.setVisible(GameController.gameInUI);
+            uid.exitButton.setVisible(GameController.gameInUI);
+            return true;
+        }
+    }
+
+    private static class EquippedItemClickListener implements EquippedItemListener {
+        public EquippedItemClickListener() {}
+
+        @Override
+        public void equippedItem(EquippedItemEvent event, Object source) {
+            GameDrawer.get().getUIDrawer().itemsNeedUpdate = true;
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.panacea.RufusPyramid.game.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.game.GameModel;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;

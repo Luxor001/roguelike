@@ -33,7 +33,7 @@ public class MenuScreen implements Screen {
      * Altezza del viewport, la larghezza viene determinata usando larghezza e altezza reali del dispositivo:
      * VIEWPORT_WIDTH = (w / h) * VIEWPORT_HEIGHT
      */
-    private static final float VIEWPORT_HEIGHT = 640f;
+    public static final float VIEWPORT_HEIGHT = 640f;
 
     private float w = (float)Gdx.graphics.getWidth();
     private float h = (float)Gdx.graphics.getHeight();
@@ -96,11 +96,20 @@ public class MenuScreen implements Screen {
                 //We set it to new Splash because we got no other screens
                 //otherwise you put the screen there where you want to go
 
-                //FIXME sembra che per poter cliccare il pulsante bisogna fare un doppioclick.... perchè?
-//                ((Game)Gdx.app.getApplicationListener()).setScreen(new SplashScreen());
+               final LoadScreen load = new LoadScreen();
+               final GameScreen game = new GameScreen(true);
 
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(true));
-                dispose();
+                game.hide();
+                ((Game) Gdx.app.getApplicationListener()).setScreen(load);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.initialize(true);
+                        load.dispose();
+                        ((Game) Gdx.app.getApplicationListener()).setScreen(game);
+                        dispose();
+                    }
+                });
             }
         });
         buttonExit.addListener(new ClickListener() {

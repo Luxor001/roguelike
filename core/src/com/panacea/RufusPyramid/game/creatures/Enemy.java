@@ -14,21 +14,23 @@ import java.util.Set;
 public class Enemy extends AbstractCreature {
     private CreatureAI creatureAI;
     private static final Set<CreatureAI.State> displayHealthBarStates = new HashSet<CreatureAI.State>(Arrays.asList(CreatureAI.State.ATTACKING, CreatureAI.State.FOLLOWING));
+
     public Enemy(String name, String description, int maximumHP, double attack, double defence, double speed, CreatureType type) {
         super(name, description, maximumHP, attack, defence, speed);
         this.setCreatureType(type);
     }
+
     public Enemy(String name, String description, Stats stats, CreatureType type, int id) {
         super(name, description, stats, id);
         this.setCreatureType(type);
     }
+
     public Enemy(String name, String description, Stats stats, CreatureType type) {
         super(name, description, stats.getMaximumHP(), stats.getAttack(), stats.getDefence(),stats.getSpeed());
         this.setCreatureType(type);
     }
-    private Enemy(){
 
-    }
+    private Enemy() {}
 
     /**
      * L'azione di default della classe Enemy, per ora, è passare il turno,

@@ -6,7 +6,6 @@ import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.creatures.ICreature;
 import com.panacea.RufusPyramid.game.view.MusicPlayer;
-import com.panacea.RufusPyramid.game.view.SoundsProvider;
 import com.panacea.RufusPyramid.game.view.SpritesProvider;
 
 /**
@@ -38,6 +37,7 @@ public class AnimWalk extends AbstractCreatureAnimation {
         this.setAbsolutePosition(Utilities.convertToAbsolutePos(startPoint));
 //        this.setSoundVolume(0.1f);
     }
+
 
     public void create() {
         super.create();

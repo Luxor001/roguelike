@@ -4,19 +4,13 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.panacea.RufusPyramid.game.creatures.DefaultHero;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
-import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import de.tomgrill.gdxfacebook.core.GDXFacebook;
-import de.tomgrill.gdxfacebook.core.GDXFacebookCallback;
 import de.tomgrill.gdxfacebook.core.GDXFacebookConfig;
-import de.tomgrill.gdxfacebook.core.GDXFacebookError;
 import de.tomgrill.gdxfacebook.core.GDXFacebookSystem;
-import de.tomgrill.gdxfacebook.core.SignInMode;
-import de.tomgrill.gdxfacebook.core.SignInResult;
 
 /**
  * Permette dall'esterno di recuperare tutti i controller istanziati
@@ -54,6 +48,8 @@ public class GameController {
     }
 
     public static void resumeGame() {
+
+
         GameController.gameInPlay = true;
         GameController.resetAll();
 

@@ -3,17 +3,13 @@ package com.panacea.RufusPyramid.save;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Registration;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.CollectionSerializer;
-import com.esotericsoftware.kryo.serializers.DefaultSerializers;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.panacea.RufusPyramid.game.Diary;
 import com.panacea.RufusPyramid.game.Effect.Effect;
@@ -43,7 +39,6 @@ import com.panacea.RufusPyramid.game.creatures.Level;
 import com.panacea.RufusPyramid.game.creatures.Stats;
 import com.panacea.RufusPyramid.game.items.ChestItem;
 import com.panacea.RufusPyramid.game.items.GoldItem;
-import com.panacea.RufusPyramid.game.items.IItem;
 import com.panacea.RufusPyramid.game.items.Item;
 import com.panacea.RufusPyramid.game.items.usableItems.IItemType;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
@@ -53,6 +48,7 @@ import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
 import com.panacea.RufusPyramid.game.view.MapDrawer;
 import com.panacea.RufusPyramid.game.view.input.HeroInputManager;
 import com.panacea.RufusPyramid.game.view.ui.HealthBar;
+import com.panacea.RufusPyramid.game.view.ui.UIDrawer;
 import com.panacea.RufusPyramid.map.Map;
 import com.panacea.RufusPyramid.map.MapContainer;
 import com.panacea.RufusPyramid.map.MapFactory;
@@ -62,8 +58,6 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by gio on 17/10/15.
@@ -92,6 +86,17 @@ public class SaveLoadHelper {
     }
     private SaveLoadHelper() {
         this.kryo = new Kryo();
+
+        Serializer<UIDrawer> uiDrawerSerializer = new Serializer<UIDrawer>() {
+            @Override
+            public void write(Kryo kryo, Output output, UIDrawer object) {
+            }
+
+            @Override
+            public UIDrawer read(Kryo kryo, Input input, Class<UIDrawer> type) {
+                return new UIDrawer();
+            }
+        };
 
         Serializer<HashMap> hashMapSerializer = new Serializer<HashMap>() {
             @Override
@@ -126,6 +131,8 @@ public class SaveLoadHelper {
             }
         };
 
+//        final Serializer<Backpack> backpackSerializer = new FieldSerializer<Backpack>(kryo, Backpack.class);
+
         Serializer<ICreature> creatureSerializer = new Serializer<ICreature>() {
             @Override
             public void write(Kryo kryo, Output output, ICreature object) {
@@ -136,10 +143,10 @@ public class SaveLoadHelper {
                 kryo.writeObject(output, object.getDescription());
                 kryo.writeObjectOrNull(output, object.getAbsoluteTickPosition(), GridPoint2.class);
                 kryo.writeObject(output, object.getBaseStats());
-                kryo.writeObject(output, object.getCurrentStats());
+//                kryo.writeObject(output, object.getCurrentStats());
                 kryo.writeObject(output, new Integer(object.getHPCurrent()));
                 kryo.writeObject(output, new Integer(object.getEnergy()));
-                kryo.writeObject(output, object.getEquipment());
+                kryo.writeObjectOrNull(output, object.getEquipment(), Backpack.class);
                 kryo.writeObject(output, object.getEffects());
 
                 switch (object.getCreatureType()) {
@@ -164,10 +171,10 @@ public class SaveLoadHelper {
                 String description = kryo.readObject(input, String.class);
                 GridPoint2 absTickPos = kryo.readObjectOrNull(input, GridPoint2.class);
                 Stats baseStats = kryo.readObject(input, Stats.class);
-                Stats currStats = kryo.readObject(input, Stats.class);
+//                Stats currStats = kryo.readObject(input, Stats.class);
                 int hpCurrent = kryo.readObject(input, Integer.class).intValue();
                 int energy = kryo.readObject(input, Integer.class).intValue();
-                Backpack backpack = kryo.readObject(input, Backpack.class);
+                Backpack backpack = kryo.readObjectOrNull(input, Backpack.class);
                 ArrayList<Effect> effects = kryo.readObject(input, ArrayList.class);
 
                 ICreature creature = null;
@@ -189,6 +196,8 @@ public class SaveLoadHelper {
                 creature.setEnergy(energy);
                 creature.setHPCurrent(hpCurrent);
                 creature.setPosition(tile);
+                creature.setEquipment(backpack);
+                creature.addEffects(effects);
 
                 return creature;
             }
@@ -417,7 +426,7 @@ public class SaveLoadHelper {
                     readItem = null;
                     Gdx.app.debug(SaveLoadHelper.class.toString(), "Item boh: " + itemType);
                 }
-                if(pos != null && readItem != null) //FIXMEABSOLUTELY: Qui è strano, a volte il readItem è null. che sia colpa del serializzatore di IItemType?
+                if(pos != null && readItem != null) //FIXMEABSOLUTELY: Qui è so, a volte il readItem è null. che sia colpa del serializzatore di IItemType?
                     readItem.setPosition(pos);
                 return readItem;
             }
@@ -496,6 +505,8 @@ public class SaveLoadHelper {
         kryo.register(AbstractList.class, 42);
         kryo.register(Diary.class, 44);
         kryo.register(LinkedHashMap.class, hashMapSerializer, 45);
+        kryo.register(UIDrawer.class, uiDrawerSerializer, 46);
+        kryo.register(Backpack.class, /*backpackSerializer,*/ 47);
     }
 
     /**
@@ -559,7 +570,7 @@ public class SaveLoadHelper {
     /*********** Load methods ***********/
     public void startLoad() {
         this.input = new Input(Gdx.files.local(saveFile).read());
-        com.esotericsoftware.minlog.Log.TRACE();
+//        com.esotericsoftware.minlog.Log.TRACE();
 
 //        try {
 //        } catch (FileNotFoundException e) {
@@ -603,7 +614,6 @@ public class SaveLoadHelper {
      * @return l'oggetto letto.
      */
     public <T> T loadObject(Class<T> classe) {
-
         return kryo.readObject(input, classe);
     }
 

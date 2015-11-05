@@ -1,7 +1,6 @@
 package com.panacea.RufusPyramid.game.creatures;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
 import com.panacea.RufusPyramid.game.actions.IAgent;
@@ -64,6 +63,7 @@ public interface ICreature extends IAgent {
     public void addCreatureDeadListener(CreatureDeadListener listener);
 
     public Backpack getEquipment();
+    public void setEquipment(Backpack backpack);
 
     public Stats getBaseStats();
 

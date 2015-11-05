@@ -3,7 +3,6 @@ package com.panacea.RufusPyramid.game.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint2;
 import com.panacea.RufusPyramid.game.view.animations.AbstractAnimation;
-import com.panacea.RufusPyramid.game.view.animations.AnimDamage;
 
 /*Snippet preso da https://github.com/libgdx/libgdx/wiki/2D-Animation*/
 public class Animator extends ViewObject {
