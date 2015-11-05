@@ -49,7 +49,6 @@ public class GameMaster{
     public transient HeroInputManager heroInput;
 
     private transient ActionResult lastResult;    //viene impostato a null ad ogni cambio di turno
-    private IAgent agentOnTurn;
     //  private SaveLoadHelper sl;
 
     public GameMaster() {
@@ -58,7 +57,6 @@ public class GameMaster{
         this.removeFromTurnWhenDeadListener = getDeadListener();
         this.someoneIsPlaying = false;
         this.currentAgentIndex = -1;
-        this.agentOnTurn = null;
 
         this.init();
     }
@@ -119,17 +117,18 @@ public class GameMaster{
         if (thereIsSomeonePlaying()) {  //Se c'è qualche creatura che deve eseguire azioni (controllo anti-esplosione)
             //Al primo avvio this.currentAgentIndex == -1, viene inizializzata dalla prima chiamata a turnToNextAgent
 
-            while (this.agentOnTurn == null || this.agentOnTurn.getEnergy() < MIN_ENERGY_TO_ACT) {
+            IAgent agentOnTurn = this.getAgentOnTurn();
+            while (agentOnTurn == null || agentOnTurn.getEnergy() < MIN_ENERGY_TO_ACT) {
                 //Applico gli effetti prima di passare il turno alla prossima creatura
-                if(this.agentOnTurn != null && this.agentOnTurn instanceof AbstractCreature)
-                    this.checkEffects((AbstractCreature) this.agentOnTurn);
+                if(agentOnTurn != null && agentOnTurn instanceof AbstractCreature)
+                    this.checkEffects((AbstractCreature) agentOnTurn);
 
                 //Se la creatura corrente non ha più energia per continuare a fare azioni passa automaticamente il turno
-                this.agentOnTurn = turnToNextAgent();
+                agentOnTurn = turnToNextAgent();
             }
 
-            this.agentOnTurn.chooseNextAction(lastResult);
-            if (this.agentOnTurn instanceof DefaultHero) {
+            agentOnTurn.chooseNextAction(lastResult);
+            if (agentOnTurn instanceof DefaultHero) {
                 this.heroInput.setPaused(false);
             }
         }
@@ -160,7 +159,7 @@ public class GameMaster{
         this.lastResult = null;
         //Mi sposto alla creatura successiva, in ordine
         this.currentAgentIndex = (this.currentAgentIndex +1) % this.agentsPlaying.size();
-        this.agentOnTurn = agentsPlaying.get(currentAgentIndex);
+        IAgent agentOnTurn = getAgentOnTurn();
 
         //Controllo che la nuova creatura dei turno non dovrebbe essere già morta (e quindi rimmossa dalla turnazione)
         if (agentOnTurn instanceof ICreature && ((ICreature)agentOnTurn).getHPCurrent() <= 0) {
@@ -249,6 +248,14 @@ public class GameMaster{
 //        return this.heroController;
 //    }
 
+    private IAgent getAgentOnTurn() {
+        if (this.currentAgentIndex < 0) {
+            return this.turnToNextAgent();
+        } else {
+            return this.agentsPlaying.get(this.currentAgentIndex);
+        }
+    }
+
     private static class PerformAndPayActionChosenListener implements ActionChosenListener {
 
         public PerformAndPayActionChosenListener() {}
@@ -256,7 +263,7 @@ public class GameMaster{
         public void performed(ActionChosenEvent event, IAgent source) {
             /* Controllo che la creatura che richiede di effettuare l'azione sia di turno. */
             GameMaster gm = GameController.getGm();
-            if (!source.equals(gm.agentsPlaying.get(gm.currentAgentIndex))
+            if (!source.equals(gm.getAgentOnTurn())
                     || (source instanceof ICreature && ((ICreature)source).getHPCurrent() <= 0)) {
                 Gdx.app.error(
                         this.getClass().getName(),
@@ -303,9 +310,10 @@ public class GameMaster{
         public void changed(CreatureDeadEvent event, Object source) {
             if (source instanceof IAgent) {
                 GameMaster gm = GameController.getGm();
-                if (gm.agentOnTurn != null && gm.agentOnTurn.equals(source)) {
+                IAgent agentOnTurn = gm.getAgentOnTurn();
+                if (agentOnTurn != null && agentOnTurn.equals(source)) {
                     //Se la creatura è di turno, prima di rimuoverla in quanto morta passo il turno alla successiva
-                    gm.agentOnTurn = gm.turnToNextAgent();
+                    agentOnTurn = gm.turnToNextAgent();
                 }
                 gm.removeAgent((IAgent) source);
             }
