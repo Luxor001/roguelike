@@ -4,8 +4,10 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
+import com.panacea.RufusPyramid.game.view.screens.GameScreen;
 import com.panacea.RufusPyramid.save.SaveLoadHelper;
 
 import de.tomgrill.gdxfacebook.core.GDXFacebook;
@@ -18,7 +20,7 @@ import de.tomgrill.gdxfacebook.core.GDXFacebookSystem;
  */
 public class GameController {
 
-    public static GameMaster gm;
+    private static GameMaster gm;
     private static boolean gameInPlay;
     public static boolean gameInUI;
 
@@ -48,8 +50,6 @@ public class GameController {
     }
 
     public static void resumeGame() {
-
-
         GameController.gameInPlay = true;
         GameController.resetAll();
 
@@ -65,12 +65,19 @@ public class GameController {
 //        }
     }
 
-    public static void changeLevel(int level){
+    public static void toNextMap() {
+        GameController.gameInPlay = true;
+        GameController.resetAll();
 
-        GameModel.get().currentMapIndex = level;
-        GameModel.get().createInstance();
-        gm = new GameMaster();
+        GameModel.get().changeToNextMap();
+        GameController.gm = new GameMaster();
 
+//        GameDrawer.reset();
+//        GameDrawer.get().create();
+        GameController.initializeGame();
+
+        GameScreen gameScreen = ((GameScreen) ((Game) Gdx.app.getApplicationListener()).getScreen());
+        gameScreen.reset();
     }
 
     private static void resetAll() {

@@ -154,25 +154,21 @@ public class GameModel {
             }
         }
     }
-    public void changeMap(){
+    public void changeToNextMap(){
 
     //    DefaultHero hero = new DefaultHero();
   //      Map prova = maps.get(1);
        if(currentMapIndex+1 < maps.size()){
          //   GameController.initializeGame();
-            currentMapIndex += 1;
-            Iterator<ICreature> e = creatures.iterator();
-            while (e.hasNext()) {
-                if(e.next().getCreatureType() != ICreature.CreatureType.HERO)
-                    e.remove();
-            }
-            items.clear();
-            initializeMap();
-            this.hero.setPosition(getCurrentMap().getSpawnPoint());
-            GameDrawer.reset();
-            GameDrawer.get().create();
-            GameController.gm = new GameMaster();
-
+           currentMapIndex += 1;
+           Iterator<ICreature> e = creatures.iterator();
+           while (e.hasNext()) {
+               if(e.next().getCreatureType() != ICreature.CreatureType.HERO)
+                   e.remove();
+           }
+           items.clear();
+           initializeMap();
+           this.hero.setPosition(getCurrentMap().getSpawnPoint());
         }
             //    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen(false));
         //this.hero = hero;

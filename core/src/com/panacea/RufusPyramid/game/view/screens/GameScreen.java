@@ -21,14 +21,15 @@ public class GameScreen implements Screen {
     }
 
     public void show() {
-  if (loadSavedGame) {
+        if (loadSavedGame) {
            GameController.resumeGame();
-       } else {
+        } else {
             GameController.initializeGame();
         }
+        this.reset();
+    }
 
-//        GameController.initializeGame();
-
+    public void reset() {
         GameDrawer.reset();
         objectsDrawer = GameDrawer.get();
         objectsDrawer.create();
@@ -37,13 +38,6 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(InputManager.get());
         MusicPlayer.setAmbient(MusicPlayer.AmbientType.GAME);
-
-        /*if(GameModel.get() != null){
-            SaveLoadHelper sl = new SaveLoadHelper();
-            sl.startSave();
-            sl.saveObject(GameModel.get());
-            sl.stopSave();
-        }*/
     }
 
     public void initialize(boolean loadSavedGame){
@@ -52,7 +46,6 @@ public class GameScreen implements Screen {
         } else {
             GameController.initializeGame();
         }
-        //GameController.resumeGame();
     }
 
     public void render(float delta) {

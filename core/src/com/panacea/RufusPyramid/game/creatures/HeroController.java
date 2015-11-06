@@ -85,7 +85,7 @@ public class HeroController {
 
         if(nextPos.getType() == Tile.TileType.NextLevel){
         //    GameController.changeLevel(GameModel.get().currentMapIndex+1);
-            GameModel.get().changeMap();
+            GameController.toNextMap();
         }
     }
 
