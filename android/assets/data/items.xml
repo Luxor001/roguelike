@@ -31,18 +31,24 @@
 			<path>Items/wearable.png</path>
 			<ARMOR>
 				<TexturePosition>0</TexturePosition>
+				<Defense>1.2</Defense>
 			</ARMOR>
 			<BOOTS>
 				<TexturePosition>1</TexturePosition>
+				<Defense>0.2</Defense>
+				<Speed>1</Speed>
 			</BOOTS>
 			<HELM>
 				<TexturePosition>2</TexturePosition>
+				<Defense>0.5</Defense>
 			</HELM>
 			<SHIELD>
 				<TexturePosition>3</TexturePosition>
+				<Defense>0.7</Defense>
 			</SHIELD>
 			<GAUNTLETS>
 				<TexturePosition>4</TexturePosition>
+				<Defense>0.3</Defense>
 			</GAUNTLETS>
 		</Wearable>
 		<MiscItem>

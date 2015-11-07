@@ -29,12 +29,12 @@ public class Backpack {
         this.equippedItems = new LinkedHashMap<Backpack.EquippableType, Equippable>(EquippableType.values().length);
         this.storage = new ArrayList<UsableItem>(MAX_STORAGE_CAPACITY);
         this.equippedItemListeners = new ArrayList<EquippedItemListener>();
-        ArrayList<Effect> effectsList1 = new ArrayList<Effect>();
-        effectsList1.add(new Effect(Effect.EffectType.ATTACK, 3));
+//        ArrayList<Effect> effectsList1 = new ArrayList<Effect>();
+//        effectsList1.add(new Effect(Effect.EffectType.ATTACK, 3));
         ArrayList<Effect> effectsList2 = new ArrayList<Effect>();
-        effectsList2.add(new Effect(Effect.EffectType.ATTACK, 1));
+        effectsList2.add(new Effect(Effect.EffectType.ATTACK, 0.8f));
         this.addItemToStorage(new Weapon(Weapon.WeaponType.PICK, effectsList2, "Neptuno's Trident"));
-        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, effectsList1, "GoldenAxe"));
+//        this.addItemToStorage(new Weapon(Weapon.WeaponType.AXE, effectsList1, "GoldenAxe"));
         this.addItemToStorage(new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 50, 1), "Superpozione"));
     }
 

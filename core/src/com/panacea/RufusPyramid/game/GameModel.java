@@ -136,12 +136,14 @@ public class GameModel {
                 }
                 case 2:{
                     itemEffects.add(new Effect(Effect.EffectType.ATTACK,2f));
-                    newItem = new ChestItem(new Weapon(Weapon.WeaponType.DAGGER, itemEffects, "Sharp ToothPick Dagger"));
+//                    newItem = new ChestItem(new Weapon(Weapon.WeaponType.DAGGER, itemEffects, "Sharp ToothPick Dagger"));
+                    newItem = new ChestItem(Item.generateRandomItem(3, (int) System.nanoTime()));
                     break;
                 }
                 case 3:{
                     itemEffects.add(new Effect(Effect.EffectType.DEFENSE,3f));
-                    newItem = new ChestItem(new Wearable(Wearable.WearableType.ARMOR, itemEffects, "Rusty Chainmail"));
+//                    newItem = new ChestItem(new Wearable(Wearable.WearableType.ARMOR, itemEffects, "Rusty Chainmail"));
+                    newItem = new ChestItem(Item.generateRandomItem(4, (int) System.nanoTime()));
                     break;
                 }
             }

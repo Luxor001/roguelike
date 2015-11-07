@@ -6,9 +6,14 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.panacea.RufusPyramid.common.Utilities;
 import com.panacea.RufusPyramid.game.Effect.Effect;
 import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
+import com.panacea.RufusPyramid.game.creatures.Backpack;
 import com.panacea.RufusPyramid.game.items.usableItems.IItemType;
 import com.panacea.RufusPyramid.game.items.usableItems.MiscItem;
 import com.panacea.RufusPyramid.game.items.usableItems.Weapon;
+import com.panacea.RufusPyramid.game.items.usableItems.Wearable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lux on 13/09/2015.
@@ -37,34 +42,56 @@ public abstract class Item implements IItem {
         this.position = position;
     }
 
-    public static Item generateRandomItem(int seed){
-        int rand= Utilities.randInt(1,4,seed);
-        Item newITem=null;
-        switch (rand){
-            case 1:
-                newITem = new GoldItem(Utilities.randInt(25,100,seed));
-                break;
-            case 2:{ //MiscItem
-                rand = Utilities.randInt(0, MiscItem.MiscItemType.values().length -1, seed);
-                MiscItem.MiscItemType type = MiscItem.MiscItemType.values()[rand];
-                if(type == MiscItem.MiscItemType.HEALTH_POTION)
-                    newITem = new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 20, 1), "Health Potion");
-                if(type == MiscItem.MiscItemType.INVINCIBILITY_POTION)
-                    newITem = new MiscItem(MiscItem.MiscItemType.INVINCIBILITY_POTION, new TemporaryEffect(Effect.EffectType.INVINCIBILITY, 1, 5), "Health Potion");
-                if(type == MiscItem.MiscItemType.RAW_MEAT)
-                    newITem = new MiscItem(MiscItem.MiscItemType.RAW_MEAT, new TemporaryEffect(Effect.EffectType.HEALTH, 10, 1), "Health Potion");
-                break;
-            }
-            case 3:{//Weapon
-                rand = Utilities.randInt(0, Weapon.WeaponType.values().length -1, seed);
-                Weapon.WeaponType type = Weapon.WeaponType.values()[rand];
-                getEffectsFromXml(type.name());
-            }
-        }
-        return newITem;
+    public static Item generateRandomItem(int seed) {
+        int rand = Utilities.randInt(1, 4, seed);
+        return generateRandomItem(rand, seed);
     }
 
-    private static Effect getEffectsFromXml(String type){
+    /**
+     * Genera un oggetto random di tipo "item". A seconda del valore di quest'ultimo genera:
+     * 1- Dell'oro
+     * 2- Un MiscItem
+     * 3- Una Weapon
+     * 4- Un Wearable
+     * @param item tipo di oggetto
+     * @param seed
+     * @return L'oggetto generato
+     */
+    public static Item generateRandomItem(int item, int seed) {
+        int rand;
+        Item newItem = null;
+        List<Effect> listaEffetti = null;
+        switch (item){
+            case 1:
+                newItem = new GoldItem(Utilities.randInt(25,100,seed));
+                break;
+            case 2: //MiscItem
+                rand = Utilities.randInt(0, MiscItem.MiscItemType.values().length -1, seed);
+                MiscItem.MiscItemType mType = MiscItem.MiscItemType.values()[rand];
+                if(mType == MiscItem.MiscItemType.HEALTH_POTION)
+                    newItem = new MiscItem(MiscItem.MiscItemType.HEALTH_POTION, new TemporaryEffect(Effect.EffectType.HEALTH, 20, 1), "Health Potion");
+                if(mType == MiscItem.MiscItemType.INVINCIBILITY_POTION)
+                    newItem = new MiscItem(MiscItem.MiscItemType.INVINCIBILITY_POTION, new TemporaryEffect(Effect.EffectType.INVINCIBILITY, 1, 5), "Health Potion");
+                if(mType == MiscItem.MiscItemType.RAW_MEAT)
+                    newItem = new MiscItem(MiscItem.MiscItemType.RAW_MEAT, new TemporaryEffect(Effect.EffectType.HEALTH, 10, 1), "Health Potion");
+                break;
+            case 3: //Weapon
+                rand = Utilities.randInt(0, Weapon.WeaponType.values().length - 1, seed);
+                Weapon.WeaponType wType = Weapon.WeaponType.values()[rand];
+                listaEffetti = getEffectsFromXml(wType.name());
+                newItem = new Weapon(wType, listaEffetti, wType.name().toLowerCase());
+                break;
+            case 4: //Wearable - Armour
+                rand = Utilities.randInt(0, Wearable.WearableType.values().length -1, seed);
+                Wearable.WearableType aType = Wearable.WearableType.values()[rand];
+                listaEffetti = getEffectsFromXml(aType.name());
+                newItem = new Wearable(aType, listaEffetti, aType.name().toLowerCase());
+        }
+        return newItem;
+    }
+
+    private static List<Effect> getEffectsFromXml(String type){
+        List<Effect> listaEffetti = new ArrayList<Effect>();
         try{
             XmlReader xml = new XmlReader();
             XmlReader.Element xml_element = xml.parse(Gdx.files.internal(Utilities.ITEMS_XML_PATH));
@@ -73,12 +100,23 @@ public abstract class Item implements IItem {
             //TODO:Da completare!
            /* int textRegionIndex = Integer.parseInt(baseRoot.getChildByName(type).get("TexturePosition"));
             Texture newTexture = new Texture(Gdx.files.internal("data/"+basePath));*/
+            for (int i = 0; i < baseRoot.getChildCount(); i++) {
+                XmlReader.Element child = baseRoot.getChild(i);
+                Effect effect = null;
+                if (child.getName().equals("Defense") || child.getName().equals("Attack") || child.getName().equals("Speed")) {
+                    Effect.EffectType itemType = Effect.EffectType.valueOf(child.getName().toUpperCase());
+                    effect = new Effect(itemType, baseRoot.getFloat(child.getName()));
+                }
+                if (effect != null) {
+                    listaEffetti.add(effect);
+                }
+            }
         }
         catch(Exception e){
-
+            e.printStackTrace();
         }
 
-        return null;
+        return listaEffetti;
     }
 
 
