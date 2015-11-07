@@ -252,6 +252,11 @@ public abstract class AbstractCreature implements ICreature {
     }
 
     @Override
+    public void removeActionChosenListener(ActionChosenListener listener) {
+        this.actionChosenListeners.remove(listener);
+    }
+
+    @Override
     public void fireActionChosenEvent(ActionChosenEvent event, IAgent source) {
         for (ActionChosenListener listener : this.actionChosenListeners) {
             listener.performed(event, source);

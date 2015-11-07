@@ -4,7 +4,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.panacea.RufusPyramid.game.view.GameDrawer;
 import com.panacea.RufusPyramid.game.view.input.InputManager;
 import com.panacea.RufusPyramid.game.view.screens.GameOverScreen;
 import com.panacea.RufusPyramid.game.view.screens.GameScreen;
@@ -70,11 +69,12 @@ public class GameController {
         GameController.resetAll();
 
         GameModel.get().changeToNextMap();
+
+        //FIXME probabilmente prima di mettere il nuovo gm dovrei togliergli tutti gli agents.
+        GameController.gm.removeAllAgents();
         GameController.gm = new GameMaster();
 
-//        GameDrawer.reset();
-//        GameDrawer.get().create();
-        GameController.initializeGame();
+//        GameController.initializeGame();
 
         GameScreen gameScreen = ((GameScreen) ((Game) Gdx.app.getApplicationListener()).getScreen());
         gameScreen.reset();

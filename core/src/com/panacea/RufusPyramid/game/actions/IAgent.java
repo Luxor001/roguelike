@@ -13,6 +13,12 @@ public interface IAgent {
     void addActionChosenListener(ActionChosenListener listener);
 
     /**
+     * Rimuove un listener per gli eventi ActionChosenEvent precedentemente aggiunto.
+     * @param listener il listener da rimuovere
+     */
+    void removeActionChosenListener(ActionChosenListener listener);
+
+    /**
      * Spara un evento di tipo ActionChosenEvent.
      */
     void fireActionChosenEvent(ActionChosenEvent event, IAgent source);

@@ -94,6 +94,14 @@ public class GameMaster{
         }
     }
 
+    public void removeAllAgents() {
+        for(IAgent agent : this.agentsPlaying) {
+            agent.removeActionChosenListener(this.commonActionPerformedListener);
+        }
+
+        this.agentsPlaying.clear();
+    }
+
     private void removeAgent(IAgent agent) {
         int indexToRemove = this.agentsPlaying.indexOf(agent);
         this.agentsPlaying.remove(indexToRemove);
