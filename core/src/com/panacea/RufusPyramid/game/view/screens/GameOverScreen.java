@@ -41,7 +41,7 @@ public class GameOverScreen implements Screen {
     private float w = (float)Gdx.graphics.getWidth();
     private float h = (float)Gdx.graphics.getHeight();
 
-    private Stage stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT));
+    private Stage stage = new Stage(new FitViewport((w / h) * VIEWPORT_HEIGHT, VIEWPORT_HEIGHT)) ;
     private Table table = new Table();
 
     Skin skin;

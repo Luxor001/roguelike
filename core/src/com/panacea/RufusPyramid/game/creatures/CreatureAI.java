@@ -52,7 +52,9 @@ public class CreatureAI {
         GridPoint2 absoluteDistance = Utilities.absoluteDistance(creature.getPosition().getPosition(),hero.getPosition().getPosition());
 
         IAction chosenAction = new PassAction(creature);
-        if(absoluteDistance.y <= creature.sigthLength || absoluteDistance.x <= creature.sigthLength) {
+        if(absoluteDistance.y <= creature.sigthLength && absoluteDistance.x <= creature.sigthLength) {
+
+            creature.getHealthBar().setVisible(true); //FIXME: DA RIMUOVERE! Probabilmente il suo posto è questo!
             List<GridCell> path = getPath(creature, hero);
             if (path != null) { //se il giocatore è raggiungibile..
                 int distance = path.size();
@@ -81,7 +83,7 @@ public class CreatureAI {
         return  chosenAction;
     }
 
-    private List<GridCell> getPath(ICreature startingCreature, ICreature arrivalCreature){
+    private List<GridCell> getPath(ICreature startingCreature, ICreature arrivalCreature) {
         List<GridCell> pathToEnd = null;
         try {
             AStarGridFinder<GridCell> finder = new AStarGridFinder(GridCell.class, pathFinderOptions);
@@ -90,30 +92,30 @@ public class CreatureAI {
             GridPoint2 arrivalCreaturePos = arrivalCreature.getPosition().getPosition();
 
             GridCell[][] gridcells = GameModel.get().getCurrentMap().getPathGrid();
-            NavigationGrid<GridCell> grid = new  NavigationGrid<GridCell>(gridcells, true);
+            NavigationGrid<GridCell> grid = new NavigationGrid<GridCell>(gridcells, true);
             pathToEnd = finder.findPath(startingCreaturePos.x, startingCreaturePos.y, arrivalCreaturePos.x, arrivalCreaturePos.y, grid);
 
-             if (pathToEnd == null){
-                 reinitializeNeighbors(grid.getCell(arrivalCreaturePos.x,arrivalCreaturePos.y),grid);
-//                 System.out.println("FALLITO!");
-             }
-            else {
-                 GridCell currCell;
-                 for (int i = 0; i < pathToEnd.size(); i++) { /*rinizializzazione della grid! riporto tutto allo stato originario, sennò stà libreria mi scasina tutto secondo calcoli suoi!*/
-                     currCell = pathToEnd.get(i);
-                     reinitializeNeighbors(currCell, grid);
-                     currCell = new GridCell(currCell.getX(), currCell.getY(), currCell.isWalkable());
-                 }
-                 currCell = grid.getCell(startingCreaturePos.x, startingCreaturePos.y);
-                 currCell = new GridCell(startingCreaturePos.x, startingCreaturePos.y, currCell.isWalkable());
-                 reinitializeNeighbors(currCell, grid);
+            GridCell currCell;
+            if(pathToEnd == null) {
+                for (int x = 0; x < grid.getWidth(); x++) { //FIXME: Rinizializzazione di tutta la griglia di cammino. da togliere subito dopo il giorno x!
+                    for (int y = 0; y < grid.getHeight(); y++) {
+                        currCell = grid.getCell(x, y);
+                        grid.setCell(currCell.getX(), currCell.getY(), new GridCell(currCell.isWalkable()));
+                    }
+                }
+            }
+            /*
 
-                 currCell = grid.getCell(arrivalCreaturePos.x, arrivalCreaturePos.y);
-                 currCell = new GridCell(arrivalCreaturePos.x, arrivalCreaturePos.y, currCell.isWalkable());
-                 reinitializeNeighbors(currCell, grid);
-             }
-        }
-        catch (Exception e){
+
+            if (pathToEnd != null) {
+                for (int i = 0; i < pathToEnd.size(); i++) { /*rinizializzazione della grid! riporto tutto allo stato originario, sennò stà libreria mi scasina tutto secondo calcoli suoi!
+                    currCell = pathToEnd.get(i);
+                    reinitializeNeighbors(currCell, grid);
+                    currCell = new GridCell(currCell.getX(), currCell.getY(), currCell.isWalkable());
+                    grid.setCell(currCell.getX(),currCell.getY(),new GridCell(currCell.isWalkable()));
+                }
+            }*/
+        } catch (Exception e) {
 
         }
         return pathToEnd;

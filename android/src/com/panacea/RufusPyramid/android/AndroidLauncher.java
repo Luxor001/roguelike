@@ -1,11 +1,21 @@
 package com.panacea.RufusPyramid.android;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.utils.Array;
 import com.panacea.RufusPyramid.Main;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.tomgrill.gdxfacebook.core.GDXFacebook;
 
@@ -20,7 +30,7 @@ public class AndroidLauncher extends AndroidApplication {
 
 
 // questo pezzo di codice ritorna l'hash key dell'applicazione, necessario per facebook.
-/*		PackageInfo info;
+	/*	PackageInfo info;
 		try {
 			info = getPackageManager().getPackageInfo(getBaseContext().getPackageName(), PackageManager.GET_SIGNATURES);
 			for (Signature signature : info.signatures) {

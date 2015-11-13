@@ -54,8 +54,7 @@ public class MapFactory { /*http://www.roguebasin.com/index.php?title=Dungeon-Bu
         spawnPoint = mapContainer.getTile(randY,randX);
 
         if(rooms.size() > 1){
-            //int randRoom=Utilities.randInt(1, rooms.size()-1); //primo parametro = 1 : esclusione della stanza originale, non posso mettere il nextlevel nella stessa stanza in cui si è generato l'eroe!
-            int randRoom = 0;
+            int randRoom=Utilities.randInt(1, rooms.size()-1); //primo parametro = 1 : esclusione della stanza originale, non posso mettere il nextlevel nella stessa stanza in cui si è generato l'eroe!
             Rectangle room = rooms.get(randRoom);
             Tile randomTile = this.mapContainer.getRandomTile(Tile.TileType.Walkable, room);
             randomTile.setType(Tile.TileType.NextLevel);

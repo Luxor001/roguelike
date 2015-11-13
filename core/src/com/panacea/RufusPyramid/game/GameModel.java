@@ -40,7 +40,7 @@ public class GameModel {
     public static final double[] extractedItem = new double[]      { 00, 01, 02, 03}; //0 = golditem, 1 = miscitem, 2= weapon, 3=wearable //TODO: DA METTERE SU DB!
     public static final double[] itemProb = new double[]          { 0.6, 0.2, 0.1, 0.1}; //probabilità
 
-    public static final double[] extractedEnemy = new double[]      { 00, 01, 02, 03}; //0 = skeleton, 1 = ORC, 2= UGLYYETI, 3=WRAITH //TODO: DA METTERE SU DB!
+    public static final double[] extractedEnemy = new double[]      { 01, 02, 03, 04}; //0 = skeleton, 1 = ORC, 2= UGLYYETI, 3=WRAITH //TODO: DA METTERE SU DB!
     public static final double[] enemyProb = new double[]          { 0.25, 0.25, 0.25, 0.25}; //probabilità nemici
 
 
@@ -107,6 +107,7 @@ public class GameModel {
         Enemy newEnemy = null;
         for(int i=0; i < Utilities.randInt(7,13); i++) { //numero casuale di nemici da 7 a 13..
             int index = (int)Utilities.randWithProb(extractedEnemy,enemyProb);//0 = skeleton, 1 = ORC, 2= UGLYYETI, 3=WRAITH
+            ICreature.CreatureType type = ICreature.CreatureType.values()[index];
             newEnemy = StaticDataProvider.getEnemy(ICreature.CreatureType.values()[index]);
             if (newEnemy != null) {
                 newEnemy.setPosition(getCurrentMap().getRandomEnemyPosition());
