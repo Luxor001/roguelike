@@ -105,7 +105,7 @@ public class GameModel {
 
 
         Enemy newEnemy = null;
-        for(int i=0; i < Utilities.randInt(7,13); i++) { //numero casuale di nemici da 7 a 13..
+        for(int i=0; i < Utilities.randInt(7,13); i++) { //numero casuale di nemici da 7 a 13..,
             int index = (int)Utilities.randWithProb(extractedEnemy,enemyProb);//0 = skeleton, 1 = ORC, 2= UGLYYETI, 3=WRAITH
             ICreature.CreatureType type = ICreature.CreatureType.values()[index];
             newEnemy = StaticDataProvider.getEnemy(ICreature.CreatureType.values()[index]);

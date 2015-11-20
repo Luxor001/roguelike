@@ -56,6 +56,7 @@ public class CreatureAI {
 
             creature.getHealthBar().setVisible(true); //FIXME: DA RIMUOVERE! Probabilmente il suo posto è questo!
             List<GridCell> path = getPath(creature, hero);
+            if (path == null) path = getPath(creature, hero);   //FIXME: WORKAROUND, viene calcolato null una volta si e una no
             if (path != null) { //se il giocatore è raggiungibile..
                 int distance = path.size();
                 if (path.size() < creature.sigthLength) {

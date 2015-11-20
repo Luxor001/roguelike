@@ -102,6 +102,10 @@ public class HeroInputManager extends InputAdapter {
 //        Gdx.app.log(HeroInputManager.class.toString(), "Paused: " + isPaused);
     }
 
+    public boolean isPaused() {
+        return this.isPaused;
+    }
+
     private boolean hasBeenDragged(Vector2 touchDownPosition, Vector2 touchUpPosition) {
         int sensibility = 5;
         Vector2 diff = touchDownPosition.sub(touchUpPosition);

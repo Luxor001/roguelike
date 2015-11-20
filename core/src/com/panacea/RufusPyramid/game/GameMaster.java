@@ -8,6 +8,7 @@ import com.panacea.RufusPyramid.game.Effect.TemporaryEffect;
 import com.panacea.RufusPyramid.game.actions.ActionChosenEvent;
 import com.panacea.RufusPyramid.game.actions.ActionChosenListener;
 import com.panacea.RufusPyramid.game.actions.ActionResult;
+import com.panacea.RufusPyramid.game.actions.AttackAction;
 import com.panacea.RufusPyramid.game.actions.IAction;
 import com.panacea.RufusPyramid.game.actions.IAgent;
 import com.panacea.RufusPyramid.game.creatures.AbstractCreature;
@@ -285,14 +286,15 @@ public class GameMaster{
             GameMaster gm = GameController.getGm();
             try {
                 if (!source.equals(gm.getAgentOnTurn())
-                        || (source instanceof ICreature && ((ICreature) source).getHPCurrent() <= 0)) {
-                    Gdx.app.error(
-                            this.getClass().getName(),
-                            "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
-                                    "CurrentAgentIndex: " + gm.currentAgentIndex + "\n" +
-                                    "wtfAgentIndex: " + gm.agentsPlaying.indexOf(source) + "\n" +
-                                    "wtfAgentToString: " + source.toString() + "\n"
-                    );
+                        || (source instanceof ICreature && ((ICreature) source).getHPCurrent() <= 0)
+                        || (source instanceof DefaultHero && gm.heroInput.isPaused() && event.getChosenAction() instanceof AttackAction)) {
+//                    Gdx.app.error(
+//                            this.getClass().getName(),
+//                            "ERRORE! Un agent non autorizzato ha appena cercato di eseguire un'azione: " +
+//                                    "CurrentAgentIndex: " + gm.currentAgentIndex + "\n" +
+//                                    "wtfAgentIndex: " + gm.agentsPlaying.indexOf(source) + "\n" +
+//                                    "wtfAgentToString: " + source.toString() + "\n"
+//                    );
                     return;
                 }
             } catch (IndexOutOfBoundsException ex) {
